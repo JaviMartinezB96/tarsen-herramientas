@@ -2,14 +2,14 @@
 // Cálculo en calculo.js; datos normativos en data/escalera.json.
 import { iniciarPagina, fmt, cargarJSON } from "../shared/ui.js";
 import { montarAsistente } from "../shared/asistente.js";
-import { calcular } from "./calculo.js";
+import { calcular, nBarras } from "./calculo.js";
 import { croquis } from "./croquis.js";
 
 iniciarPagina();
 const N = await cargarJSON("data/escalera.json");
 const $ = (s) => document.querySelector(s);
 
-const INICIAL = { uso: "A1", L: 3.5, contrahuella: 17.5, huella: 28, peldanos: "hormigon", solado: 1.5, fck: "25", acero: "B500S", rec: 30 };
+const INICIAL = { uso: "A1", L: 3.5, ancho: 1, contrahuella: 17.5, huella: 28, peldanos: "hormigon", solado: 1.5, fck: "25", acero: "B500S", rec: 30 };
 let est = { ...INICIAL };
 
 const conFyk = (e) => ({ ...e, fck: Number(e.fck), fyk: N.acero.tipos.find((a) => a.id === e.acero).fyk });
@@ -79,7 +79,7 @@ const fila = (titulo, valor, ref) =>
   `<div class="res"><span>${titulo}</span><span class="dato">${valor}</span><span class="ref">${ref}</span></div>`;
 const nota = (texto, ref, alerta) => `<p class="nota${alerta ? " alerta" : ""}">${texto}${ref ? ` <span class="ref">${ref}</span>` : ""}</p>`;
 const cm2 = (mm2) => `${fmt(mm2 / 100, 2)} cm²/m`;
-const barra = (a) => `Ø${a.diam} c/${fmt(a.s / 10)} cm`;
+const barra = (a, lMm, rec) => `${nBarras(lMm, a.s, rec)}Ø${a.diam} c/${fmt(a.s / 10)} cm`;
 const chip = (ok, texto) => `<span class="chip ${ok ? "ok" : "no"}">${ok ? "Cumple" : "No cumple"} · ${texto}</span>`;
 
 function pintarResultado() {
@@ -92,16 +92,17 @@ function pintarResultado() {
     $("#res").innerHTML = nota(`Con un canto de hasta ${N.canto.max / 10} cm no se cumplen las comprobaciones. La escalera necesita un cálculo específico (zanca, apoyo intermedio o mayor canto).`, "", true);
     return;
   }
-  const c = r.c;
+  const c = r.c, b = e.ancho * 1000;
   let h = `<p class="label">Canto de la losa</p>
     <p class="designacion">h = ${fmt(r.h / 10)} cm</p>
     <p class="ref">Menor canto que cumple esbeltez y cortante sin cercos · Anejo 19 del Código Estructural, 7.4.2 y 6.2.2 · L/h = ${fmt(e.L * 1000 / r.h, 1)}</p>
     <div class="semaforo">${chip(r.ok.esbeltez, "esbeltez")}${chip(r.ok.cortante, "cortante")}${chip(r.ok.cuantia, "cuantía mínima")}</div>
     ${croquis(e, r)}
     <div class="resultados">` +
-    fila("Armadura inferior principal", barra(r.arm), `${cm2(r.arm.As)} ≥ ${cm2(r.Asnec)} · A19, 6.1 y 9.2.1.1 · separación 9.3.1.1(3)`) +
-    fila("Armadura de reparto (inferior, transversal)", barra(r.reparto), `${cm2(r.reparto.As)} ≥ 20 % de la principal · A19, 9.3.1.1(2)`) +
-    fila("Armadura superior en los apoyos", `${barra(r.superior)}`, `${cm2(r.superior.As)}, longitud ${fmt(0.2 * e.L, 2)} m desde cada apoyo · A19, 9.3.1.2(2) y 9.2.1.1`) +
+    fila("Inferior longitudinal (principal)", barra(r.arm, b, e.rec), `${cm2(r.arm.As)} ≥ ${cm2(r.Asnec)} · A19, 6.1 y 9.2.1.1 · separación 9.3.1.1(3)`) +
+    fila("Inferior transversal (reparto)", barra(r.reparto, r.lInc, e.rec), `${cm2(r.reparto.As)} ≥ 20 % de la principal · A19, 9.3.1.1(2)`) +
+    fila("Superior longitudinal", barra(r.superior, b, e.rec), `${cm2(r.superior.As)} en toda la losa: 15 % de M<sub>d</sub> y A<sub>s,min</sub> · A19, 9.3.1.2(2) y 9.2.1.1`) +
+    fila("Superior transversal", barra(r.repartoSup, r.lInc, e.rec), `${cm2(r.repartoSup.As)} ≥ 20 % de la superior · criterio TARSEN`) +
     fila("Canto útil d", `${fmt(r.d / 10, 1)} cm`, `h − recubrimiento − Ø/2`) +
     fila("Carga de cálculo q<sub>d</sub>", `${fmt(r.qd, 2)} kN/m²`, `${fmt(r.gam.gammaG, 2)}·g + ${fmt(r.gam.gammaQ, 2)}·q en planta · CTE DB SE, tabla 4.1`) +
     fila("Momento de cálculo M<sub>d</sub>", `${fmt(r.Md, 1)} kN·m/m`, "q<sub>d</sub>·L²/8 · biapoyada") + `</div>`;
@@ -115,8 +116,9 @@ function pintarResultado() {
     [`Armadura mínima: A<sub>s,min</sub> = W/z · f<sub>ctm,fl</sub>/f<sub>yd</sub> = ${cm2(r.Asmin)} (f<sub>ctm</sub> = ${fmt(r.fctm, 2)}, f<sub>ctm,fl</sub> = ${fmt(r.fctmfl, 2)} N/mm², z = 0,8h)`, "A19, (9.1), (3.23) y tabla A19.3.1"],
     [`Esbeltez: l/d = ${fmt(r.ld, 1)} ≤ ${fmt(r.ldLim, 1)} con la luz inclinada ${fmt(r.lInc / 1000, 2)} m, ρ = ${fmt(r.rho * 100, 3)} %, ρ₀ = ${fmt(r.rho0 * 100, 3)} %, K = 1,0`, "A19, (7.16), (7.17) y tabla A19.7.4"],
     [`Cortante: V<sub>d</sub> = ${fmt(r.Vd, 1)} kN/m ≤ V<sub>Rd,c</sub> = ${fmt(r.VRdc, 1)} kN/m (k = ${fmt(r.k, 2)}, ρ<sub>l</sub> = ${fmt(r.rhoL * 100, 3)} % con la mitad de la armadura en el apoyo) y ≤ ${fmt(r.Vmax, 0)} kN/m`, "A19, (6.2.a), (6.2.b), (6.3), (6.5) y 9.3.1.2(1)"],
-    ["Prolonga hasta los apoyos al menos la mitad de la armadura inferior y ánclala; la superior se ancla en el apoyo extremo.", "A19, 9.3.1.2"],
-    ["Criterios TARSEN: luz inclinada para la esbeltez, cortante sin reducir por cos α, A<sub>s,min</sub> también en la armadura superior, canto mínimo 15 cm, separaciones múltiplo de 5 cm y no menores de 10 cm.", ""],
+    [`Nº de barras para un ancho de ${fmt(e.ancho, 2)} m y una longitud inclinada de ${fmt(r.lInc / 1000, 2)} m: (longitud − 2 · recubrimiento) / s, redondeado hacia arriba, más una.`, "Criterio TARSEN"],
+    ["Prolonga hasta los apoyos al menos la mitad de la armadura inferior y ánclala; ancla también la superior en los dos apoyos.", "A19, 9.3.1.2"],
+    ["Criterios TARSEN: luz inclinada para la esbeltez, cortante sin reducir por cos α, parrilla superior en toda la losa con A<sub>s,min</sub>, canto mínimo 15 cm, separaciones múltiplo de 5 cm y no menores de 10 cm.", ""],
   ];
   h += nota("Predimensionado de un tramo recto biapoyado sin mesetas. No comprueba fisuración, vibraciones, fuego ni el apoyo en los forjados.", "", false) +
     `<details class="detalles"><summary>Cargas y comprobaciones (${det.length})</summary>${det.map(([t, ref]) => nota(t, ref)).join("")}</details>`;

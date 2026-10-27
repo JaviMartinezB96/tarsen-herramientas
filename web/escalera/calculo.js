@@ -95,13 +95,18 @@ export function calcular(N, e) {
   return { fallo: true, ultimo, gam };
 }
 
-/** Reparto (9.3.1.1(2)) y armadura superior en apoyos (9.3.1.2(2)). */
+/** Nº de barras de separación s en una longitud lMm, descontando el recubrimiento en los extremos (criterio TARSEN). */
+export const nBarras = (lMm, s, rec) => Math.ceil((lMm - 2 * rec) / s) + 1;
+
+/** Reparto inferior (9.3.1.1(2)) y parrilla superior en toda la losa (criterio TARSEN). */
 function complementos(N, r) {
   const A = N.armado;
   const elegir = (Anec) => A.diamReparto.map((diam) => separacion(A, Anec, diam, r.h)).filter(Boolean).sort((a, b) => a.As - b.As)[0];
-  const repNec = A.reparto * r.arm.As;                                 // ≥ 20 % de la principal
-  const MdSup = A.superiorApoyo * r.Md;                                // 15 % del momento de vano en apoyo extremo
+  const repNec = A.reparto * r.arm.As;                                 // A19 9.3.1.1(2): ≥ 20 % de la principal
+  const MdSup = A.superiorApoyo * r.Md;                                // A19 9.3.1.2(2): 15 % del momento de vano en apoyo extremo
   const supReq = flexion(MdSup, r.d, r.fcd, r.fyd).As;
-  const supNec = Math.max(supReq, r.Asmin);                            // As,min también arriba: nota de 9.2.1.2(1) (criterio TARSEN, confirmado 27-10-2026)
-  return { reparto: { nec: repNec, ...elegir(repNec) }, superior: { Md: MdSup, req: supReq, nec: supNec, ...elegir(supNec) } };
+  const supNec = Math.max(supReq, r.Asmin);                            // As,min también arriba: nota de 9.2.1.2(1) (criterio TARSEN)
+  const superior = { Md: MdSup, req: supReq, nec: supNec, ...elegir(supNec) };  // en toda la longitud (criterio TARSEN, 27-10-2026)
+  const repSupNec = A.reparto * superior.As;                           // transversal superior: 20 % de la superior (criterio TARSEN)
+  return { reparto: { nec: repNec, ...elegir(repNec) }, superior, repartoSup: { nec: repSupNec, ...elegir(repSupNec) } };
 }

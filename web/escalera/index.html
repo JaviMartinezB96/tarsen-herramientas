@@ -30,16 +30,16 @@
     <!-- Explicación del método (también para SEO). Mantener al día con calculo.js. -->
     <details class="detalles metodo">
       <summary>Cómo calcula esta herramienta</summary>
-      <p>Calcula una losa de hormigón armado de un tramo recto, apoyada en sus dos extremos y sin mesetas, por cada metro de ancho. Todo en proyección horizontal, con la luz L medida en planta.</p>
+      <p>Calcula una losa de hormigón armado de un tramo recto, apoyada en sus dos extremos y sin mesetas, por cada metro de ancho; el ancho del tramo solo sirve para contar las barras. Todo en proyección horizontal, con la luz L medida en planta.</p>
       <ol>
         <li><strong>Cargas.</strong> Peso de la losa 25 kN/m³ · h / cos α (α, inclinación del tramo), peso de los peldaños γ · contrahuella / 2 (24 kN/m³ si son de hormigón, 15 kN/m³ si son de fábrica) y el solado que indiques. Sobrecarga de uso de la tabla 3.1, más 1 kN/m² en escaleras de viviendas y oficinas. <span class="ref">CTE DB SE-AE, tablas 3.1 y C.1 y apdo. 3.1.1.3</span></li>
         <li><strong>Combinación.</strong> q<sub>d</sub> = 1,35 · g + 1,50 · q; M<sub>d</sub> = q<sub>d</sub> · L² / 8 y V<sub>d</sub> = q<sub>d</sub> · L / 2. <span class="ref">CTE DB SE, tabla 4.1</span></li>
         <li><strong>Canto.</strong> Prueba cantos desde 15 cm, de centímetro en centímetro, y se queda con el menor que cumple la esbeltez y el cortante sin cercos. Los peldaños no cuentan como canto resistente. <span class="ref">Código Estructural, Anejo 19, 7.4.2 y 6.2.2</span></li>
         <li><strong>Flexión.</strong> f<sub>cd</sub> = f<sub>ck</sub> / 1,5 y f<sub>yd</sub> = f<sub>yk</sub> / 1,15, con el bloque rectangular de tensiones. <span class="ref">Anejo 19, tabla A19.2.1, 3.1.6 y 3.1.7</span></li>
-        <li><strong>Armadura mínima.</strong> A<sub>s,min</sub> = W / z · f<sub>ctm,fl</sub> / f<sub>yd</sub>, con z = 0,8 h. Se aplica abajo y en la armadura superior de los apoyos. <span class="ref">Anejo 19, 9.2.1.1 y 3.1.8</span></li>
+        <li><strong>Armadura mínima.</strong> A<sub>s,min</sub> = W / z · f<sub>ctm,fl</sub> / f<sub>yd</sub>, con z = 0,8 h. Se aplica abajo y en la armadura superior. <span class="ref">Anejo 19, 9.2.1.1 y 3.1.8</span></li>
         <li><strong>Esbeltez.</strong> Compara la luz inclinada entre el canto útil con el límite de las expresiones 7.16 y 7.17 (losa simplemente apoyada, K = 1). Si se cumple, no hace falta calcular la flecha. <span class="ref">Anejo 19, 7.4.2 y tabla A19.7.4</span></li>
         <li><strong>Cortante.</strong> V<sub>d</sub> ≤ V<sub>Rd,c</sub>, contando solo la mitad de la armadura inferior, que es la que llega al apoyo. <span class="ref">Anejo 19, 6.2.2 y 9.3.1.2</span></li>
-        <li><strong>Armado.</strong> Barras Ø10, Ø12 o Ø16 a separaciones múltiplo de 5 cm, entre 10 cm y menos de 30 cm y 3 h. Reparto de al menos el 20 % de la principal. Armadura superior en los apoyos para el 15 % del momento del vano, en una longitud de 0,2 L. <span class="ref">Anejo 19, 9.3.1.1 y 9.3.1.2</span></li>
+        <li><strong>Armado.</strong> Barras Ø10, Ø12 o Ø16 a separaciones múltiplo de 5 cm, entre 10 cm y menos de 30 cm y 3 h. Reparto inferior de al menos el 20 % de la principal. Parrilla superior en toda la losa: longitudinal para el 15 % del momento del vano y no menos de la mínima, y transversal del 20 % de la superior. El número de barras sale del ancho del tramo (longitudinales) y de la longitud inclinada (transversales), descontando el recubrimiento en los extremos. <span class="ref">Anejo 19, 9.3.1.1 y 9.3.1.2</span></li>
       </ol>
       <p>No comprueba fisuración, vibraciones, resistencia al fuego, mesetas, zancas ni el apoyo de la losa en los forjados o vigas.</p>
     </details>
