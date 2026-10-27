@@ -1,16 +1,17 @@
 // Interfaz de /hormigon/. Cálculo en calculo.js; datos normativos en data/*.json.
 import { iniciarPagina, fmt, cargarJSON } from "../shared/ui.js";
 import { dosificacion, recubrimiento } from "./calculo.js";
+import { montarAsistente } from "./asistente.js";
 
 iniciarPagina();
-const [D, R] = await Promise.all([cargarJSON("data/dosificacion.json"), cargarJSON("data/recubrimientos.json")]);
+const [D, R, C] = await Promise.all(["dosificacion", "recubrimientos", "clases"].map((n) => cargarJSON(`data/${n}.json`)));
 const $ = (s, r = document) => r.querySelector(s);
 const fA = $("#f-amb"), fR = $("#f-rec");
 
 // ---- Rellenar desplegables ----
 const opciones = (sel, items, ninguna) => {
   sel.innerHTML = (ninguna ? `<option value="">${ninguna}</option>` : "") +
-    items.map((i) => (typeof i === "string" ? `<option>${i}</option>` : `<option value="${i.id}">${i.nombre}</option>`)).join("");
+    items.map((i) => (typeof i === "string" ? `<option value="${i}">${i} · ${C.clases[i]}</option>` : `<option value="${i.id}">${i.nombre}</option>`)).join("");
 };
 for (const f of [fA, fR]) {
   opciones(f.corrosion, D.grupos.corrosion);
@@ -91,6 +92,11 @@ $("#pasar").addEventListener("click", () => {
   window.scrollTo({ top: $(".pestanas").offsetTop, behavior: "smooth" });
 });
 
+// Asistente (tabla 27.1.a): sus respuestas rellenan el formulario de clases.
+montarAsistente($("#asistente"), C, (est) => {
+  for (const [k, v] of Object.entries(est)) if (k !== "tipo" || v) fA[k].value = v || (k === "corrosion" ? "X0" : "");
+  pintarAmbientes();
+});
 fA.addEventListener("input", pintarAmbientes);
 fR.addEventListener("input", pintarRecubrimientos);
 pintarAmbientes();

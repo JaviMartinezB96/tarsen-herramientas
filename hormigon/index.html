@@ -22,8 +22,9 @@
     <!-- Pestaña 1: Ambientes (art. 43.2.1) -->
     <section id="ambientes" role="tabpanel" aria-labelledby="tab-ambientes">
       <h2 class="solo-impresion">Ambientes y dosificación</h2>
-      <!-- PENDIENTE: asistente de preguntas. Necesita la tabla 27.1 (descripción de las clases de exposición), no incluida en el PDF del cap. 9. -->
+      <div class="tarjeta no-imprimir" id="asistente" aria-live="polite"></div>
       <form class="tarjeta" id="f-amb">
+        <p class="label">Clases elegidas (puedes ajustarlas a mano)</p>
         <div class="rejilla">
           <label class="campo"><span>Tipo de hormigón</span>
             <select name="tipo"><option value="armado">Armado</option><option value="pretensado">Pretensado</option><option value="masa">En masa</option></select></label>

@@ -47,10 +47,10 @@ No programa. Cualquier paso manual (subir al hosting, GitHub): pasos numerados y
 ## Estado
 
 - [x] 0. Plantilla común `/shared/` (estilos.css, ui.js, plantilla.html). PENDIENTE: confirmar URL de contacto y web en `CONFIG` de `shared/ui.js`.
-- [~] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). PENDIENTE: asistente de preguntas (falta tabla 27.1 del CE) y formato de designación (falta art. de tipificación).
+- [~] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). PENDIENTE: formato de designación del hormigón (falta el artículo de tipificación).
 - [ ] 2. `/escalera/`
 - [ ] 3. `/nieve/`
 - [ ] 4. `/sismo/`
 - [ ] 5. `/visor-ifc/`
 
-Subido: `docs/normativa/CE-capitulo-9-durabilidad.pdf`. Pendiente de subir a `docs/normativa/`: extractos de CTE DB SE-AE (3.5 y Anejo E), Código Estructural (art. 27.1 tabla de clases de exposición, tipificación del hormigón, flexión, cortante, cuantías, esbeltez) y NCSE-02 (1.2, 2.1, 2.2, figura 2.1 y Anejo 1).
+Subido: `docs/normativa/CE-capitulo-9-durabilidad.pdf`; cap. 7 del CE (art. 27) en el proyecto de Claude. Pendiente de subir a `docs/normativa/`: extractos de CTE DB SE-AE (3.5 y Anejo E), Código Estructural (tipificación del hormigón, flexión, cortante, cuantías, esbeltez) y NCSE-02 (1.2, 2.1, 2.2, figura 2.1 y Anejo 1).

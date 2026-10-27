@@ -1,0 +1,116 @@
+{
+  "fuente": "Código Estructural (RD 470/2021), Capítulo 7, art. 27.1, tablas 27.1.a y 27.1.b (PDF del cap. 7 en el proyecto de Claude, pp. 90-93).",
+  "clases": {
+    "_ref": "Tabla 27.1.a — Descripción del entorno",
+    "X0":  "Sin riesgo de corrosión (masa; o armado en ambiente muy seco)",
+    "XC1": "Seco o permanentemente húmedo",
+    "XC2": "Húmedo, raramente seco",
+    "XC3": "Humedad moderada",
+    "XC4": "Sequedad y humedad cíclicas",
+    "XD1": "Cloruros no marinos, humedad moderada",
+    "XD2": "Cloruros no marinos, húmedo, raramente seco",
+    "XD3": "Cloruros no marinos, ciclos de humedad y secado",
+    "XS1": "Aerosoles marinos, sin contacto con el agua del mar",
+    "XS2": "Permanentemente sumergido en agua de mar",
+    "XS3": "Carrera de mareas, oleaje o salpicaduras",
+    "XF1": "Saturación moderada, sin sales fundentes",
+    "XF2": "Saturación moderada, con sales fundentes",
+    "XF3": "Saturación alta, sin sales fundentes",
+    "XF4": "Saturación alta, con sales fundentes o agua de mar",
+    "XA1": "Agresividad química débil (tabla 27.1.b)",
+    "XA2": "Agresividad química moderada (tabla 27.1.b)",
+    "XA3": "Agresividad química alta (tabla 27.1.b)",
+    "XM1": "Erosión/abrasión moderada",
+    "XM2": "Erosión/abrasión intensa",
+    "XM3": "Erosión/abrasión extrema"
+  },
+
+  "asistente": [
+    {
+      "id": "tipo", "campo": "tipo", "pregunta": "¿De qué hormigón es el elemento?",
+      "opciones": [
+        { "valor": "armado", "texto": "Armado (con barras de acero)" },
+        { "valor": "pretensado", "texto": "Pretensado" },
+        { "valor": "masa", "texto": "En masa (sin armaduras)", "fija": { "corrosion": "X0" } }
+      ],
+      "ref": "Tabla 27.1.a: en masa, X0 salvo hielo/deshielo, abrasión o ataque químico"
+    },
+    {
+      "id": "entorno", "campo": "corrosion", "solo_si": { "tipo": ["armado", "pretensado"] },
+      "pregunta": "¿Dónde está el elemento?",
+      "opciones": [
+        { "valor": "X0",  "texto": "Interior de un edificio con humedad muy baja (HR < 45 %)" },
+        { "valor": "XC1", "texto": "Interior de un edificio con humedad baja (HR < 65 %), o siempre sumergido en agua no agresiva" },
+        { "valor": "XC2", "texto": "Enterrado en suelo no agresivo o siempre en contacto con agua (p. ej., cimentaciones)" },
+        { "valor": "XC3", "texto": "Interior con humedad media o alta (HR > 65 %), o exterior protegido de la lluvia" },
+        { "valor": "XC4", "texto": "Exterior, mojado por la lluvia de forma no permanente" },
+        { "valor": "XD1", "texto": "Exterior con aerosoles de cloruros de origen no marino" },
+        { "valor": "XD2", "texto": "Piscinas o en contacto con aguas industriales con cloruros" },
+        { "valor": "XD3", "texto": "Losas de aparcamiento, o salpicado por sales de deshielo de una calzada" },
+        { "valor": "XS2", "texto": "Siempre sumergido en agua de mar" },
+        { "valor": "XS3", "texto": "En zona de mareas, oleaje o salpicaduras del mar" }
+      ],
+      "ref": "Tabla 27.1.a (ejemplos informativos)"
+    },
+    {
+      "id": "costa", "solo_si": { "tipo": ["armado", "pretensado"], "corrosion": ["X0", "XC1", "XC2", "XC3", "XC4"] },
+      "pregunta": "¿Está al aire libre a menos de 5 km de la costa, expuesto a aerosoles marinos?",
+      "opciones": [
+        { "valor": "no", "texto": "No" },
+        { "valor": "si", "texto": "Sí", "fija": { "corrosion": "XS1" } }
+      ],
+      "ref": "Art. 27.1: en general, XS1 en estructuras marinas aéreas a menos de 5 km de la costa"
+    },
+    {
+      "id": "heladas", "campo": "xf", "pregunta": "¿Puede helar y cómo le afecta el agua?",
+      "nota": "Hay helada si la humedad en invierno supera el 75 % y hay más de un 50 % de probabilidad anual de bajar de −5 °C. Se usan sales fundentes con más de 5 nevadas al año o temperatura media en invierno inferior a 0 °C.",
+      "opciones": [
+        { "valor": "",    "texto": "No hiela" },
+        { "valor": "XF1", "texto": "Hiela; superficie vertical o que no se encharca, sin sales fundentes" },
+        { "valor": "XF2", "texto": "Hiela; superficie vertical o que no se encharca, con sales fundentes" },
+        { "valor": "XF3", "texto": "Hiela; superficie horizontal donde se acumula agua, sin sales fundentes" },
+        { "valor": "XF4", "texto": "Hiela; superficie horizontal donde se acumula agua, con sales fundentes o agua de mar" }
+      ],
+      "ref": "Tabla 27.1.a, nota (1)"
+    },
+    {
+      "id": "quimico", "campo": "xa", "pregunta": "¿El terreno o el agua son químicamente agresivos según el estudio geotécnico?",
+      "tabla": "agresividad",
+      "opciones": [
+        { "valor": "",    "texto": "No (o no hay contacto con terreno ni aguas agresivas)" },
+        { "valor": "XA1", "texto": "Ataque débil" },
+        { "valor": "XA2", "texto": "Ataque medio" },
+        { "valor": "XA3", "texto": "Ataque fuerte" }
+      ],
+      "ref": "Tabla 27.1.b"
+    },
+    {
+      "id": "erosion", "campo": "xm", "pregunta": "¿Tiene desgaste por tráfico?",
+      "opciones": [
+        { "valor": "",    "texto": "No" },
+        { "valor": "XM1", "texto": "Tráfico de vehículos" },
+        { "valor": "XM2", "texto": "Carretillas con ruedas de neumático (zonas industriales)" },
+        { "valor": "XM3", "texto": "Carretillas con ruedas de acero o cadenas (zonas industriales)" }
+      ],
+      "ref": "Tabla 27.1.a"
+    }
+  ],
+
+  "agresividad": {
+    "_ref": "Tabla 27.1.b — Clasificación de la agresividad química",
+    "columnas": ["Parámetro", "XA1 débil", "XA2 medio", "XA3 fuerte"],
+    "agua": [
+      ["pH (UNE 83952)", "6,5 – 5,5", "5,5 – 4,5", "< 4,5"],
+      ["CO₂ agresivo, mg/l (UNE-EN 13577)", "15 – 40", "40 – 100", "> 100"],
+      ["Ion amonio NH₄⁺, mg/l (UNE 83954)", "15 – 30", "30 – 60", "> 60"],
+      ["Ion magnesio Mg²⁺, mg/l (UNE 83955)", "300 – 1.000", "1.000 – 3.000", "> 3.000"],
+      ["Ion sulfato SO₄²⁻, mg/l (UNE 83956)", "200 – 600", "600 – 3.000", "> 3.000"],
+      ["Residuo seco, mg/l (UNE 83957)", "75 – 150", "50 – 75", "< 50"]
+    ],
+    "suelo": [
+      ["Acidez Baumann-Gully, ml/kg (UNE-EN 16502)", "> 200", "(*)", "(*)"],
+      ["Ion sulfato SO₄²⁻, mg/kg suelo seco (UNE 83963)", "2.000 – 3.000", "3.000 – 12.000", "> 12.000"]
+    ],
+    "nota": "(*) Estas condiciones no se dan en la práctica."
+  }
+}

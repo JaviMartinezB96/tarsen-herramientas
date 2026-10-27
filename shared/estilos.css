@@ -85,6 +85,9 @@ section { margin-bottom: var(--s5); }
 .cta .btn { border-color: var(--accent); background: var(--accent); color: var(--brand-ink); margin-top: var(--s2); }
 .pie { border-top: 1px solid var(--border); padding-block: var(--s4); font-size: 14px; color: var(--text-muted); }
 .solo-impresion { display: none; }
+.tabla { border-collapse: collapse; font-size: 13px; line-height: 18px; margin-block: var(--s2); }
+.tabla th, .tabla td { border: 1px solid var(--border); padding: var(--s1) var(--s2); text-align: left; }
+.btn:disabled { opacity: .4; cursor: default; background: transparent; color: var(--text); border-color: var(--text); }
 [hidden] { display: none !important; }
 
 /* Hoja de impresión */
