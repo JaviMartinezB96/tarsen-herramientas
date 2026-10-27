@@ -1,0 +1,122 @@
+{
+  "fuentes": {
+    "SE-AE": "CTE DB SE-AE (abril 2009), apdo. 3.5 y Anejo E. PDF en docs/normativa/CTE-DB-SE-AE.pdf.",
+    "zonas": "Figura E.2 digitalizada con docs/scripts/nieve_zonas_e2.py → data/zonas_e2.json."
+  },
+
+  "tabla_3_8": {
+    "_ref": "CTE DB SE-AE, 3.5.2.1 y tabla 3.8: sobrecarga de nieve en capitales de provincia y ciudades autónomas (altitud en m, sk en kN/m²)",
+    "_nota": "En el PDF la tercera columna aparece desplazada en vertical porque «San Sebastián/Donostia» ocupa dos líneas; se ha transcrito por orden (17 nombres, 17 altitudes y 17 valores por columna). Comprobado: Segovia 1.000 m, Soria 1.090 m.",
+    "capitales": [
+      { "nombre": "Albacete", "alias": ["Albacete"], "altitud": 690, "sk": 0.6 },
+      { "nombre": "Alicante / Alacant", "alias": ["Alicante", "Alacant"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Almería", "alias": ["Almería"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Ávila", "alias": ["Ávila"], "altitud": 1130, "sk": 1.0 },
+      { "nombre": "Badajoz", "alias": ["Badajoz"], "altitud": 180, "sk": 0.2 },
+      { "nombre": "Barcelona", "alias": ["Barcelona"], "altitud": 0, "sk": 0.4 },
+      { "nombre": "Bilbao / Bilbo", "alias": ["Bilbao", "Bilbo"], "altitud": 0, "sk": 0.3 },
+      { "nombre": "Burgos", "alias": ["Burgos"], "altitud": 860, "sk": 0.6 },
+      { "nombre": "Cáceres", "alias": ["Cáceres"], "altitud": 440, "sk": 0.4 },
+      { "nombre": "Cádiz", "alias": ["Cádiz"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Castellón", "alias": ["Castellón de la Plana", "Castelló de la Plana", "Castellón", "Castelló"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Ciudad Real", "alias": ["Ciudad Real"], "altitud": 640, "sk": 0.6 },
+      { "nombre": "Córdoba", "alias": ["Córdoba"], "altitud": 100, "sk": 0.2 },
+      { "nombre": "Coruña / A Coruña", "alias": ["A Coruña", "La Coruña", "Coruña"], "altitud": 0, "sk": 0.3 },
+      { "nombre": "Cuenca", "alias": ["Cuenca"], "altitud": 1010, "sk": 1.0 },
+      { "nombre": "Gerona / Girona", "alias": ["Girona", "Gerona"], "altitud": 70, "sk": 0.4 },
+      { "nombre": "Granada", "alias": ["Granada"], "altitud": 690, "sk": 0.5 },
+
+      { "nombre": "Guadalajara", "alias": ["Guadalajara"], "altitud": 680, "sk": 0.6 },
+      { "nombre": "Huelva", "alias": ["Huelva"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Huesca", "alias": ["Huesca"], "altitud": 470, "sk": 0.7 },
+      { "nombre": "Jaén", "alias": ["Jaén"], "altitud": 570, "sk": 0.4 },
+      { "nombre": "León", "alias": ["León"], "altitud": 820, "sk": 1.2 },
+      { "nombre": "Lérida / Lleida", "alias": ["Lleida", "Lérida"], "altitud": 150, "sk": 0.5 },
+      { "nombre": "Logroño", "alias": ["Logroño"], "altitud": 380, "sk": 0.6 },
+      { "nombre": "Lugo", "alias": ["Lugo"], "altitud": 470, "sk": 0.7 },
+      { "nombre": "Madrid", "alias": ["Madrid"], "altitud": 660, "sk": 0.6 },
+      { "nombre": "Málaga", "alias": ["Málaga"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Murcia", "alias": ["Murcia"], "altitud": 40, "sk": 0.2 },
+      { "nombre": "Orense / Ourense", "alias": ["Ourense", "Orense"], "altitud": 130, "sk": 0.4 },
+      { "nombre": "Oviedo", "alias": ["Oviedo", "Uviéu"], "altitud": 230, "sk": 0.5 },
+      { "nombre": "Palencia", "alias": ["Palencia"], "altitud": 740, "sk": 0.4 },
+      { "nombre": "Palma de Mallorca", "alias": ["Palma", "Palma de Mallorca"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Palmas, Las", "alias": ["Las Palmas de Gran Canaria", "Las Palmas"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Pamplona / Iruña", "alias": ["Pamplona", "Iruña", "Pamplona / Iruña"], "altitud": 450, "sk": 0.7 },
+
+      { "nombre": "Pontevedra", "alias": ["Pontevedra"], "altitud": 0, "sk": 0.3 },
+      { "nombre": "Salamanca", "alias": ["Salamanca"], "altitud": 780, "sk": 0.5 },
+      { "nombre": "San Sebastián / Donostia", "alias": ["Donostia", "San Sebastián", "Donostia / San Sebastián"], "altitud": 0, "sk": 0.3 },
+      { "nombre": "Santander", "alias": ["Santander"], "altitud": 0, "sk": 0.3 },
+      { "nombre": "Segovia", "alias": ["Segovia"], "altitud": 1000, "sk": 0.7 },
+      { "nombre": "Sevilla", "alias": ["Sevilla"], "altitud": 10, "sk": 0.2 },
+      { "nombre": "Soria", "alias": ["Soria"], "altitud": 1090, "sk": 0.9 },
+      { "nombre": "Tarragona", "alias": ["Tarragona"], "altitud": 0, "sk": 0.4 },
+      { "nombre": "Tenerife", "alias": ["Santa Cruz de Tenerife"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Teruel", "alias": ["Teruel"], "altitud": 950, "sk": 0.9 },
+      { "nombre": "Toledo", "alias": ["Toledo"], "altitud": 550, "sk": 0.5 },
+      { "nombre": "Valencia / València", "alias": ["Valencia", "València"], "altitud": 0, "sk": 0.2 },
+      { "nombre": "Valladolid", "alias": ["Valladolid"], "altitud": 690, "sk": 0.4 },
+      { "nombre": "Vitoria / Gasteiz", "alias": ["Vitoria-Gasteiz", "Vitoria", "Gasteiz"], "altitud": 520, "sk": 0.7 },
+      { "nombre": "Zamora", "alias": ["Zamora"], "altitud": 650, "sk": 0.4 },
+      { "nombre": "Zaragoza", "alias": ["Zaragoza"], "altitud": 210, "sk": 0.5 },
+      { "nombre": "Ceuta y Melilla", "alias": ["Ceuta", "Melilla"], "altitud": 0, "sk": 0.2 }
+    ]
+  },
+
+  "tabla_E2": {
+    "_ref": "CTE DB SE-AE, Anejo E, E.3 y tabla E.2: sobrecarga de nieve en un terreno horizontal (kN/m²) por altitud (m) y zona de clima invernal (figura E.2). null = «-» en la tabla (sin valor).",
+    "_interpolacion": "Lineal entre filas de altitud. Criterio TARSEN: el DB no lo indica expresamente.",
+    "altitudes": [0, 200, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2200],
+    "zonas": {
+      "1": [0.3, 0.5, 0.6, 0.7, 0.9, 1.0, 1.2, 1.4, 1.7, 2.3, 3.2, 4.3, null, null],
+      "2": [0.4, 0.5, 0.6, 0.7, 0.9, 1.0, 1.1, 1.3, 1.5, 2.0, 2.6, 3.5, 4.6, 8.0],
+      "3": [0.2, 0.2, 0.2, 0.3, 0.3, 0.4, 0.5, 0.6, 0.7, 1.1, 1.7, 2.6, 4.0, null],
+      "4": [0.2, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.9, 3.0, 4.6, null, null],
+      "5": [0.2, 0.3, 0.4, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.3, 1.8, 2.5, null, null],
+      "6": [0.2, 0.2, 0.2, 0.3, 0.4, 0.5, 0.7, 0.9, 1.2, 2.0, 3.3, 5.5, 9.3, null],
+      "7": [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, null]
+    },
+    "fuera_de_tabla": "CTE DB SE-AE, 3.5.2.3: por encima de las altitudes tabuladas, la carga de nieve es la de la ordenanza municipal o la que resulte de los datos empíricos disponibles."
+  },
+
+  "zonas_especiales": {
+    "_ref": "Figura E.2: Canarias en el recuadro «ZONA 7»; Ceuta y Melilla junto al rótulo «ZONA 6»; Baleares rotuladas «ZONA 5»",
+    "canarias": 7,
+    "ceuta_melilla": 6
+  },
+
+  "forma": {
+    "_ref": "CTE DB SE-AE, 3.5.3.2: faldón limitado inferiormente por cornisas o limatesas. Sin impedimento al deslizamiento: μ = 1 si α ≤ 30°, μ = 0 si α ≥ 60°, interpolación lineal entre medias. Con impedimento: μ = 1 para cualquier inclinación.",
+    "angulo_mu1": 30,
+    "angulo_mu0": 60
+  },
+
+  "viento": {
+    "_ref": "CTE DB SE-AE, 3.5.1.3: protegida del viento, se puede reducir un 20 %; fuertemente expuesta, se debe aumentar un 20 %",
+    "opciones": [
+      { "id": "normal", "factor": 1.0, "texto": "Normal", "detalle": "Ni especialmente resguardada ni expuesta." },
+      { "id": "protegida", "factor": 0.8, "texto": "Protegida del viento (−20 %)", "detalle": "Rodeada de edificios más altos, arbolado denso o en un valle resguardado." },
+      { "id": "expuesta", "factor": 1.2, "texto": "Fuertemente expuesta (+20 %)", "detalle": "Cumbres, collados o llanuras abiertas sin obstáculos." }
+    ]
+  },
+
+  "simplificado": {
+    "_ref": "CTE DB SE-AE, 3.5.1.1: en cubiertas planas de edificios de pisos situados en localidades de altitud inferior a 1.000 m es suficiente considerar 1,0 kN/m²",
+    "qn": 1.0,
+    "altitud_max": 1000
+  },
+
+  "hielo": {
+    "_ref": "CTE DB SE-AE, 3.5.1.4, ec. (3.3): en elementos volados de cubierta de edificios a más de 1.000 m, carga lineal en el borde pn = k · μ² · sk, con k = 3 m",
+    "k": 3,
+    "altitud_min": 1000
+  },
+
+  "criterios": {
+    "aviso_limite_km": 5,
+    "_aviso_limite": "Criterio TARSEN: si el punto está a menos de 5 km de otra zona se avisa, porque los límites de la figura E.2 tienen un grosor de unos 3 km a su escala.",
+    "distancia_max_km": 20,
+    "_distancia_max": "Puntos de costa o islotes fuera de los polígonos: se toma la zona más cercana si está a menos de 20 km."
+  }
+}

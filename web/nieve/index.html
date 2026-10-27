@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de carga de nieve CTE DB SE-AE con mapa | TARSEN</title>
+  <meta name="description" content="Calcula gratis la carga de nieve sobre cubierta según el CTE DB SE-AE: busca tu municipio o pulsa en el mapa y obtén zona, altitud, sk y qn.">
+  <link rel="icon" href="../shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="../shared/estilos.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+</head>
+<body>
+  <div data-ui="cabecera"></div>
+  <main class="contenedor estrecho">
+    <h1>Calculadora de carga de nieve (CTE)</h1>
+    <p class="entradilla">Busca un municipio o pulsa en el mapa: obtienes la zona de clima invernal, la altitud y la carga de nieve sobre la cubierta según el CTE DB SE-AE.</p>
+
+    <!-- Paso 1: lugar -->
+    <section class="paso" id="p-mapa">
+      <form id="buscador" class="buscador" role="search">
+        <label class="campo"><span>Ciudad, pueblo, pedanía o paraje</span>
+          <input type="search" id="q" name="q" placeholder="Ej.: Jaca, Sierra Nevada, Albarracín" autocomplete="off" required></label>
+        <button class="btn btn-primario" type="submit">Buscar</button>
+      </form>
+      <div id="encontrados" aria-live="polite"></div>
+      <div id="mapa" class="mapa" aria-label="Mapa de España con las zonas de clima invernal. Pulsa para elegir un punto."></div>
+      <label class="check"><input type="checkbox" id="ver-zonas" checked> Mostrar las zonas de clima invernal (figura E.2)</label>
+    </section>
+
+    <!-- Paso 2: resultado + datos editables (recalcula al cambiar) -->
+    <section class="paso" id="p-resultados" hidden>
+      <div id="res" aria-live="polite"></div>
+      <h2 class="pregunta subtitulo">Tus datos</h2>
+      <p class="nota">Cambia cualquier dato y el resultado se recalcula al momento. Para otro lugar, pulsa en el mapa o busca de nuevo.</p>
+      <form id="f" class="respuestas" onsubmit="return false"></form>
+      <div data-ui="cta"></div>
+    </section>
+
+    <!-- Explicación del método (también para SEO). Mantener al día con calculo.js y zonas.js. -->
+    <details class="detalles metodo">
+      <summary>Cómo calcula esta herramienta</summary>
+      <p>Calcula la carga de nieve por depósito natural sobre un faldón de cubierta, en proyección horizontal.</p>
+      <ol>
+        <li><strong>Lugar.</strong> El buscador usa Nominatim (OpenStreetMap) y encuentra municipios, pedanías, barrios y parajes de España. El municipio del punto sirve para saber si es capital de provincia.</li>
+        <li><strong>Zona de clima invernal.</strong> Sale sola del punto. La figura E.2 se ha digitalizado: se georreferenció con su retícula de paralelos y meridianos (proyección UTM, huso 30; error menor de 0,5 km) y se trazaron los siete límites. Canarias es zona 7 y Ceuta y Melilla, zona 6, como rotula la figura. Si el punto cae en la costa fuera del dibujo, se toma la zona más próxima. A menos de 5 km de otra zona se avisa, porque las líneas de la figura tienen unos 3 km de grosor a su escala (criterio TARSEN). Contraste hecho: en las 52 capitales, la zona detectada reproduce con la tabla E.2 el valor de la tabla 3.8. Puedes cambiar la zona a mano. <span class="ref">CTE DB SE-AE, Anejo E, figura E.2</span></li>
+        <li><strong>Altitud.</strong> Del modelo digital del terreno del IGN (paso de 25 m en la Península y Baleares; 500 m en Canarias). Puedes corregirla: manda la altitud de tu proyecto.</li>
+        <li><strong>Carga sobre terreno horizontal s<sub>k</sub>.</strong> En capitales de provincia y ciudades autónomas, de la tabla 3.8, o, si lo prefieres, de la tabla E.2 con la altitud del punto (ambas opciones son justificables: la tabla 3.8 da el valor de la ciudad a una altitud fija). En el resto, de la tabla E.2 por zona y altitud, interpolando linealmente entre filas (criterio TARSEN: el DB no lo dice expresamente). Por encima de las altitudes tabuladas no hay valor: manda la ordenanza municipal o los datos empíricos. <span class="ref">CTE DB SE-AE, 3.5.2 y tablas 3.8 y E.2</span></li>
+        <li><strong>Coeficiente de forma μ.</strong> En un faldón que acaba en alero o limatesa y sin nada que impida deslizar a la nieve, μ = 1 hasta 30°, μ = 0 desde 60° e interpolación lineal entre medias. Con impedimento, μ = 1 siempre. <span class="ref">CTE DB SE-AE, 3.5.3.2</span></li>
+        <li><strong>Carga sobre la cubierta.</strong> q<sub>n</sub> = μ · s<sub>k</sub>, reducida un 20 % si la construcción está protegida del viento o aumentada un 20 % si está fuertemente expuesta. <span class="ref">CTE DB SE-AE, 3.5.1.2, ec. (3.2) y 3.5.1.3</span></li>
+        <li><strong>Método simplificado.</strong> En cubiertas planas de edificios de pisos por debajo de 1.000 m se ofrece como opción tomar 1,0 kN/m². <span class="ref">CTE DB SE-AE, 3.5.1.1</span></li>
+        <li><strong>Hielo en vuelos.</strong> Por encima de 1.000 m se da la carga lineal en el borde de los vuelos p<sub>n</sub> = k · μ² · s<sub>k</sub>, con k = 3 m. <span class="ref">CTE DB SE-AE, 3.5.1.4, ec. (3.3)</span></li>
+      </ol>
+      <p>No calcula faldones que acaban en limahoya, distribuciones asimétricas por viento ni acumulaciones junto a cambios de nivel o petos (CTE DB SE-AE, 3.5.3.3, 3.5.3.4 y 3.5.4).</p>
+    </details>
+
+    <div data-ui="aviso"></div>
+  </main>
+  <div data-ui="pie"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
