@@ -118,3 +118,6 @@ summary { cursor: pointer; color: var(--ink-2); font-weight: 500; }
 .chip.no { color: var(--danger); border-color: var(--danger); }
 .croquis { display: block; margin: 16px 0 8px; }
 input[aria-invalid="true"] { border-color: var(--danger); }
+.metodo ol { padding-left: 20px; margin: 12px 0; }
+.metodo li, .metodo p { font-size: 14.5px; line-height: 1.55; color: var(--ink-2); margin-bottom: 10px; }
+.metodo strong { color: var(--ink); font-weight: 500; }

@@ -2,13 +2,13 @@
   "fuentes": {
     "CE": "Código Estructural (RD 470/2021), Anejo 19 y cap. 8 (art. 34), PDF en el proyecto de Claude.",
     "SE-AE": "CTE DB SE-AE, tabla 3.1, apdo. 3.1.1.3 y tabla C.1, PDF en el proyecto de Claude.",
-    "SE": "CTE DB SE, tabla 4.1 — NO SUBIDO: coeficientes de las acciones PENDIENTES."
+    "SE": "CTE DB SE, tabla 4.1, PDF en el proyecto de Claude."
   },
 
   "acciones": {
-    "_ref": "CTE DB SE, tabla 4.1 (coeficientes parciales de seguridad de las acciones, ELU, situación persistente)",
-    "gammaG": "PENDIENTE",
-    "gammaQ": "PENDIENTE"
+    "_ref": "CTE DB SE, tabla 4.1: resistencia, situación persistente o transitoria, desfavorable (peso propio 1,35; variable 1,50)",
+    "gammaG": 1.35,
+    "gammaQ": 1.5
   },
 
   "pesos": {
@@ -16,9 +16,7 @@
     "losa": { "valor": 25, "texto": "Hormigón armado", "ref": "Tabla C.1: hormigón normal 24,0 kN/m³ + 1 kN/m³ por armado usual (nota 1)" },
     "peldanos": [
       { "id": "hormigon", "valor": 24, "texto": "Hormigonados con la losa", "detalle": "Hormigón en masa, 24 kN/m³. No colaboran en la resistencia: solo pesan.", "ref": "Tabla C.1: hormigón normal" },
-      { "id": "hueco", "valor": 12, "texto": "De fábrica de ladrillo hueco", "detalle": "12 kN/m³. Peldañeado ligero habitual sobre la losa.", "ref": "Tabla C.1: ladrillo cerámico hueco" },
-      { "id": "perforado", "valor": 15, "texto": "De fábrica de ladrillo perforado", "detalle": "15 kN/m³.", "ref": "Tabla C.1: ladrillo cerámico perforado" },
-      { "id": "macizo", "valor": 18, "texto": "De fábrica de ladrillo macizo", "detalle": "18 kN/m³.", "ref": "Tabla C.1: ladrillo cerámico macizo" }
+      { "id": "fabrica", "valor": 15, "texto": "De fábrica de ladrillo", "detalle": "15 kN/m³ aproximado. Peldañeado de ladrillo sobre la losa.", "ref": "Tabla C.1: ladrillo cerámico perforado, 15 kN/m³ (valor aproximado adoptado por TARSEN para cualquier peldañeado de fábrica)" }
     ]
   },
 

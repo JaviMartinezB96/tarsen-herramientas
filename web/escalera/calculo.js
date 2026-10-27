@@ -45,7 +45,7 @@ function comprobar(N, e, c, h, diam, gam) {
   const fcd = (H.alphaCC * fck) / H.gammaC;                            // A19 (3.15)
   const fyd = e.fyk / N.acero.gammaS;                                  // tabla A19.2.1
   const d = h - e.rec - diam / 2;
-  const qd = gam.gammaG * c.g + gam.gammaQ * c.q;                      // CTE DB SE, tabla 4.1 (PENDIENTE)
+  const qd = gam.gammaG * c.g + gam.gammaQ * c.q;                      // CTE DB SE, tabla 4.1 (1,35 y 1,50)
   const Md = (qd * e.L ** 2) / 8;                                      // biapoyada, proyección horizontal
   const Vd = (qd * e.L) / 2;                                           // reacción en apoyo, sin reducir por cos α
   const { mu, As: Asreq } = flexion(Md, d, fcd, fyd);
@@ -102,6 +102,6 @@ function complementos(N, r) {
   const repNec = A.reparto * r.arm.As;                                 // ≥ 20 % de la principal
   const MdSup = A.superiorApoyo * r.Md;                                // 15 % del momento de vano en apoyo extremo
   const supReq = flexion(MdSup, r.d, r.fcd, r.fyd).As;
-  const supNec = Math.max(supReq, r.Asmin);                            // As,min aplicado también arriba [Inferencia, nota de 9.2.1.2(1)]
+  const supNec = Math.max(supReq, r.Asmin);                            // As,min también arriba: nota de 9.2.1.2(1) (criterio TARSEN, confirmado 27-10-2026)
   return { reparto: { nec: repNec, ...elegir(repNec) }, superior: { Md: MdSup, req: supReq, nec: supNec, ...elegir(supNec) } };
 }
