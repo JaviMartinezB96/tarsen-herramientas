@@ -2,9 +2,9 @@
 // Uso: <div data-ui="cabecera"></div> … <div data-ui="aviso"></div> <div data-ui="cta"></div> <div data-ui="pie"></div>
 //      import { iniciarPagina, fmt, cargarJSON } from "../shared/ui.js";
 
-// PENDIENTE: confirmar con TARSEN la URL definitiva de la página de contacto y de la web.
+// URLs de la web de TARSEN (contacto confirmado por el propietario, 27-10-2026).
 export const CONFIG = {
-  contacto: "https://tarsen.es/contacto/",
+  contacto: "https://tarsen.es/#contacto",
   web: "https://tarsen.es/",
   herramientas: "../",
 };
