@@ -21,6 +21,16 @@ export function dosificacion(D, clases, tipo) {
   };
 }
 
+/** Resistencia a especificar y designación. Art. 33.4 (mínimos), 43.2.1 (prevalece la mínima por durabilidad), 33.6 (formato). */
+export function designacion(T, { tipo, clases, fckDur, fckElegida, consistencia, tm }) {
+  const minimo = Math.max(T.fck_minimo[tipo], fckDur || 0);                  // Art. 33.4 y tabla 43.2.1.b
+  const serie = T.serie_R.valores;
+  const R = Math.max(fckElegida || 0, serie.find((v) => v >= minimo) ?? minimo); // Serie recomendada, art. 33.6
+  const subida = fckElegida && fckElegida < minimo;                          // Art. 43.2.1: prevalece la mínima
+  const texto = `${T.T[tipo]}-${R}/${consistencia}/${tm}/${clases.join(T.separador_ambientes.valor)}`; // T-R/C/TM/A
+  return { R, minimo, subida, texto };
+}
+
 const banda = (fck) => (fck >= 40 ? "f40" : fck >= 25 ? "f25" : null); // Bandas de las tablas 44.2.1.1.a, 44.3
 const iVida = (v) => (v === 100 ? 1 : 0);
 

@@ -10,20 +10,20 @@
 </head>
 <body>
   <div data-ui="cabecera"></div>
-  <main class="contenedor">
+  <main class="contenedor estrecho">
     <h1>Herramientas gratuitas de cálculo estructural</h1>
     <p class="entradilla">Consultas rápidas con la normativa española. Todo se calcula en tu navegador.</p>
-    <a class="tarjeta" style="display:block;text-decoration:none" href="hormigon/">
-      <h3>Clases de exposición y recubrimientos</h3>
-      <p class="muted">Dosificación mínima y recubrimiento nominal según el Código Estructural.</p>
-    </a>
+    <div class="opciones-grandes">
+      <a class="opcion" href="hormigon/" style="text-decoration:none">
+        <strong>Clases de exposición y recubrimientos</strong>
+        <span>Designación del hormigón y recubrimiento según el Código Estructural.</span>
+      </a>
+    </div>
     <div data-ui="aviso"></div>
   </main>
-  <div data-ui="cta"></div>
   <div data-ui="pie"></div>
   <script type="module">
-    import { iniciarPagina, CONFIG } from "./shared/ui.js";
-    CONFIG.herramientas = "./";
+    import { iniciarPagina } from "./shared/ui.js";
     iniciarPagina();
   </script>
 </body>

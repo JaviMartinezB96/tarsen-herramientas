@@ -11,15 +11,14 @@
 </head>
 <body>
   <div data-ui="cabecera"></div>
-  <main class="contenedor">
+  <main class="contenedor estrecho">
     <h1>[H1 con la palabra clave]</h1>
     <p class="entradilla">[Qué hace la herramienta, en una frase.]</p>
 
-    <!-- Contenido de la herramienta -->
+    <!-- Contenido de la herramienta, por pasos (.paso). En el paso de resultados: <div data-ui="cta"></div> -->
 
     <div data-ui="aviso"></div>
   </main>
-  <div data-ui="cta"></div>
   <div data-ui="pie"></div>
   <script type="module">
     import { iniciarPagina } from "../shared/ui.js";

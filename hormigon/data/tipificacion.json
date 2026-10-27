@@ -1,0 +1,20 @@
+{
+  "fuente": "Código Estructural (RD 470/2021), Capítulo 8, art. 33 (PDF del cap. 8 en el proyecto de Claude, pp. 112-114). Numeración de apartados deducida de las remisiones internas del texto (33.5 consistencia, 33.6 tipificación); el PDF no imprime los números de los títulos.",
+  "formato": { "_ref": "Art. 33.6 — Tipificación: T-R/C/TM/A", "texto": "T-R/C/TM/A" },
+  "T": { "_ref": "Art. 33.6", "masa": "HM", "armado": "HA", "pretensado": "HP" },
+  "serie_R": { "_ref": "Art. 33.6 — serie recomendada de resistencias (N/mm²)", "valores": [20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100] },
+  "fck_minimo": { "_ref": "Art. 33.4 — Valor mínimo de la resistencia: 20 N/mm² en masa, 25 N/mm² en armado o pretensado", "masa": 20, "armado": 25, "pretensado": 25 },
+  "consistencias": {
+    "_ref": "Tabla 33.5.a — Clases de consistencia (asentamiento en mm) y art. 33.6 (AC para autocompactante)",
+    "lista": [
+      { "id": "F",  "nombre": "Fluida (100–150 mm)" },
+      { "id": "B",  "nombre": "Blanda (50–90 mm)" },
+      { "id": "L",  "nombre": "Líquida (160–210 mm)", "nota": "Solo si se consigue con aditivos superplastificantes." },
+      { "id": "P",  "nombre": "Plástica (30–40 mm)", "nota": "No se emplea salvo justificación específica." },
+      { "id": "S",  "nombre": "Seca (0–20 mm)", "nota": "No se emplea salvo justificación específica." },
+      { "id": "AC", "nombre": "Autocompactante" }
+    ],
+    "nota_edificacion": "En edificación, pilares, forjados y vigas se hormigonan con consistencia fluida salvo justificación en contra."
+  },
+  "separador_ambientes": { "_ref": "[Inferencia] El art. 33.6 no indica cómo unir varias clases en A; se usa '+' (p. ej. XC2+XA1).", "valor": "+" }
+}

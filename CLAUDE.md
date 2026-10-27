@@ -30,15 +30,15 @@ Herramientas web gratuitas para la sección "Herramientas" de la web de TARSEN (
 
 - Español de España, tuteo, unidades SI con símbolo, coma decimal en pantalla.
 - Aviso: herramienta de predimensionado/consulta; no sustituye al proyecto de un técnico competente.
-- CTA final: "¿Necesitas el cálculo completo? Cuéntanos tu proyecto" con enlace a contacto.
-- Botón "Imprimir / PDF" (`window.print()`) con hoja de impresión: logo, fecha, entradas, resultados y referencias.
+- Interfaz simple y por pasos: primero se elige camino (cuestionario o datos a mano), luego solo preguntas o solo datos, y al final los resultados. Notas y comprobaciones plegadas.
+- Cabecera: logo + botón "Contacto". CTA pequeño solo junto a los resultados ("Pide presupuesto a TARSEN"). Sin botón de imprimir, sin selector de tema, sin bloque grande de CTA (decisión del propietario, 27-10-2026).
 - Responsive con prioridad móvil. SEO: `<title>`, `description` y H1 con la palabra clave.
 - Sin cookies ni analítica de terceros. Todo en el navegador; los IFC no se suben a ningún servidor.
 - Entrega: carpeta estática con rutas relativas, lista para subir al hosting propio de TARSEN.
 
 ## Marca
 
-Las herramientas imitan la web actual tarsen.es (su CSS está en `docs/web-tarsen-estilos.css`), que manda sobre el manual de `docs/marca.md` donde difieren. Tema oscuro por defecto: fondo `#0f1512` / `#141c17`, texto `#eef0e6`, `#b4bbae` y `#778072`, titulares en `#e2e8ce`, acento `#acbfa4`, líneas `#e2e8ce1f` / `#e2e8ce3d`. Tipografías Bricolage Grotesque 600 (titulares y cifras) y DM Sans 400/500 (texto). Botones en píldora (radio 999px), el principal relleno `#e2e8ce` con hover `#acbfa4`; campos con radio 6px y tarjetas con radio 10px. Tema claro opcional ([Inferencia], no existe en la web); impresión siempre en claro. Sin emojis. Logos en `shared/brand/` (INV sobre oscuro).
+Las herramientas imitan la web actual tarsen.es (su CSS está en `docs/web-tarsen-estilos.css`), que manda sobre el manual de `docs/marca.md` donde difieren. Tema oscuro por defecto: fondo `#0f1512` / `#141c17`, texto `#eef0e6`, `#b4bbae` y `#778072`, titulares en `#e2e8ce`, acento `#acbfa4`, líneas `#e2e8ce1f` / `#e2e8ce3d`. Tipografías Bricolage Grotesque 600 (titulares y cifras) y DM Sans 400/500 (texto). Botones en píldora (radio 999px), el principal relleno `#e2e8ce` con hover `#acbfa4`; campos con radio 6px y tarjetas con radio 10px. Solo tema oscuro. Sin emojis. Logos en `shared/brand/` (INV sobre oscuro).
 
 ## Propietario
 
@@ -47,10 +47,10 @@ No programa. Cualquier paso manual (subir al hosting, GitHub): pasos numerados y
 ## Estado
 
 - [x] 0. Plantilla común `/shared/` (estilos.css, ui.js, plantilla.html). Contacto: https://tarsen.es/#contacto.
-- [~] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). PENDIENTE: formato de designación del hormigón (falta el artículo de tipificación).
+- [x] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). Designación T-R/C/TM/A con art. 33.4, 33.5 y 33.6 (cap. 8). Flujo por pasos (inicio → preguntas o datos → resultados).
 - [ ] 2. `/escalera/`
 - [ ] 3. `/nieve/`
 - [ ] 4. `/sismo/`
 - [ ] 5. `/visor-ifc/`
 
-Subido: `docs/normativa/CE-capitulo-9-durabilidad.pdf`; cap. 7 del CE (art. 27) en el proyecto de Claude. Pendiente de subir a `docs/normativa/`: extractos de CTE DB SE-AE (3.5 y Anejo E), Código Estructural (tipificación del hormigón, flexión, cortante, cuantías, esbeltez) y NCSE-02 (1.2, 2.1, 2.2, figura 2.1 y Anejo 1).
+Subido: `docs/normativa/CE-capitulo-9-durabilidad.pdf`; caps. 7 (art. 27) y 8 (art. 33) del CE en el proyecto de Claude. Pendiente de subir a `docs/normativa/`: extractos de CTE DB SE-AE (3.5 y Anejo E), Código Estructural (tipificación del hormigón, flexión, cortante, cuantías, esbeltez) y NCSE-02 (1.2, 2.1, 2.2, figura 2.1 y Anejo 1).
