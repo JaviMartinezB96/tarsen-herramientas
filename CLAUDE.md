@@ -50,7 +50,7 @@ No programa. Cualquier paso manual (subir al hosting, GitHub): pasos numerados y
 
 - [x] 0. Plantilla común `/shared/` (estilos.css, ui.js, plantilla.html). Contacto: https://tarsen.es/#contacto.
 - [x] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). Designación T-R/C/TM/A con art. 33.4, 33.5 y 33.6 (cap. 8). Flujo: cuestionario con avance automático → resultado + respuestas editables. XS1 a < 5 km de la costa aunque esté protegido (criterio TARSEN). Pregunta Ø máximo de obra y Ø de cercos/estribos: cmin se mide al estribo y la armadura principal exige (Ø − Øe) y (k·TM − Øe) [Inferencia sobre arts. 43.4.1 y 44.2.1.1 a)]; caso XC1, CEM I, Ø12, estribo Ø8, TM20 → 15/25 mm al estribo y 33 mm a la principal.
-- [ ] 2. `/escalera/`
+- [ ] 2. `/escalera/` — programada, NO enlazada en `index.html`: faltan γG y γQ (CTE DB SE, tabla 4.1, `PENDIENTE` en `escalera/data/escalera.json`). Cálculo con Anejo 19 (A19.2.1, 3.1.6, 3.1.7, 3.23, 6.2.2, 7.4.2, 9.2.1.1, 9.3.1) y DB SE-AE (tabla 3.1, 3.1.1.3, tabla C.1). Busca el menor h (desde 15 cm, cada 1 cm) que cumple esbeltez (luz inclinada) y cortante sin cercos (ρl con la mitad de As, 9.3.1.2); peldaños de hormigón (24 kN/m³) o fábrica (12/15/18), sin colaborar. Verificado con γ provisionales 1,35/1,50: L = 3/4/5 m → h 16/20/25 cm, Ø10/20, Ø10/15, Ø12/15. El cuestionario común está ahora en `shared/asistente.js` (admite preguntas numéricas).
 - [ ] 3. `/nieve/`
 - [ ] 4. `/sismo/`
 - [ ] 5. `/visor-ifc/`

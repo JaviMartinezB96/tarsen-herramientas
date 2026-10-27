@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de escalera de hormigón armado biapoyada (Código Estructural) | TARSEN</title>
+  <meta name="description" content="Predimensiona gratis una escalera de hormigón armado biapoyada: canto de la losa y armado según el Código Estructural y el CTE DB SE-AE.">
+  <link rel="icon" href="../shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../shared/estilos.css">
+</head>
+<body>
+  <div data-ui="cabecera"></div>
+  <main class="contenedor estrecho">
+    <h1>Calculadora de escalera de hormigón armado</h1>
+    <p class="entradilla">Responde unas preguntas y obtén el canto de la losa y el armado de un tramo recto biapoyado según el Código Estructural.</p>
+
+    <!-- Cuestionario (una pregunta por pantalla, avance automático) -->
+    <section class="paso" id="p-preguntas"><div id="asistente" aria-live="polite"></div></section>
+
+    <!-- Resultado + respuestas editables (recalcula al cambiar) -->
+    <section class="paso" id="p-resultados" hidden>
+      <div id="res" aria-live="polite"></div>
+      <h2 class="pregunta subtitulo">Tus respuestas</h2>
+      <p class="nota">Cambia cualquier dato y el resultado se recalcula al momento.</p>
+      <form id="f" class="respuestas" onsubmit="return false"></form>
+      <div class="botonera"><button class="btn" type="button" id="reiniciar">Empezar de nuevo</button></div>
+      <div data-ui="cta"></div>
+    </section>
+
+    <div data-ui="aviso"></div>
+  </main>
+  <div data-ui="pie"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

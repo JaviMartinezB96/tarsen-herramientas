@@ -2,7 +2,7 @@
 // Cálculo en calculo.js; datos normativos en data/*.json.
 import { iniciarPagina, fmt, cargarJSON } from "../shared/ui.js";
 import { dosificacion, recubrimiento, designacion } from "./calculo.js";
-import { montarAsistente } from "./asistente.js";
+import { montarAsistente } from "../shared/asistente.js";
 
 iniciarPagina();
 const [D, R, C, T] = await Promise.all(
@@ -46,8 +46,16 @@ function cementos(e) {
 }
 
 // ---- Cuestionario ----
+// Tabla 27.1.b (umbrales de agresividad), plegada bajo la pregunta que la pide.
+const tabla = (t) => `<details class="nota"><summary>Ver tabla 27.1.b (umbrales de agresividad)</summary>
+  <div style="overflow-x:auto"><table class="tabla"><thead><tr>${t.columnas.map((c) => `<th>${c}</th>`).join("")}</tr></thead><tbody>
+  <tr><th colspan="4">Agua</th></tr>${t.agua.map((f) => `<tr>${f.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}
+  <tr><th colspan="4">Suelo</th></tr>${t.suelo.map((f) => `<tr>${f.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}
+  </tbody></table></div><p>${t.nota} <span class="ref">Código Estructural, tabla 27.1.b</span></p></details>`;
+
 const asistente = montarAsistente($("#asistente"), C, {
   inicial: INICIAL,
+  extra: (p) => (p.tabla ? tabla(C[p.tabla]) : ""),
   opcionesDe: (nombre, e) => (nombre === "cementos" ? cementos(e) : []),
   alTerminar: (e) => { est = { ...INICIAL, ...e }; mostrarResultado(); },
 });

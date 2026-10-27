@@ -1,0 +1,121 @@
+{
+  "fuentes": {
+    "CE": "Código Estructural (RD 470/2021), Anejo 19 y cap. 8 (art. 34), PDF en el proyecto de Claude.",
+    "SE-AE": "CTE DB SE-AE, tabla 3.1, apdo. 3.1.1.3 y tabla C.1, PDF en el proyecto de Claude.",
+    "SE": "CTE DB SE, tabla 4.1 — NO SUBIDO: coeficientes de las acciones PENDIENTES."
+  },
+
+  "acciones": {
+    "_ref": "CTE DB SE, tabla 4.1 (coeficientes parciales de seguridad de las acciones, ELU, situación persistente)",
+    "gammaG": "PENDIENTE",
+    "gammaQ": "PENDIENTE"
+  },
+
+  "pesos": {
+    "_ref": "CTE DB SE-AE, tabla C.1 (peso específico aparente, kN/m³)",
+    "losa": { "valor": 25, "texto": "Hormigón armado", "ref": "Tabla C.1: hormigón normal 24,0 kN/m³ + 1 kN/m³ por armado usual (nota 1)" },
+    "peldanos": [
+      { "id": "hormigon", "valor": 24, "texto": "Hormigonados con la losa", "detalle": "Hormigón en masa, 24 kN/m³. No colaboran en la resistencia: solo pesan.", "ref": "Tabla C.1: hormigón normal" },
+      { "id": "hueco", "valor": 12, "texto": "De fábrica de ladrillo hueco", "detalle": "12 kN/m³. Peldañeado ligero habitual sobre la losa.", "ref": "Tabla C.1: ladrillo cerámico hueco" },
+      { "id": "perforado", "valor": 15, "texto": "De fábrica de ladrillo perforado", "detalle": "15 kN/m³.", "ref": "Tabla C.1: ladrillo cerámico perforado" },
+      { "id": "macizo", "valor": 18, "texto": "De fábrica de ladrillo macizo", "detalle": "18 kN/m³.", "ref": "Tabla C.1: ladrillo cerámico macizo" }
+    ]
+  },
+
+  "sobrecargas": {
+    "_ref": "CTE DB SE-AE, tabla 3.1 (qk, kN/m²) y apdo. 3.1.1.3",
+    "incremento_escaleras": { "valor": 1, "categorias": ["A", "B"], "ref": "DB SE-AE 3.1.1.3: en escaleras de zonas A y B se incrementa en 1 kN/m² el valor de la zona servida" },
+    "lista": [
+      { "id": "A1", "cat": "A", "qk": 2, "texto": "Viviendas, hoteles y hospitales (A1)" },
+      { "id": "A2", "cat": "A", "qk": 3, "texto": "Trasteros (A2)" },
+      { "id": "B",  "cat": "B", "qk": 2, "texto": "Zonas administrativas (B)" },
+      { "id": "C1", "cat": "C", "qk": 3, "texto": "Pública con mesas y sillas (C1)" },
+      { "id": "C2", "cat": "C", "qk": 4, "texto": "Pública con asientos fijos (C2)" },
+      { "id": "C3", "cat": "C", "qk": 5, "texto": "Pública sin obstáculos: vestíbulos, museos (C3)" },
+      { "id": "C4", "cat": "C", "qk": 5, "texto": "Gimnasios y actividades físicas (C4)" },
+      { "id": "C5", "cat": "C", "qk": 5, "texto": "Zonas de aglomeración (C5)" },
+      { "id": "D1", "cat": "D", "qk": 5, "texto": "Locales comerciales (D1)" },
+      { "id": "D2", "cat": "D", "qk": 5, "texto": "Supermercados y grandes superficies (D2)" }
+    ]
+  },
+
+  "hormigon": {
+    "_ref": "Anejo 19: tabla A19.2.1 (γc), 3.1.6(1) (αcc), tabla A19.3.1 (fctm), 3.1.7(3) (λ, η)",
+    "gammaC": 1.5,
+    "alphaCC": 1.0,
+    "fctm": "0,30·fck^(2/3) para fck ≤ 50 N/mm² (tabla A19.3.1)",
+    "fck": [25, 30, 35, 40, 45, 50],
+    "_fck": "Mínimo 25 N/mm² en armado (art. 33.4). Máximo 50 N/mm²: por encima cambian λ, η y fctm (3.1.7(3), tabla A19.3.1)."
+  },
+
+  "acero": {
+    "_ref": "Cap. 8, tabla 34.2.a (fyk) y Anejo 19, tabla A19.2.1 (γs)",
+    "gammaS": 1.15,
+    "tipos": [
+      { "id": "B500S", "fyk": 500, "texto": "B 500 S" },
+      { "id": "B500SD", "fyk": 500, "texto": "B 500 SD" },
+      { "id": "B400S", "fyk": 400, "texto": "B 400 S" },
+      { "id": "B400SD", "fyk": 400, "texto": "B 400 SD" }
+    ]
+  },
+
+  "cortante": {
+    "_ref": "Anejo 19, 6.2.2(1) expresiones (6.2.a), (6.2.b) y (6.3); 6.2.2(6) expresiones (6.5) y (6.6)",
+    "CRdc": 0.18, "vmin": 0.035, "rhoMax": 0.02, "kMax": 2.0
+  },
+
+  "esbeltez": {
+    "_ref": "Anejo 19, 7.4.2(2): expresiones (7.16.a/b), (7.17) y tabla A19.7.4",
+    "K": 1.0,
+    "_K": "Tabla A19.7.4: viga simplemente apoyada; losa unidireccional simplemente apoyada",
+    "sigmaRef": 500
+  },
+
+  "armado": {
+    "_ref": "Anejo 19: 9.2.1.1 (As,min y As,max), 9.3.1.1 (reparto y separación), 9.3.1.2 (apoyos)",
+    "zSobreH": 0.8,
+    "asMaxSobreAc": 0.04,
+    "reparto": 0.20,
+    "sMaxAbs": 300,
+    "sMaxSobreH": 3,
+    "superiorApoyo": 0.15,
+    "longitudSuperior": 0.2,
+    "fraccionAlApoyo": 0.5,
+    "diamPrincipal": [10, 12, 16],
+    "diamReparto": [8, 10, 12],
+    "_criterio": "Criterio TARSEN (no normativo): separaciones múltiplo de 50 mm y no menores de 100 mm.",
+    "sPaso": 50,
+    "sMin": 100
+  },
+
+  "canto": {
+    "_criterio": "Criterio TARSEN (no normativo): canto mínimo 150 mm, en saltos de 10 mm, hasta 400 mm.",
+    "min": 150, "max": 400, "paso": 10
+  },
+
+  "asistente": [
+    { "id": "uso", "campo": "uso", "pregunta": "¿A qué uso da servicio la escalera?", "dinamica": "usos",
+      "nota": "En viviendas y oficinas (categorías A y B) la escalera lleva 1 kN/m² más que la zona a la que sirve.",
+      "ref": "CTE DB SE-AE, tabla 3.1 y apdo. 3.1.1.3" },
+    { "id": "L", "campo": "L", "tipo": "numero", "pregunta": "¿Cuál es la luz horizontal entre apoyos?", "unidad": "Luz L (m)",
+      "min": 1.5, "max": 7, "paso": 0.05, "nota": "Distancia en planta entre los ejes de apoyo del tramo (forjado, viga o muro).",
+      "ref": "Tramo recto biapoyado, sin mesetas" },
+    { "id": "contrahuella", "campo": "contrahuella", "tipo": "numero", "pregunta": "¿Cuánto mide la contrahuella?", "unidad": "Contrahuella (cm)",
+      "min": 10, "max": 25, "paso": 0.5, "nota": "Altura de cada peldaño." },
+    { "id": "huella", "campo": "huella", "tipo": "numero", "pregunta": "¿Cuánto mide la huella?", "unidad": "Huella (cm)",
+      "min": 20, "max": 40, "paso": 0.5, "nota": "Fondo de cada peldaño. Con la contrahuella da la inclinación del tramo." },
+    { "id": "peldanos", "campo": "peldanos", "pregunta": "¿Cómo se hacen los peldaños?", "dinamica": "peldanos",
+      "nota": "En ningún caso los peldaños se cuentan como parte resistente de la losa.",
+      "ref": "CTE DB SE-AE, tabla C.1" },
+    { "id": "solado", "campo": "solado", "tipo": "numero", "pregunta": "¿Cuánto pesan el solado y el revestimiento inferior?", "unidad": "Solado y revestimiento (kN/m²)",
+      "min": 0, "max": 5, "paso": 0.05, "nota": "Peldañeado de piedra o cerámica con mortero, más el enlucido o falso techo inferior. Si no lo sabes, deja 1,50 kN/m²." },
+    { "id": "fck", "campo": "fck", "pregunta": "¿Qué hormigón vas a usar?", "dinamica": "fck",
+      "ref": "Código Estructural, art. 33.4 y Anejo 19, tabla A19.3.1" },
+    { "id": "acero", "campo": "acero", "pregunta": "¿Qué acero vas a usar?", "dinamica": "aceros",
+      "ref": "Código Estructural, tabla 34.2.a" },
+    { "id": "rec", "campo": "rec", "tipo": "numero", "pregunta": "¿Qué recubrimiento nominal lleva la armadura?", "unidad": "Recubrimiento (mm)",
+      "min": 15, "max": 80, "paso": 1,
+      "nota": "Distancia de la cara inferior a la barra principal. Si no lo sabes, calcúlalo en <a href=\"../hormigon/\">clases de exposición y recubrimientos</a>.",
+      "ref": "Código Estructural, art. 43.4.1" }
+  ]
+}
