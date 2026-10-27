@@ -2,6 +2,8 @@
 
 Herramientas web gratuitas para la sección "Herramientas" de la web de TARSEN (estudio de cálculo estructural, España). Objetivo: captar visitas de arquitectos, estudiantes y particulares y generar contactos. Especificación completa: documento "Contexto — Herramientas web TARSEN" (en el proyecto de Claude).
 
+La web publicable vive en `web/` (es la carpeta que publica Cloudflare Pages). Las rutas de la tabla son relativas a `web/`. Fuera de `web/` solo hay documentación interna (`docs/`, este archivo), que no se publica.
+
 | Carpeta | Herramienta | Normativa |
 | --- | --- | --- |
 | `/escalera/` | Predimensionador de escalera biapoyada | Código Estructural + CTE DB SE-AE |
@@ -34,7 +36,7 @@ Herramientas web gratuitas para la sección "Herramientas" de la web de TARSEN (
 - Cabecera: logo + botón "Contacto". CTA pequeño solo junto a los resultados ("Pide presupuesto a TARSEN"). Sin botón de imprimir, sin selector de tema, sin bloque grande de CTA (decisión del propietario, 27-10-2026).
 - Responsive con prioridad móvil. SEO: `<title>`, `description` y H1 con la palabra clave.
 - Sin cookies ni analítica de terceros. Todo en el navegador; los IFC no se suben a ningún servidor.
-- Entrega: carpeta estática con rutas relativas, lista para subir al hosting propio de TARSEN.
+- Entrega: carpeta estática `web/` con rutas relativas. Publicación de prueba automática en Cloudflare Pages conectado a GitHub (rama `main`, carpeta de salida `web`); más adelante, dominio propio de TARSEN.
 
 ## Marca
 
