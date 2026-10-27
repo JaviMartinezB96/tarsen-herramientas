@@ -1,3 +1,5 @@
+> Nota (oct. 2026): la web actual tarsen.es usa Bricolage Grotesque + DM Sans, fondo verde casi negro y botones en píldora. Para las herramientas web manda la web (ver `docs/web-tarsen-estilos.css` y CLAUDE.md).
+
 TARSEN es un estudio de cálculo estructural. La marca transmite precisión y tranquilidad: estructura limpia, mucho aire, dos verdes suaves sobre una tinta casi negra. Todo lo que se diseñe debe parecer calculado, no decorado.
 
 ## Contenido y tono

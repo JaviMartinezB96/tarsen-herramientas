@@ -26,7 +26,8 @@ export async function cargarJSON(url) {
 // ---- Tema claro / sobre oscuro (preferencia guardada solo en este navegador) ----
 function leerTema() { try { return localStorage.getItem("tarsen-tema"); } catch { return null; } }
 function guardarTema(t) { try { localStorage.setItem("tarsen-tema", t); } catch { /* sin almacenamiento */ } }
-function aplicarTema(t) { document.documentElement.dataset.theme = t === "dark" ? "dark" : "light"; }
+// Por defecto oscuro, como tarsen.es; el claro es opcional.
+function aplicarTema(t) { document.documentElement.dataset.theme = t === "light" ? "light" : "dark"; }
 aplicarTema(leerTema());
 
 const html = (s) => { const t = document.createElement("template"); t.innerHTML = s.trim(); return t.content; };
@@ -57,7 +58,9 @@ const PIEZAS = {
       <a class="btn" href="${CONFIG.contacto}">Pide presupuesto a TARSEN</a>
     </div></aside>`,
   pie: () => `
-    <footer class="pie"><div class="contenedor">© ${new Date().getFullYear()} TARSEN · Cálculo estructural</div></footer>`,
+    <footer class="pie"><div class="contenedor">
+      <a href="${CONFIG.web}">tarsen.es</a><span>© ${new Date().getFullYear()} TARSEN Estructuras</span>
+    </div></footer>`,
 };
 
 /** Rellena los huecos data-ui y conecta los botones comunes. */
@@ -70,7 +73,7 @@ export function iniciarPagina() {
     const a = e.target.closest("[data-accion]")?.dataset.accion;
     if (a === "imprimir") window.print();
     if (a === "tema") {
-      const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      const t = document.documentElement.dataset.theme === "light" ? "dark" : "light";
       aplicarTema(t); guardarTema(t);
     }
   });

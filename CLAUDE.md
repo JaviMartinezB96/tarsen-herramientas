@@ -38,7 +38,7 @@ Herramientas web gratuitas para la sección "Herramientas" de la web de TARSEN (
 
 ## Marca
 
-Fuente de verdad: `docs/marca.md` y `docs/marca-tokens.json`. Resumen: `brand-ink` #262626, `brand-sage` #ACBFA4 (solo relleno, nunca texto sobre blanco), `brand-pale` #E2E8CE. Tema claro por defecto y tema "Sobre oscuro"; el visor IFC siempre oscuro. Red Hat Display 800 para titulares y cifras; Red Hat Text 400/500 para el resto. Aristas vivas, sin degradados ni sombras, sin emojis. Logos en `shared/brand/`.
+Las herramientas imitan la web actual tarsen.es (su CSS está en `docs/web-tarsen-estilos.css`), que manda sobre el manual de `docs/marca.md` donde difieren. Tema oscuro por defecto: fondo `#0f1512` / `#141c17`, texto `#eef0e6`, `#b4bbae` y `#778072`, titulares en `#e2e8ce`, acento `#acbfa4`, líneas `#e2e8ce1f` / `#e2e8ce3d`. Tipografías Bricolage Grotesque 600 (titulares y cifras) y DM Sans 400/500 (texto). Botones en píldora (radio 999px), el principal relleno `#e2e8ce` con hover `#acbfa4`; campos con radio 6px y tarjetas con radio 10px. Tema claro opcional ([Inferencia], no existe en la web); impresión siempre en claro. Sin emojis. Logos en `shared/brand/` (INV sobre oscuro).
 
 ## Propietario
 
