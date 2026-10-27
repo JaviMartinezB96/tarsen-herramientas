@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Clases de exposición, tipo de hormigón y recubrimientos (Código Estructural) | TARSEN</title>
-  <meta name="description" content="Calcula gratis la clase de exposición, la designación del hormigón y el recubrimiento nominal según el Código Estructural, paso a paso.">
+  <meta name="description" content="Calcula gratis la clase de exposición, la designación del hormigón y el recubrimiento nominal según el Código Estructural, respondiendo unas preguntas.">
   <link rel="icon" href="../shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../shared/estilos.css">
 </head>
@@ -12,73 +12,18 @@
   <div data-ui="cabecera"></div>
   <main class="contenedor estrecho">
     <h1>Clases de exposición y recubrimientos del hormigón</h1>
-    <p class="entradilla">Obtén la designación del hormigón y el recubrimiento que pide el Código Estructural.</p>
+    <p class="entradilla">Responde unas preguntas y obtén la designación del hormigón y el recubrimiento que pide el Código Estructural.</p>
 
-    <!-- Paso 0: elegir camino -->
-    <section class="paso" id="p-inicio">
-      <h2 class="pregunta">¿Cómo quieres empezar?</h2>
-      <div class="opciones-grandes">
-        <button class="opcion" type="button" data-ir="preguntas">
-          <strong>Responder unas preguntas</strong>
-          <span>Te guiamos paso a paso para saber el ambiente de tu elemento.</span>
-        </button>
-        <button class="opcion" type="button" data-ir="manual">
-          <strong>Introducir los datos</strong>
-          <span>Si ya conoces las clases de exposición.</span>
-        </button>
-      </div>
-    </section>
+    <!-- Cuestionario (una pregunta por pantalla, avance automático) -->
+    <section class="paso" id="p-preguntas"><div id="asistente" aria-live="polite"></div></section>
 
-    <!-- Camino A: cuestionario (tabla 27.1.a) -->
-    <section class="paso" id="p-preguntas" hidden><div id="asistente" aria-live="polite"></div></section>
-
-    <!-- Datos (camino B completo; en el camino A solo los datos del hormigón) -->
-    <section class="paso" id="p-datos" hidden>
-      <form id="f" novalidate>
-        <div id="bloque-clases">
-          <h2 class="pregunta">Clases de exposición</h2>
-          <label class="campo"><span>Tipo de hormigón</span>
-            <select name="tipo"><option value="armado">Armado</option><option value="pretensado">Pretensado</option><option value="masa">En masa</option></select></label>
-          <label class="campo"><span>Corrosión de armaduras</span><select name="corrosion"></select></label>
-          <label class="campo"><span>Heladas</span><select name="xf"></select></label>
-          <label class="campo"><span>Ataque químico</span><select name="xa"></select></label>
-          <label class="campo"><span>Erosión</span><select name="xm"></select></label>
-        </div>
-        <div id="bloque-resumen" hidden>
-          <p class="label">Clases de exposición</p>
-          <p class="dato" id="resumen-clases"></p>
-        </div>
-
-        <h2 class="pregunta">Datos del hormigón</h2>
-        <label class="campo"><span>Resistencia fck</span><select name="fck"></select></label>
-        <label class="campo"><span>Consistencia</span><select name="consistencia"></select></label>
-        <label class="campo"><span>Tamaño máximo del árido (mm)</span><input name="tm" type="number" min="4" max="63" step="1" value="20"></label>
-
-        <label class="check" id="check-rec"><input type="checkbox" name="conRec"><span>Calcular también el recubrimiento</span></label>
-        <div id="bloque-rec" hidden>
-          <label class="campo"><span>Tipo de cemento</span><select name="cemento"></select></label>
-          <label class="campo"><span>Vida útil de proyecto</span>
-            <select name="vida"><option value="50">50 años</option><option value="100">100 años</option></select></label>
-          <label class="campo"><span>Control de ejecución</span><select name="margen"></select></label>
-          <label class="campo"><span>Diámetro de la barra principal (mm)</span><input name="diam" type="number" min="6" max="40" step="1" value="12"></label>
-          <label class="check"><input type="checkbox" name="aridoDificil"><span>Las armaduras dificultan el paso del hormigón</span></label>
-          <label class="check"><input type="checkbox" name="terreno"><span>Se hormigona contra el terreno, sin hormigón de limpieza</span></label>
-        </div>
-
-        <div class="botonera">
-          <button class="btn" type="button" id="datos-atras">Atrás</button>
-          <button class="btn btn-primario" type="submit">Ver resultados</button>
-        </div>
-      </form>
-    </section>
-
-    <!-- Resultados -->
+    <!-- Resultado + respuestas editables (recalcula al cambiar) -->
     <section class="paso" id="p-resultados" hidden>
       <div id="res" aria-live="polite"></div>
-      <div class="botonera">
-        <button class="btn" type="button" id="res-cambiar">Cambiar datos</button>
-        <button class="btn" type="button" id="res-reiniciar">Empezar de nuevo</button>
-      </div>
+      <h2 class="pregunta subtitulo">Tus respuestas</h2>
+      <p class="nota">Cambia cualquier dato y el resultado se recalcula al momento.</p>
+      <form id="f" class="respuestas" onsubmit="return false"></form>
+      <div class="botonera"><button class="btn" type="button" id="reiniciar">Empezar de nuevo</button></div>
       <div data-ui="cta"></div>
     </section>
 

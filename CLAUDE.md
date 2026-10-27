@@ -30,7 +30,7 @@ Herramientas web gratuitas para la sección "Herramientas" de la web de TARSEN (
 
 - Español de España, tuteo, unidades SI con símbolo, coma decimal en pantalla.
 - Aviso: herramienta de predimensionado/consulta; no sustituye al proyecto de un técnico competente.
-- Interfaz simple y por pasos: primero se elige camino (cuestionario o datos a mano), luego solo preguntas o solo datos, y al final los resultados. Notas y comprobaciones plegadas.
+- Interfaz simple: empieza directamente con preguntas (una por pantalla, avanza al pulsar la respuesta) y termina en el resultado, debajo del cual se muestran las respuestas como desplegables editables que recalculan al momento. Opciones con ayuda (p. ej. cementos ordenados por recubrimiento). Notas y comprobaciones plegadas.
 - Cabecera: logo + botón "Contacto". CTA pequeño solo junto a los resultados ("Pide presupuesto a TARSEN"). Sin botón de imprimir, sin selector de tema, sin bloque grande de CTA (decisión del propietario, 27-10-2026).
 - Responsive con prioridad móvil. SEO: `<title>`, `description` y H1 con la palabra clave.
 - Sin cookies ni analítica de terceros. Todo en el navegador; los IFC no se suben a ningún servidor.
@@ -47,7 +47,7 @@ No programa. Cualquier paso manual (subir al hosting, GitHub): pasos numerados y
 ## Estado
 
 - [x] 0. Plantilla común `/shared/` (estilos.css, ui.js, plantilla.html). Contacto: https://tarsen.es/#contacto.
-- [x] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). Designación T-R/C/TM/A con art. 33.4, 33.5 y 33.6 (cap. 8). Flujo por pasos (inicio → preguntas o datos → resultados).
+- [x] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). Designación T-R/C/TM/A con art. 33.4, 33.5 y 33.6 (cap. 8). Flujo: cuestionario con avance automático → resultado + respuestas editables. XS1 a < 5 km de la costa aunque esté protegido (criterio TARSEN).
 - [ ] 2. `/escalera/`
 - [ ] 3. `/nieve/`
 - [ ] 4. `/sismo/`

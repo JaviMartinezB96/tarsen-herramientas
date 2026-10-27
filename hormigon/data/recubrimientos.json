@@ -13,7 +13,9 @@
         "xf13": "otros",
         "xf24": "otros",
         "xa1": "resto",
-        "pretensado": true
+        "pretensado": true,
+        "desc": "Portland sin adiciones.",
+        "habitual": true
       },
       {
         "id": "CEMI_HS",
@@ -24,7 +26,9 @@
         "xf13": "otros",
         "xf24": "otros",
         "xa1": "g1",
-        "pretensado": true
+        "pretensado": true,
+        "desc": "CEM I con humo de sílice añadido en central (más del 6 %).",
+        "habitual": false
       },
       {
         "id": "CEMI_CV",
@@ -35,7 +39,9 @@
         "xf13": "otros",
         "xf24": "otros",
         "xa1": "g1",
-        "pretensado": true
+        "pretensado": true,
+        "desc": "CEM I con cenizas volantes añadidas en central (más del 20 %).",
+        "habitual": false
       },
       {
         "id": "CEMII_AD",
@@ -46,7 +52,9 @@
         "xf13": "otros",
         "xf24": "CEMIIAD",
         "xa1": "g1",
-        "pretensado": true
+        "pretensado": true,
+        "desc": "Portland con humo de sílice.",
+        "habitual": false
       },
       {
         "id": "CEMII_BV",
@@ -57,7 +65,9 @@
         "xf13": "otros",
         "xf24": "otros",
         "xa1": "g1",
-        "pretensado": false
+        "pretensado": false,
+        "desc": "Portland con cenizas volantes silíceas.",
+        "habitual": false
       },
       {
         "id": "CEMII_BSP",
@@ -68,7 +78,9 @@
         "xf13": "otros",
         "xf24": "otros",
         "xa1": "g1",
-        "pretensado": false
+        "pretensado": false,
+        "desc": "Portland con escoria (B-S) o con puzolana natural (B-P).",
+        "habitual": false
       },
       {
         "id": "CEMIII",
@@ -79,7 +91,9 @@
         "xf13": "CEMIII",
         "xf24": "CEMIII",
         "xa1": "g1",
-        "pretensado": false
+        "pretensado": false,
+        "desc": "De horno alto (con escoria).",
+        "habitual": false
       },
       {
         "id": "CEMIV",
@@ -90,21 +104,26 @@
         "xf13": "otros",
         "xf24": "otros",
         "xa1": "g1",
-        "pretensado": false
+        "pretensado": false,
+        "desc": "Puzolánico.",
+        "habitual": false
       },
       {
         "id": "OTROS",
-        "nombre": "Otros cementos (resto de CEM II, CEM V…)",
+        "nombre": "Otros CEM II y CEM V",
         "a": "otros",
         "b_armado": "resto",
         "b_pretensado": "resto",
         "xf13": "otros",
         "xf24": "otros",
         "xa1": "resto",
-        "pretensado": true
+        "pretensado": true,
+        "desc": "Resto de CEM II (A-L, A-LL, A-M, A-S, A-V…) y CEM V.",
+        "habitual": true
       }
     ],
-    "_ref_pretensado": "Tabla 28 (art. 28): en pretensado solo CEM I, CEM II/A-D, CEM II/A-V, CEM II/A-P y CEM II/A-M (V, P). 'pretensado': false = no utilizable en pretensado."
+    "_ref_pretensado": "Tabla 28 (art. 28): en pretensado solo CEM I, CEM II/A-D, CEM II/A-V, CEM II/A-P y CEM II/A-M (V, P). 'pretensado': false = no utilizable en pretensado.",
+    "_ref_desc": "[Inferencia] 'desc' y 'habitual' son orientación de TARSEN, no son de la norma."
   },
   "carbonatacion": {
     "_ref": "Tabla 44.2.1.1.a — Recubrimientos mínimos para clases relacionadas con la corrosión por carbonatación",
@@ -234,19 +253,19 @@
     "_ref": "Tabla 43.4.1 — Margen de recubrimiento Δcdev según el nivel de control de ejecución",
     "lista": [
       {
-        "id": "prefabricado",
-        "nombre": "Prefabricado con nivel intenso de control en la instalación",
-        "valor": 0
+        "id": "otros",
+        "nombre": "Control normal (otros casos, lo habitual)",
+        "valor": 10
       },
       {
         "id": "intenso",
-        "nombre": "In situ con nivel intenso de control de ejecución",
+        "nombre": "Control intenso, in situ",
         "valor": 5
       },
       {
-        "id": "otros",
-        "nombre": "Otros casos",
-        "valor": 10
+        "id": "prefabricado",
+        "nombre": "Prefabricado con control intenso",
+        "valor": 0
       }
     ]
   },

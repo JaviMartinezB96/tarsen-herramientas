@@ -69,9 +69,15 @@ select, input[type="number"] { width: 100%; min-width: 0; min-height: 48px; padd
 select:focus, input:focus { border-color: var(--sage); outline: none; }
 .check { display: flex; gap: 10px; align-items: flex-start; margin: 8px 0 14px; color: var(--ink); cursor: pointer; }
 input[type="radio"], input[type="checkbox"] { accent-color: var(--sage); margin-top: 5px; }
-form h2.pregunta + .campo, #bloque-resumen + h2 { margin-top: 0; }
-#bloque-clases, #bloque-resumen { margin-bottom: 40px; }
-#bloque-rec { border-left: 1px solid var(--line-2); padding-left: 16px; margin-top: 8px; }
+.radio > span { display: grid; gap: 2px; }
+.radio small { color: var(--ink-3); font-size: 13.5px; line-height: 1.45; }
+.etiqueta { font-style: normal; font-size: 12px; font-weight: 500; color: #141c17; background: var(--sage);
+  border-radius: 999px; padding: 2px 8px; margin-left: 6px; white-space: nowrap; vertical-align: 2px; }
+.progreso { height: 2px; background: var(--line); margin-bottom: 20px; }
+.progreso span { display: block; height: 100%; background: var(--sage); transition: width .3s; }
+.subtitulo { margin-top: 48px; margin-bottom: 8px; }
+.respuestas { display: grid; gap: 0 14px; margin-top: 20px; }
+@media (min-width: 720px) { .respuestas { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 
 /* Resultados */
 .designacion { font-size: clamp(30px, 5vw, 48px); margin-bottom: 6px; word-break: break-word; }

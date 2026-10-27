@@ -2,7 +2,7 @@
   "fuente": "Código Estructural (RD 470/2021), Capítulo 7, art. 27.1, tablas 27.1.a y 27.1.b (PDF del cap. 7 en el proyecto de Claude, pp. 90-93).",
   "clases": {
     "_ref": "Tabla 27.1.a — Descripción del entorno",
-    "X0":  "Sin riesgo de corrosión (masa; o armado en ambiente muy seco)",
+    "X0": "Sin riesgo de corrosión (masa; o armado en ambiente muy seco)",
     "XC1": "Seco o permanentemente húmedo",
     "XC2": "Húmedo, raramente seco",
     "XC3": "Humedad moderada",
@@ -24,92 +24,434 @@
     "XM2": "Erosión/abrasión intensa",
     "XM3": "Erosión/abrasión extrema"
   },
-
   "asistente": [
     {
-      "id": "tipo", "campo": "tipo", "pregunta": "¿De qué hormigón es el elemento?",
+      "id": "tipo",
+      "campo": "tipo",
+      "pregunta": "¿De qué hormigón es el elemento?",
       "opciones": [
-        { "valor": "armado", "texto": "Armado (con barras de acero)" },
-        { "valor": "pretensado", "texto": "Pretensado" },
-        { "valor": "masa", "texto": "En masa (sin armaduras)", "fija": { "corrosion": "X0" } }
+        {
+          "valor": "armado",
+          "texto": "Armado (con barras de acero)"
+        },
+        {
+          "valor": "pretensado",
+          "texto": "Pretensado"
+        },
+        {
+          "valor": "masa",
+          "texto": "En masa (sin armaduras)",
+          "fija": {
+            "corrosion": "X0"
+          }
+        }
       ],
       "ref": "Tabla 27.1.a: en masa, X0 salvo hielo/deshielo, abrasión o ataque químico"
     },
     {
-      "id": "entorno", "campo": "corrosion", "solo_si": { "tipo": ["armado", "pretensado"] },
+      "id": "entorno",
+      "campo": "corrosion",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ]
+      },
       "pregunta": "¿Dónde está el elemento?",
       "opciones": [
-        { "valor": "X0",  "texto": "Interior de un edificio con humedad muy baja (HR < 45 %)" },
-        { "valor": "XC1", "texto": "Interior de un edificio con humedad baja (HR < 65 %), o siempre sumergido en agua no agresiva" },
-        { "valor": "XC2", "texto": "Enterrado en suelo no agresivo o siempre en contacto con agua (p. ej., cimentaciones)" },
-        { "valor": "XC3", "texto": "Interior con humedad media o alta (HR > 65 %), o exterior protegido de la lluvia" },
-        { "valor": "XC4", "texto": "Exterior, mojado por la lluvia de forma no permanente" },
-        { "valor": "XD1", "texto": "Exterior con aerosoles de cloruros de origen no marino" },
-        { "valor": "XD2", "texto": "Piscinas o en contacto con aguas industriales con cloruros" },
-        { "valor": "XD3", "texto": "Losas de aparcamiento, o salpicado por sales de deshielo de una calzada" },
-        { "valor": "XS2", "texto": "Siempre sumergido en agua de mar" },
-        { "valor": "XS3", "texto": "En zona de mareas, oleaje o salpicaduras del mar" }
+        {
+          "valor": "X0",
+          "texto": "Interior de un edificio con humedad muy baja (HR < 45 %)"
+        },
+        {
+          "valor": "XC1",
+          "texto": "Interior de un edificio con humedad baja (HR < 65 %), o siempre sumergido en agua no agresiva"
+        },
+        {
+          "valor": "XC2",
+          "texto": "Enterrado en suelo no agresivo o siempre en contacto con agua (p. ej., cimentaciones)"
+        },
+        {
+          "valor": "XC3",
+          "texto": "Interior con humedad media o alta (HR > 65 %), o exterior protegido de la lluvia"
+        },
+        {
+          "valor": "XC4",
+          "texto": "Exterior, mojado por la lluvia de forma no permanente"
+        },
+        {
+          "valor": "XD1",
+          "texto": "Exterior con aerosoles de cloruros de origen no marino"
+        },
+        {
+          "valor": "XD2",
+          "texto": "Piscinas o en contacto con aguas industriales con cloruros"
+        },
+        {
+          "valor": "XD3",
+          "texto": "Losas de aparcamiento, o salpicado por sales de deshielo de una calzada"
+        },
+        {
+          "valor": "XS2",
+          "texto": "Siempre sumergido en agua de mar"
+        },
+        {
+          "valor": "XS3",
+          "texto": "En zona de mareas, oleaje o salpicaduras del mar"
+        }
       ],
       "ref": "Tabla 27.1.a (ejemplos informativos)"
     },
     {
-      "id": "costa", "solo_si": { "tipo": ["armado", "pretensado"], "corrosion": ["X0", "XC1", "XC2", "XC3", "XC4"] },
-      "pregunta": "¿Está al aire libre a menos de 5 km de la costa, expuesto a aerosoles marinos?",
+      "id": "costa",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ],
+        "corrosion": [
+          "X0",
+          "XC1",
+          "XC2",
+          "XC3",
+          "XC4"
+        ]
+      },
+      "pregunta": "¿Está a menos de 5 km de la costa?",
       "opciones": [
-        { "valor": "no", "texto": "No" },
-        { "valor": "si", "texto": "Sí", "fija": { "corrosion": "XS1" } }
+        {
+          "valor": "no",
+          "texto": "No"
+        },
+        {
+          "valor": "si",
+          "texto": "Sí, a menos de 5 km",
+          "fija": {
+            "corrosion": "XS1"
+          }
+        }
       ],
-      "ref": "Art. 27.1: en general, XS1 en estructuras marinas aéreas a menos de 5 km de la costa"
+      "ref": "Art. 27.1: en general, XS1 a menos de 5 km de la costa. Criterio TARSEN: se aplica también a elementos protegidos"
     },
     {
-      "id": "heladas", "campo": "xf", "pregunta": "¿Puede helar y cómo le afecta el agua?",
+      "id": "heladas",
+      "campo": "xf",
+      "pregunta": "¿Puede helar y cómo le afecta el agua?",
       "nota": "Hay helada si la humedad en invierno supera el 75 % y hay más de un 50 % de probabilidad anual de bajar de −5 °C. Se usan sales fundentes con más de 5 nevadas al año o temperatura media en invierno inferior a 0 °C.",
       "opciones": [
-        { "valor": "",    "texto": "No hiela" },
-        { "valor": "XF1", "texto": "Hiela; superficie vertical o que no se encharca, sin sales fundentes" },
-        { "valor": "XF2", "texto": "Hiela; superficie vertical o que no se encharca, con sales fundentes" },
-        { "valor": "XF3", "texto": "Hiela; superficie horizontal donde se acumula agua, sin sales fundentes" },
-        { "valor": "XF4", "texto": "Hiela; superficie horizontal donde se acumula agua, con sales fundentes o agua de mar" }
+        {
+          "valor": "",
+          "texto": "No hiela"
+        },
+        {
+          "valor": "XF1",
+          "texto": "Hiela; superficie vertical o que no se encharca, sin sales fundentes"
+        },
+        {
+          "valor": "XF2",
+          "texto": "Hiela; superficie vertical o que no se encharca, con sales fundentes"
+        },
+        {
+          "valor": "XF3",
+          "texto": "Hiela; superficie horizontal donde se acumula agua, sin sales fundentes"
+        },
+        {
+          "valor": "XF4",
+          "texto": "Hiela; superficie horizontal donde se acumula agua, con sales fundentes o agua de mar"
+        }
       ],
       "ref": "Tabla 27.1.a, nota (1)"
     },
     {
-      "id": "quimico", "campo": "xa", "pregunta": "¿El terreno o el agua son químicamente agresivos según el estudio geotécnico?",
+      "id": "quimico",
+      "campo": "xa",
+      "pregunta": "¿El terreno o el agua son químicamente agresivos según el estudio geotécnico?",
       "tabla": "agresividad",
       "opciones": [
-        { "valor": "",    "texto": "No (o no hay contacto con terreno ni aguas agresivas)" },
-        { "valor": "XA1", "texto": "Ataque débil" },
-        { "valor": "XA2", "texto": "Ataque medio" },
-        { "valor": "XA3", "texto": "Ataque fuerte" }
+        {
+          "valor": "",
+          "texto": "No (o no hay contacto con terreno ni aguas agresivas)"
+        },
+        {
+          "valor": "XA1",
+          "texto": "Ataque débil"
+        },
+        {
+          "valor": "XA2",
+          "texto": "Ataque medio"
+        },
+        {
+          "valor": "XA3",
+          "texto": "Ataque fuerte"
+        }
       ],
       "ref": "Tabla 27.1.b"
     },
     {
-      "id": "erosion", "campo": "xm", "pregunta": "¿Tiene desgaste por tráfico?",
+      "id": "erosion",
+      "campo": "xm",
+      "pregunta": "¿Tiene desgaste por tráfico?",
       "opciones": [
-        { "valor": "",    "texto": "No" },
-        { "valor": "XM1", "texto": "Tráfico de vehículos" },
-        { "valor": "XM2", "texto": "Carretillas con ruedas de neumático (zonas industriales)" },
-        { "valor": "XM3", "texto": "Carretillas con ruedas de acero o cadenas (zonas industriales)" }
+        {
+          "valor": "",
+          "texto": "No"
+        },
+        {
+          "valor": "XM1",
+          "texto": "Tráfico de vehículos"
+        },
+        {
+          "valor": "XM2",
+          "texto": "Carretillas con ruedas de neumático (zonas industriales)"
+        },
+        {
+          "valor": "XM3",
+          "texto": "Carretillas con ruedas de acero o cadenas (zonas industriales)"
+        }
       ],
       "ref": "Tabla 27.1.a"
+    },
+    {
+      "id": "cemento",
+      "campo": "cemento",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ]
+      },
+      "dinamica": "cementos",
+      "pregunta": "¿Qué tipo de cemento se usará?",
+      "nota": "Junto a cada cemento, el recubrimiento mínimo por durabilidad que sale con tus respuestas. Si no lo sabes, elige uno habitual y compáralo luego en el resultado.",
+      "ref": "Tablas 44.2.1.1.a/b, 44.3 y 44.4; cementos utilizables en pretensado según tabla 28"
+    },
+    {
+      "id": "vida",
+      "campo": "vida",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ]
+      },
+      "pregunta": "¿Qué vida útil tiene el proyecto?",
+      "nota": "La fija la propiedad en el proyecto.",
+      "opciones": [
+        {
+          "valor": "50",
+          "texto": "50 años"
+        },
+        {
+          "valor": "100",
+          "texto": "100 años"
+        }
+      ],
+      "ref": "Art. 43 (vida útil establecida por la propiedad) y tablas del art. 44"
+    },
+    {
+      "id": "control",
+      "campo": "margen",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ]
+      },
+      "pregunta": "¿Qué nivel de control de ejecución tendrá?",
+      "opciones": [
+        {
+          "valor": "otros",
+          "texto": "Control normal (lo habitual)",
+          "detalle": "«Otros casos» en la norma: margen de 10 mm"
+        },
+        {
+          "valor": "intenso",
+          "texto": "Control intenso, hormigonado in situ",
+          "detalle": "Margen de 5 mm"
+        },
+        {
+          "valor": "prefabricado",
+          "texto": "Prefabricado con control intenso en la instalación",
+          "detalle": "Margen de 0 mm"
+        }
+      ],
+      "ref": "Tabla 43.4.1 (margen Δcdev)"
+    },
+    {
+      "id": "diam",
+      "campo": "diam",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ]
+      },
+      "pregunta": "¿Qué diámetro tiene la barra principal?",
+      "opciones": [
+        {
+          "valor": "6",
+          "texto": "Ø6 mm"
+        },
+        {
+          "valor": "8",
+          "texto": "Ø8 mm"
+        },
+        {
+          "valor": "10",
+          "texto": "Ø10 mm"
+        },
+        {
+          "valor": "12",
+          "texto": "Ø12 mm"
+        },
+        {
+          "valor": "14",
+          "texto": "Ø14 mm"
+        },
+        {
+          "valor": "16",
+          "texto": "Ø16 mm"
+        },
+        {
+          "valor": "20",
+          "texto": "Ø20 mm"
+        },
+        {
+          "valor": "25",
+          "texto": "Ø25 mm"
+        },
+        {
+          "valor": "32",
+          "texto": "Ø32 mm"
+        },
+        {
+          "valor": "40",
+          "texto": "Ø40 mm"
+        }
+      ],
+      "ref": "Serie de diámetros del art. 34.2; el recubrimiento no será menor que el diámetro (art. 44.2.1.1 a)"
+    },
+    {
+      "id": "tm",
+      "campo": "tm",
+      "pregunta": "¿Qué tamaño máximo de árido tendrá el hormigón?",
+      "nota": "Si no lo sabes, elige 20 mm y ajústalo luego en el resultado.",
+      "opciones": [
+        {
+          "valor": "10",
+          "texto": "10 mm"
+        },
+        {
+          "valor": "12",
+          "texto": "12 mm"
+        },
+        {
+          "valor": "16",
+          "texto": "16 mm"
+        },
+        {
+          "valor": "20",
+          "texto": "20 mm"
+        },
+        {
+          "valor": "25",
+          "texto": "25 mm"
+        },
+        {
+          "valor": "32",
+          "texto": "32 mm"
+        },
+        {
+          "valor": "40",
+          "texto": "40 mm"
+        }
+      ],
+      "ref": "Art. 33.6 (TM de la designación) y art. 44.2.1.1 a)"
+    },
+    {
+      "id": "terreno",
+      "campo": "terreno",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ]
+      },
+      "pregunta": "¿Se hormigona directamente contra el terreno?",
+      "opciones": [
+        {
+          "valor": "no",
+          "texto": "No",
+          "detalle": "Con encofrado, o sobre terreno preparado con hormigón de limpieza"
+        },
+        {
+          "valor": "si",
+          "texto": "Sí, contra el terreno sin hormigón de limpieza",
+          "detalle": "El recubrimiento mínimo pasa a ser 70 mm"
+        }
+      ],
+      "ref": "Art. 44.2.1.1"
     }
   ],
-
   "agresividad": {
     "_ref": "Tabla 27.1.b — Clasificación de la agresividad química",
-    "columnas": ["Parámetro", "XA1 débil", "XA2 medio", "XA3 fuerte"],
+    "columnas": [
+      "Parámetro",
+      "XA1 débil",
+      "XA2 medio",
+      "XA3 fuerte"
+    ],
     "agua": [
-      ["pH (UNE 83952)", "6,5 – 5,5", "5,5 – 4,5", "< 4,5"],
-      ["CO₂ agresivo, mg/l (UNE-EN 13577)", "15 – 40", "40 – 100", "> 100"],
-      ["Ion amonio NH₄⁺, mg/l (UNE 83954)", "15 – 30", "30 – 60", "> 60"],
-      ["Ion magnesio Mg²⁺, mg/l (UNE 83955)", "300 – 1.000", "1.000 – 3.000", "> 3.000"],
-      ["Ion sulfato SO₄²⁻, mg/l (UNE 83956)", "200 – 600", "600 – 3.000", "> 3.000"],
-      ["Residuo seco, mg/l (UNE 83957)", "75 – 150", "50 – 75", "< 50"]
+      [
+        "pH (UNE 83952)",
+        "6,5 – 5,5",
+        "5,5 – 4,5",
+        "< 4,5"
+      ],
+      [
+        "CO₂ agresivo, mg/l (UNE-EN 13577)",
+        "15 – 40",
+        "40 – 100",
+        "> 100"
+      ],
+      [
+        "Ion amonio NH₄⁺, mg/l (UNE 83954)",
+        "15 – 30",
+        "30 – 60",
+        "> 60"
+      ],
+      [
+        "Ion magnesio Mg²⁺, mg/l (UNE 83955)",
+        "300 – 1.000",
+        "1.000 – 3.000",
+        "> 3.000"
+      ],
+      [
+        "Ion sulfato SO₄²⁻, mg/l (UNE 83956)",
+        "200 – 600",
+        "600 – 3.000",
+        "> 3.000"
+      ],
+      [
+        "Residuo seco, mg/l (UNE 83957)",
+        "75 – 150",
+        "50 – 75",
+        "< 50"
+      ]
     ],
     "suelo": [
-      ["Acidez Baumann-Gully, ml/kg (UNE-EN 16502)", "> 200", "(*)", "(*)"],
-      ["Ion sulfato SO₄²⁻, mg/kg suelo seco (UNE 83963)", "2.000 – 3.000", "3.000 – 12.000", "> 12.000"]
+      [
+        "Acidez Baumann-Gully, ml/kg (UNE-EN 16502)",
+        "> 200",
+        "(*)",
+        "(*)"
+      ],
+      [
+        "Ion sulfato SO₄²⁻, mg/kg suelo seco (UNE 83963)",
+        "2.000 – 3.000",
+        "3.000 – 12.000",
+        "> 12.000"
+      ]
     ],
     "nota": "(*) Estas condiciones no se dan en la práctica."
   }
