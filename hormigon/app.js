@@ -11,7 +11,7 @@ const $ = (s) => document.querySelector(s);
 
 // Valores por defecto (se cambian con las respuestas o en el resultado)
 const INICIAL = { tipo: "armado", corrosion: "X0", xf: "", xa: "", xm: "", cemento: "OTROS", vida: "50", margen: "otros",
-  diam: "12", tm: "20", terreno: "no", aridoDificil: "no", fck: "", consistencia: "F" };
+  diam: "16", estribo: "0", tm: "20", terreno: "no", aridoDificil: "no", fck: "", consistencia: "F" };
 let est = { ...INICIAL };
 
 const clases = (e) => [e.corrosion, e.xf, e.xa, e.xm].filter(Boolean);
@@ -22,7 +22,7 @@ function calcular(e) {
   const cl = clases(e), dos = dosificacion(D, cl, e.tipo);
   const des = designacion(T, { tipo: e.tipo, clases: cl, fckDur: dos.fck, fckElegida: Number(e.fck) || 0,
     consistencia: e.consistencia, tm: Number(e.tm) });
-  const rec = conArmadura(e) ? recubrimiento(R, { ...e, fck: des.R, vida: Number(e.vida), diam: Number(e.diam),
+  const rec = conArmadura(e) ? recubrimiento(R, { ...e, fck: des.R, vida: Number(e.vida), diam: Number(e.diam), estribo: Number(e.estribo),
     arido: Number(e.tm), aridoDificil: e.aridoDificil === "si", terreno: e.terreno === "si" }) : null;
   return { cl, dos, des, rec };
 }
@@ -86,7 +86,8 @@ function campos(e) {
       op(c.valor, `${c.texto} · ${c.sinValor || `${c.cdur} mm`}${c.etiqueta ? ` (${c.etiqueta.toLowerCase()})` : ""}`)).join("")],
     rec && ["vida", "Vida útil", de("vida").map((o) => op(o.valor, o.texto)).join("")],
     rec && ["margen", "Control de ejecución", R.margen.lista.map((m) => op(m.id, `${m.nombre} · Δc ${m.valor} mm`)).join("")],
-    rec && ["diam", "Diámetro de la barra principal", de("diam").map((o) => op(o.valor, o.texto)).join("")],
+    rec && ["diam", "Diámetro máximo de barra", de("diam").map((o) => op(o.valor, o.texto)).join("")],
+    rec && ["estribo", "Cercos o estribos", de("estribo").map((o) => op(o.valor, o.valor === "0" ? "Sin cercos ni estribos" : o.texto)).join("")],
     ["tm", "Tamaño máximo del árido", de("tm").map((o) => op(o.valor, o.texto)).join("")],
     rec && ["terreno", "Hormigonado contra el terreno", op("no", "No (encofrado u hormigón de limpieza)") + op("si", "Sí, sin hormigón de limpieza")],
     rec && ["aridoDificil", "Paso del hormigón entre armaduras",
@@ -126,8 +127,10 @@ function pintarResultado() {
     <p class="ref">Código Estructural, art. 33.6 (tipificación T-R/C/TM/A) · Clases: tabla 27.1.a</p>
     <div class="resultados">`;
   if (rec && !rec.bloqueo) {
-    h += fila("Recubrimiento nominal c<sub>nom</sub>", `${fmt(rec.cnom)} mm`, `c<sub>min</sub> + Δc<sub>dev</sub> · Código Estructural, art. 43.4.1`);
-    h += fila("Recubrimiento mínimo c<sub>min</sub>", `${fmt(rec.cmin)} mm`, `Gobierna: ${rec.gobierna.texto} · Código Estructural, ${rec.gobierna.ref}`);
+    const ext = rec.estribo ? " al estribo" : "";
+    h += fila(`Recubrimiento nominal${ext}`, `${fmt(rec.cnom)} mm`, `c<sub>nom</sub> = c<sub>min</sub> + Δc<sub>dev</sub> · Código Estructural, art. 43.4.1`);
+    if (rec.estribo) h += fila("Recubrimiento nominal a la barra principal", `${fmt(rec.cnom + rec.estribo)} mm`, `c<sub>nom</sub> + Ø estribo ${rec.estribo} mm · art. 43.4.1`);
+    h += fila(`Recubrimiento mínimo${ext}`, `${fmt(rec.cmin)} mm`, `Gobierna: ${rec.gobierna.texto} · Código Estructural, ${rec.gobierna.ref}`);
     h += fila("Margen Δc<sub>dev</sub>", `${fmt(rec.dc)} mm`, "Código Estructural, tabla 43.4.1");
   }
   h += fila("Relación agua/cemento máxima", fmt(dos.ac, 2), "Código Estructural, tabla 43.2.1.a") +

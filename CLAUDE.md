@@ -47,7 +47,7 @@ No programa. Cualquier paso manual (subir al hosting, GitHub): pasos numerados y
 ## Estado
 
 - [x] 0. Plantilla común `/shared/` (estilos.css, ui.js, plantilla.html). Contacto: https://tarsen.es/#contacto.
-- [x] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). Designación T-R/C/TM/A con art. 33.4, 33.5 y 33.6 (cap. 8). Flujo: cuestionario con avance automático → resultado + respuestas editables. XS1 a < 5 km de la costa aunque esté protegido (criterio TARSEN).
+- [x] 1. `/hormigon/` (ambientes + recubrimientos). Hecho: dosificación (tablas 43.2.1.a/b, avisos 43.3), recubrimientos (tablas 43.4.1, 44.2.1.1.a/b, 44.3, 44.4, 44.5, terreno 70 mm, Ø y árido). Verificado con 3 casos (XC1 → 16/26 mm; XS1 → 40/45 mm; XC2+XA1 contra terreno → 70/80 mm). Asistente de preguntas con tabla 27.1.a/b (cap. 7). Designación T-R/C/TM/A con art. 33.4, 33.5 y 33.6 (cap. 8). Flujo: cuestionario con avance automático → resultado + respuestas editables. XS1 a < 5 km de la costa aunque esté protegido (criterio TARSEN). Pregunta Ø máximo de obra y Ø de cercos/estribos: cmin se mide al estribo y la armadura principal exige (Ø − Øe) y (k·TM − Øe) [Inferencia sobre arts. 43.4.1 y 44.2.1.1 a)]; caso XC1, CEM I, Ø12, estribo Ø8, TM20 → 15/25 mm al estribo y 33 mm a la principal.
 - [ ] 2. `/escalera/`
 - [ ] 3. `/nieve/`
 - [ ] 4. `/sismo/`

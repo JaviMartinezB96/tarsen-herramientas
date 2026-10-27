@@ -70,11 +70,16 @@ export function recubrimiento(R, e) {
     const fila = R.quimico[e.xa];
     add(typeof fila === "string" ? fila : fila[cem.xa1][iVida(e.vida)], `cmin,dur por ${e.xa}`, "Tabla 44.4");
   }
-  // Adherencia y árido — art. 44.2.1.1 a)
-  if (e.diam > 0) add(e.diam, "Diámetro de la barra", "Art. 44.2.1.1 a)");
+  // Armadura principal — art. 44.2.1.1 a): su recubrimiento ≥ Ø y ≥ 0,8·TM (1,25·TM si las armaduras dificultan el paso).
+  // [Inferencia] El recubrimiento se mide a la armadura más exterior (art. 43.4.1, incluye cercos y estribos); la barra
+  // principal queda Ø_estribo más adentro, así que a la armadura más exterior se le exige (Ø − Øe) y (k·TM − Øe).
+  const est = e.estribo > 0 ? e.estribo : 0;
+  const menos = est ? ` − Ø estribo ${est}` : "";
+  if (e.diam > 0 && e.diam - est > 0) add(e.diam - est, `Ø máximo ${e.diam}${menos}`, "Art. 44.2.1.1 a)");
   if (e.arido > 0) {
     const k = e.aridoDificil ? R.adherencia.k_arido_dificil : R.adherencia.k_arido;
-    add(Math.round(k * e.arido * 10) / 10, `${String(k).replace(".", ",")} × tamaño máximo del árido`, "Art. 44.2.1.1 a)");
+    const v = Math.round((k * e.arido - est) * 10) / 10;
+    if (v > 0) add(v, `${String(k).replace(".", ",")} × árido ${e.arido}${menos}`, "Art. 44.2.1.1 a)");
   }
   if (bloqueo) return { partes, bloqueo, notas };
 
@@ -96,5 +101,5 @@ export function recubrimiento(R, e) {
     notas.push({ texto: "Recubrimiento superior a 50 mm: valora disponer una malla de reparto (Ø ≤ 12 mm, en mitad del recubrimiento).", ref: "Art. 44.2.1.1" });
   if (/^(XS|XD)/.test(e.corrosion))
     notas.push({ texto: "Con armaduras inoxidables, galvanizadas, inhibidores o protección catódica el proyecto puede reducir estos valores.", ref: "Art. 43.3.1.4 a 43.3.1.7" });
-  return { partes, cmin, cnom, dc, gobierna, notas, bloqueo: null };
+  return { partes, cmin, cnom, dc, gobierna, notas, estribo: est, bloqueo: null };
 }

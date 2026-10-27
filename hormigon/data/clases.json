@@ -286,12 +286,8 @@
           "pretensado"
         ]
       },
-      "pregunta": "¿Qué diámetro tiene la barra principal?",
+      "pregunta": "¿Qué diámetro máximo de barra se usará en la obra?",
       "opciones": [
-        {
-          "valor": "6",
-          "texto": "Ø6 mm"
-        },
         {
           "valor": "8",
           "texto": "Ø8 mm"
@@ -329,7 +325,43 @@
           "texto": "Ø40 mm"
         }
       ],
-      "ref": "Serie de diámetros del art. 34.2; el recubrimiento no será menor que el diámetro (art. 44.2.1.1 a)"
+      "ref": "Serie de diámetros del art. 34.2; el recubrimiento de la armadura principal no será menor que su diámetro (art. 44.2.1.1 a)"
+    },
+    {
+      "id": "estribo",
+      "campo": "estribo",
+      "solo_si": {
+        "tipo": [
+          "armado",
+          "pretensado"
+        ]
+      },
+      "pregunta": "¿Llevará cercos o estribos? ¿De qué diámetro?",
+      "nota": "El recubrimiento se mide a la armadura más exterior, que suele ser el cerco o estribo.",
+      "opciones": [
+        {
+          "valor": "0",
+          "texto": "Sin cercos ni estribos",
+          "detalle": "Losas, muros, zapatas…"
+        },
+        {
+          "valor": "6",
+          "texto": "Ø6 mm"
+        },
+        {
+          "valor": "8",
+          "texto": "Ø8 mm"
+        },
+        {
+          "valor": "10",
+          "texto": "Ø10 mm"
+        },
+        {
+          "valor": "12",
+          "texto": "Ø12 mm"
+        }
+      ],
+      "ref": "Art. 43.4.1 (recubrimiento hasta la armadura más exterior, incluyendo cercos y estribos) y art. 44.2.1.1"
     },
     {
       "id": "tm",
