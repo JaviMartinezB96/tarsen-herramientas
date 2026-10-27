@@ -44,7 +44,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 async function fijarPunto(lat, lon, address, zoom) {
   const t = ++turno;
   mapa.ponerChincheta(lat, lon, zoom);
-  est = { ...est, lat, lon, alt: null, altFuente: "cargando", lugar: address ? lugarDe(address) : "", capital: null, origen: "E2", fuera: false };
+  est = { ...est, lat, lon, alt: null, altFuente: "cargando", lugar: address ? lugarDe(address) : "", capital: null, fuera: false };
   ponerZona(address ? municipioDe(address) : "");
   if (address) ponerMunicipio(address);
   $("#p-resultados").hidden = false;
@@ -64,7 +64,6 @@ function ponerMunicipio(a) {
   est.fuera = a.country_code && a.country_code !== "es";
   est.lugar = lugarDe(a, `${fmt(est.lat, 4)}, ${fmt(est.lon, 4)}`);
   est.capital = capitalDe(N, municipioDe(a));
-  est.origen = est.capital ? "3.8" : "E2";                      // por defecto la tabla 3.8 en capitales (3.5.2.1)
 }
 function ponerZona(municipio) {
   est.zonaInfo = zonaDe(ZONAS, N, est.lat, est.lon, municipio);
@@ -81,8 +80,6 @@ function pintarCampos() {
         placeholder="${est.altFuente === "cargando" ? "Obteniendo…" : "Escribe la altitud"}"></label>
     <label class="campo"><span>Zona de clima invernal (figura E.2)</span>
       <select name="zona">${[1, 2, 3, 4, 5, 6, 7].map((z) => opt(z, `Zona ${z}${z === zi.zona ? " · detectada" : ""}`, est.zona)).join("")}</select></label>
-    <label class="campo" ${c ? "" : "hidden"}><span>Valor de s<sub>k</sub> en ${c ? esc(c.nombre) : ""}</span>
-      <select name="origen">${c ? opt("3.8", `Tabla 3.8 · capital a ${fmt(c.altitud)} m`, est.origen) + opt("E2", "Tabla E.2 · zona y altitud del punto", est.origen) : ""}</select></label>
     <label class="campo"><span>Inclinación del faldón (°)</span>
       <input type="number" inputmode="decimal" name="angulo" min="0" max="90" step="1" value="${est.angulo}"></label>
     <label class="campo"><span>¿Algo impide que la nieve deslice?</span>
@@ -125,42 +122,50 @@ function pintar() {
       : `<p class="label">${lugar}</p>` + nota("No se ha podido obtener la altitud automáticamente. Escríbela en «Altitud del emplazamiento».", "", true);
     return;
   }
-  const r = calcular(N, est), zi = est.zonaInfo || {};
+  // En capitales se dan los dos valores: tabla 3.8 (3.5.2.1) y tabla E.2 con la altitud del punto (3.5.2.2).
+  const rE2 = calcular(N, { ...est, origen: "E2" });
+  const r38 = est.capital ? calcular(N, { ...est, origen: "3.8" }) : null;
+  const zi = est.zonaInfo || {};
   const altRef = { ign: "MDT del IGN (paso de 25 m; 500 m en Canarias)", usuario: "Introducida por ti" }[est.altFuente] || "";
   const zonaRef = est.zona !== zi.zona ? "Elegida por ti" : {
     canarias: "Canarias: zona 7", "ceuta-melilla": "Ceuta y Melilla: zona 6", cercana: `Zona más próxima (a ${fmt(zi.km, 1)} km)`,
   }[zi.regla] || "Detectada en el mapa";
+  const casos = r38 && rE2.metodo === "general"
+    ? [[`Tabla 3.8 · ${esc(est.capital.nombre)} a ${fmt(est.capital.altitud)} m`, r38], [`Tabla E.2 · zona ${est.zona} a ${fmt(est.alt)} m (tu punto)`, rE2]]
+    : [["", r38 && rE2.qn == null ? r38 : rE2]];
 
-  let h = `<p class="label">${lugar}</p>`;
-  if (r.qn == null) {
-    h += `<p class="designacion">Sin valor en la tabla E.2</p>` +
-      nota(`A ${fmt(est.alt)} m la zona ${est.zona} no tiene valor tabulado. ${N.tabla_E2.fuera_de_tabla.split(": ")[1]}`, "CTE DB SE-AE, 3.5.2.3", true);
-  } else {
-    const formula = r.metodo === "simplificado"
-      ? "Cubierta plana de edificio de pisos por debajo de 1.000 m · CTE DB SE-AE, 3.5.1.1"
-      : `q<sub>n</sub> = μ · s<sub>k</sub>${r.factor !== 1 ? ` · ${fmt(r.factor, 1)}` : ""} = ${fmt(r.mu, 2)} · ${fmt(r.sk, 2)}${r.factor !== 1 ? ` · ${fmt(r.factor, 1)}` : ""} · CTE DB SE-AE, 3.5.1.2, ec. (3.2)${r.factor !== 1 ? " y 3.5.1.3" : ""}`;
-    h += `<p class="label">Carga de nieve sobre la cubierta (proyección horizontal)</p>
-      <p class="designacion">q<sub>n</sub> = ${kn(r.qn)}</p><p class="ref">${formula}</p>`;
-  }
+  let h = `<p class="label">${lugar}</p><p class="label">Carga de nieve sobre la cubierta (proyección horizontal)</p>
+    <div class="${casos.length > 1 ? "doble" : ""}">${casos.map(([t, r]) => bloque(t, r)).join("")}</div>`;
+  if (casos.length > 1) h += nota("Las dos son válidas según el DB: la tabla 3.8 da el valor de la capital a una altitud fija y la tabla E.2 el de la zona a la altitud de tu punto. Si la obra está lejos del casco urbano o a otra cota, la segunda describe mejor el emplazamiento.", "CTE DB SE-AE, 3.5.2.1 y 3.5.2.2");
+  const ref = casos[casos.length - 1][1];
   h += `<div class="resultados">` +
     fila("Altitud", `${fmt(est.alt)} m`, altRef) +
     fila("Zona de clima invernal", `${est.zona}`, `${zonaRef} · Anejo E, figura E.2`) +
-    (r.sk != null ? fila("Carga sobre terreno horizontal s<sub>k</sub>", kn(r.sk), refSk(r)) : "") +
-    (r.metodo === "general" ? fila("Coeficiente de forma μ", fmt(r.mu, 2), refMu()) : "") +
-    (r.metodo === "general" && r.factor !== 1 ? fila("Exposición al viento", `× ${fmt(r.factor, 1)}`, "CTE DB SE-AE, 3.5.1.3") : "") + `</div>`;
+    casos.filter(([, r]) => r.sk != null).map(([, r]) => fila(`Carga sobre terreno horizontal s<sub>k</sub>${casos.length > 1 ? (r.fuenteSk === "3.8" ? " · tabla 3.8" : " · tabla E.2") : ""}`, kn(r.sk), refSk(r))).join("") +
+    (ref.metodo === "general" ? fila("Coeficiente de forma μ", fmt(ref.mu, 2), refMu()) : "") +
+    (ref.metodo === "general" && ref.factor !== 1 ? fila("Exposición al viento", `× ${fmt(ref.factor, 1)}`, "CTE DB SE-AE, 3.5.1.3") : "") + `</div>`;
 
   const notas = [];
   if (zi.cerca && est.zona === zi.zona) notas.push([`El punto está a ${fmt(zi.cerca.km, 1)} km de la zona ${zi.cerca.zona}. Los límites de la figura E.2 son aproximados: si dudas, compara las dos zonas.`, "Criterio TARSEN", true]);
-  if (est.capital && est.origen === "3.8" && r.e2?.sk != null && Math.abs(est.alt - est.capital.altitud) > 100)
-    notas.push([`Tu punto está a ${fmt(est.alt)} m y la tabla 3.8 da el valor de ${esc(est.capital.nombre)} a ${fmt(est.capital.altitud)} m. Con la tabla E.2 y la altitud del punto saldría s<sub>k</sub> = ${kn(r.e2.sk)}. Puedes cambiarlo en «Valor de s<sub>k</sub>».`, "3.5.2.1 y 3.5.2.2", true]);
-  if (r.metodo === "general" && r.simplificadoAplica) notas.push(["Si es la cubierta plana de un edificio de pisos, el DB permite tomar directamente 1,0 kN/m². Puedes elegirlo en «Método».", "CTE DB SE-AE, 3.5.1.1"]);
-  if (r.pn != null) notas.push([`Por encima de 1.000 m, en los vuelos de la cubierta añade en el borde una carga lineal de hielo p<sub>n</sub> = k · μ² · s<sub>k</sub> = 3 · ${fmt(r.mu, 2)}² · ${fmt(r.sk, 2)} = ${fmt(r.pn, 2)} kN/m.`, "CTE DB SE-AE, 3.5.1.4, ec. (3.3)"]);
+  if (ref.metodo === "general" && ref.simplificadoAplica) notas.push(["Si es la cubierta plana de un edificio de pisos, el DB permite tomar directamente 1,0 kN/m². Puedes elegirlo en «Método».", "CTE DB SE-AE, 3.5.1.1"]);
+  for (const [t, r] of casos) if (r.pn != null) notas.push([`Por encima de 1.000 m, en los vuelos de la cubierta añade en el borde una carga lineal de hielo p<sub>n</sub> = k · μ² · s<sub>k</sub> = 3 · ${fmt(r.mu, 2)}² · ${fmt(r.sk, 2)} = ${fmt(r.pn, 2)} kN/m${t ? ` (${r.fuenteSk === "3.8" ? "tabla 3.8" : "tabla E.2"})` : ""}.`, "CTE DB SE-AE, 3.5.1.4, ec. (3.3)"]);
   if (est.impedimento === "si" && est.angulo > N.forma.angulo_mu1) notas.push(["Con impedimento al deslizamiento, comprueba también el elemento que retiene la nieve con la masa de nieve que puede deslizar (rozamiento nulo).", "CTE DB SE-AE, 3.5.1.5"]);
   notas.push(["No incluye: faldones que acaban en limahoya, distribuciones asimétricas por viento, acumulaciones junto a cambios de nivel o petos, ni redistribuciones en cubiertas accesibles. Si tu cubierta las tiene, el cálculo es específico.", "CTE DB SE-AE, 3.5 (2), 3.5.3.3, 3.5.3.4 y 3.5.4"]);
   h += notas.filter((n) => n[2]).map(([t, ref]) => nota(t, ref, true)).join("");
   const resto = notas.filter((n) => !n[2]);
   h += `<details class="detalles"><summary>Notas (${resto.length})</summary>${resto.map(([t, ref]) => nota(t, ref)).join("")}</details>`;
   out.innerHTML = h;
+}
+
+// Valor grande de qn con su fórmula (t: título del caso cuando hay dos)
+function bloque(t, r) {
+  if (r.qn == null) return `<div>${t ? `<p class="label">${t}</p>` : ""}<p class="designacion">Sin valor en la tabla E.2</p>` +
+    nota(`A ${fmt(est.alt)} m la zona ${est.zona} no tiene valor tabulado. ${N.tabla_E2.fuera_de_tabla.split(": ")[1]}`, "CTE DB SE-AE, 3.5.2.3", true) + `</div>`;
+  const x = r.factor !== 1 ? ` · ${fmt(r.factor, 1)}` : "";
+  const formula = r.metodo === "simplificado"
+    ? "Cubierta plana de edificio de pisos por debajo de 1.000 m · CTE DB SE-AE, 3.5.1.1"
+    : `q<sub>n</sub> = μ · s<sub>k</sub>${x} = ${fmt(r.mu, 2)} · ${fmt(r.sk, 2)}${x} · CTE DB SE-AE, 3.5.1.2, ec. (3.2)${x ? " y 3.5.1.3" : ""}`;
+  return `<div>${t ? `<p class="label">${t}</p>` : ""}<p class="designacion">q<sub>n</sub> = ${kn(r.qn)}</p><p class="ref">${formula}</p></div>`;
 }
 
 function refSk(r) {

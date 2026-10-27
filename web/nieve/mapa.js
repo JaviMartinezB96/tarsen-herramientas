@@ -26,22 +26,36 @@ export function lugarDe(a = {}, alternativo = "") {
 // ---- Altitud: API-Coverages del IGN (Sistema Cartográfico Nacional), datos CC BY 4.0 ----
 // Península y Baleares: MDT de 25 m (EPSG:4258). Canarias: MDT de 500 m (EPSG:4326); allí la zona 7 da
 // sk = 0,2 kN/m² hasta 1.800 m (tabla E.2), así que la precisión de la altitud apenas influye.
+// El recorte se pide con subset=Lat(a:b),Long(c:d) (el servidor no admite bbox: devuelve error 500).
+// La respuesta (CoverageJSON) trae celdas null; se promedian las que tienen valor.
+// Comprobado el 27-10-2026: Jaca 819 m, Madrid (Sol) 649 m, Palma 20 m, La Laguna 549 m.
 const IGN = "https://api-coverages.idee.es/collections";
-export async function altitudIGN(lat, lon) {
-  const canarias = lat < 30;
-  const col = canarias ? "EL.ElevationGridCoverage_4326_500" : "EL.ElevationGridCoverage_4258_25_PB";
-  const d = canarias ? 0.003 : 0.0002;                       // ventana de ~1 celda alrededor del punto
-  const url = `${IGN}/${col}/coverage?f=json&bbox=${lon - d},${lat - d},${lon + d},${lat + d}`;
+const MDT25 = "EL.ElevationGridCoverage_4258_25_PB", MDT500 = "EL.ElevationGridCoverage_4326_500";
+
+async function pedirMDT(col, lat, lon, d) {
+  const url = `${IGN}/${col}/coverage?f=json&subset=Lat(${lat - d}:${lat + d}),Long(${lon - d}:${lon + d})`;
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 10000);
   try {
     const r = await fetch(url, { signal: ctl.signal });
     if (!r.ok) throw new Error(`IGN ${r.status}`);
-    const j = await r.json();
-    const rango = Object.values(j.ranges || {})[0];
+    const rango = Object.values((await r.json()).ranges || {})[0];
     const v = (rango?.values || []).filter((x) => typeof x === "number" && x > -100 && x < 4000);
-    if (!v.length) throw new Error("Sin datos de altitud");
-    return v.reduce((a, b) => a + b, 0) / v.length;
+    return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
   } finally { clearTimeout(t); }
+}
+
+export async function altitudIGN(lat, lon) {
+  if (lat < 30) {                                             // Canarias: solo MDT de 500 m
+    const h = await pedirMDT(MDT500, lat, lon, 0.003) ?? await pedirMDT(MDT500, lat, lon, 0.008);
+    if (h == null) throw new Error("Sin datos de altitud");
+    return h;
+  }
+  // Península y Baleares: MDT de 25 m (ventana de ~2 celdas; si sale vacía, más amplia) y, si falla, el de 500 m
+  let h = null;
+  try { h = await pedirMDT(MDT25, lat, lon, 0.0003) ?? await pedirMDT(MDT25, lat, lon, 0.001); } catch { /* sigue */ }
+  if (h == null) h = await pedirMDT(MDT500, lat, lon, 0.003);
+  if (h == null) throw new Error("Sin datos de altitud");
+  return h;
 }
 
 // ---- Mapa ----

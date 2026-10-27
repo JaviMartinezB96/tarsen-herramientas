@@ -138,3 +138,5 @@ input[type="search"] { width: 100%; min-width: 0; min-height: 48px; padding: 12p
 .leaflet-bar a { background: var(--bg-2) !important; color: var(--ink) !important; border-color: var(--line-2) !important; }
 .pin { background: none; border: 0; }
 .rotulo-zona { font: 600 13px var(--display); color: var(--pale); text-shadow: 0 0 3px #0f1512, 0 0 6px #0f1512; white-space: nowrap; text-align: center; }
+.doble { display: grid; gap: 20px; }
+@media (min-width: 640px) { .doble { grid-template-columns: 1fr 1fr; } }
