@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- Plantilla base: copiar a /<herramienta>/index.html y rellenar los [CORCHETES]. -->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>[Palabra clave] | Herramientas TARSEN</title>
+  <meta name="description" content="[Descripción de 150 caracteres con la palabra clave]">
+  <link rel="icon" href="../shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../shared/estilos.css">
+</head>
+<body>
+  <div data-ui="cabecera"></div>
+  <main class="contenedor">
+    <h1>[H1 con la palabra clave]</h1>
+    <p class="entradilla">[Qué hace la herramienta, en una frase.]</p>
+
+    <!-- Contenido de la herramienta -->
+
+    <div data-ui="aviso"></div>
+  </main>
+  <div data-ui="cta"></div>
+  <div data-ui="pie"></div>
+  <script type="module">
+    import { iniciarPagina } from "../shared/ui.js";
+    iniciarPagina();
+  </script>
+</body>
+</html>

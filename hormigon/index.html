@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clases de exposición y recubrimientos del Código Estructural | Herramientas TARSEN</title>
+  <meta name="description" content="Calcula gratis la clase de exposición, la relación agua/cemento, el cemento mínimo, la resistencia mínima y el recubrimiento nominal según el Código Estructural.">
+  <link rel="icon" href="../shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../shared/estilos.css">
+</head>
+<body>
+  <div data-ui="cabecera"></div>
+  <main class="contenedor">
+    <h1>Clases de exposición y recubrimientos según el Código Estructural</h1>
+    <p class="entradilla">Elige el ambiente de tu elemento de hormigón y obtén la dosificación mínima y el recubrimiento que pide la norma.</p>
+
+    <div class="pestanas" role="tablist">
+      <button role="tab" id="tab-ambientes" aria-controls="ambientes" aria-selected="true">Ambientes</button>
+      <button role="tab" id="tab-recubrimientos" aria-controls="recubrimientos" aria-selected="false">Recubrimientos</button>
+    </div>
+
+    <!-- Pestaña 1: Ambientes (art. 43.2.1) -->
+    <section id="ambientes" role="tabpanel" aria-labelledby="tab-ambientes">
+      <h2 class="solo-impresion">Ambientes y dosificación</h2>
+      <!-- PENDIENTE: asistente de preguntas. Necesita la tabla 27.1 (descripción de las clases de exposición), no incluida en el PDF del cap. 9. -->
+      <form class="tarjeta" id="f-amb">
+        <div class="rejilla">
+          <label class="campo"><span>Tipo de hormigón</span>
+            <select name="tipo"><option value="armado">Armado</option><option value="pretensado">Pretensado</option><option value="masa">En masa</option></select></label>
+          <label class="campo"><span>Clase de corrosión de armaduras</span><select name="corrosion"></select></label>
+          <label class="campo"><span>Heladas (XF)</span><select name="xf"></select></label>
+          <label class="campo"><span>Ataque químico (XA)</span><select name="xa"></select></label>
+          <label class="campo"><span>Erosión (XM)</span><select name="xm"></select></label>
+        </div>
+        <p class="nota">Un elemento tiene una sola clase de corrosión (X0, XC, XS o XD) y puede sumar clases de heladas, ataque químico y erosión.</p>
+      </form>
+      <div class="resultados" id="r-amb" aria-live="polite"></div>
+      <button class="btn btn-primario no-imprimir" type="button" id="pasar">Calcular el recubrimiento con estas clases</button>
+    </section>
+
+    <!-- Pestaña 2: Recubrimientos (arts. 43.4.1 y 44) -->
+    <section id="recubrimientos" role="tabpanel" aria-labelledby="tab-recubrimientos" hidden>
+      <h2 class="solo-impresion">Recubrimientos</h2>
+      <form class="tarjeta" id="f-rec">
+        <div class="rejilla">
+          <label class="campo"><span>Tipo de hormigón</span>
+            <select name="tipo"><option value="armado">Armado</option><option value="pretensado">Pretensado (armaduras pretesas)</option></select></label>
+          <label class="campo"><span>Clase de corrosión de armaduras</span><select name="corrosion"></select></label>
+          <label class="campo"><span>Heladas (XF)</span><select name="xf"></select></label>
+          <label class="campo"><span>Ataque químico (XA)</span><select name="xa"></select></label>
+          <label class="campo"><span>Erosión (XM)</span><select name="xm"></select></label>
+          <label class="campo"><span>Tipo de cemento</span><select name="cemento"></select></label>
+          <label class="campo"><span>Resistencia fck (N/mm²)</span><input name="fck" type="number" min="20" max="100" step="5" value="25"></label>
+          <label class="campo"><span>Vida útil de proyecto</span>
+            <select name="vida"><option value="50">50 años</option><option value="100">100 años</option></select></label>
+          <label class="campo"><span>Control de ejecución</span><select name="margen"></select></label>
+          <label class="campo"><span>Diámetro de la barra principal (mm)</span><input name="diam" type="number" min="0" max="40" step="1" value="12"></label>
+          <label class="campo"><span>Tamaño máximo del árido (mm)</span><input name="arido" type="number" min="0" max="40" step="1" value="20"></label>
+        </div>
+        <label class="check"><input type="checkbox" name="aridoDificil"><span>Las armaduras dificultan el paso del hormigón (1,25 × árido)</span></label>
+        <label class="check"><input type="checkbox" name="terreno"><span>Se hormigona contra el terreno, sin hormigón de limpieza</span></label>
+      </form>
+      <div class="resultados" id="r-rec" aria-live="polite"></div>
+      <p class="nota">Fuera de alcance: armaduras activas postesas (art. 44.2.1.2), barras dobladas y protección frente a incendio.</p>
+    </section>
+
+    <div data-ui="aviso"></div>
+  </main>
+  <div data-ui="cta"></div>
+  <div data-ui="pie"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

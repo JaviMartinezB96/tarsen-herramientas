@@ -1,0 +1,89 @@
+{
+  "fuente": "Código Estructural (RD 470/2021), Capítulo 9, art. 43. Transcrito de docs/normativa/CE-capitulo-9-durabilidad.pdf, p. 157.",
+  "nota_null": "null = '-' en la tabla (sin requisito para ese tipo de hormigón).",
+  "clases": ["X0", "XC1", "XC2", "XC3", "XC4", "XS1", "XS2", "XS3", "XD1", "XD2", "XD3", "XF1", "XF2", "XF3", "XF4", "XA1", "XA2", "XA3", "XM1", "XM2", "XM3"],
+  "grupos": {
+    "corrosion": ["X0", "XC1", "XC2", "XC3", "XC4", "XS1", "XS2", "XS3", "XD1", "XD2", "XD3"],
+    "XF": ["XF1", "XF2", "XF3", "XF4"],
+    "XA": ["XA1", "XA2", "XA3"],
+    "XM": ["XM1", "XM2", "XM3"]
+  },
+  "ac_max": {
+    "_ref": "Tabla 43.2.1.a — Máxima relación agua/cemento",
+    "masa": [0.65, null, null, null, null, null, null, null, null, null, null, 0.55, 0.5, 0.55, 0.5, 0.5, 0.5, 0.45, 0.5, 0.5, 0.5],
+    "armado": [0.65, 0.6, 0.6, 0.55, 0.55, 0.5, 0.5, 0.45, 0.5, 0.5, 0.5, 0.55, 0.5, 0.55, 0.5, 0.5, 0.5, 0.45, 0.5, 0.5, 0.5],
+    "pretensado": [0.6, 0.6, 0.6, 0.55, 0.55, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.5, 0.45, 0.5, 0.5, 0.45, 0.45, 0.5, 0.5, 0.5]
+  },
+  "cemento_min": {
+    "_ref": "Tabla 43.2.1.a — Contenido mínimo de cemento (kg/m³)",
+    "masa": [200, null, null, null, null, null, null, null, null, null, null, 275, 300, 275, 300, 275, 300, 325, 300, 300, 300],
+    "armado": [250, 275, 275, 300, 300, 300, 325, 350, 325, 325, 325, 300, 325, 300, 325, 325, 350, 350, 325, 325, 325],
+    "pretensado": [275, 300, 300, 300, 300, 300, 325, 350, 325, 325, 325, 300, 325, 300, 325, 325, 350, 350, 325, 325, 325]
+  },
+  "fck_min": {
+    "_ref": "Tabla 43.2.1.b — Resistencia característica mínima esperada (N/mm²)",
+    "masa": [20, null, null, null, null, null, null, null, null, null, null, 30, 30, 30, 30, 30, 30, 35, 30, 30, 30],
+    "armado": [25, 25, 25, 30, 30, 30, 30, 35, 30, 30, 30, 30, 30, 30, 30, 30, 30, 35, 30, 30, 30],
+    "pretensado": [25, 25, 25, 30, 30, 30, 35, 35, 35, 35, 35, 30, 30, 30, 30, 30, 35, 35, 30, 30, 30]
+  },
+  "avisos": [
+    {
+      "clases": ["XF2", "XF4"],
+      "texto": "Contenido mínimo de aire ocluido del 4,5 % (UNE-EN 12350-7).",
+      "ref": "Art. 43.3.3"
+    },
+    {
+      "clases": ["XS2", "XS3"],
+      "tipos": ["armado", "pretensado"],
+      "texto": "Cemento con característica adicional MR, SR o SRC.",
+      "ref": "Art. 43.3.4.2"
+    },
+    {
+      "clases": ["XA2"],
+      "tipos": ["masa"],
+      "texto": "En contacto con agua de mar: cemento con característica adicional MR, SR o SRC.",
+      "ref": "Art. 43.3.4.2"
+    },
+    {
+      "clases": ["XA1", "XA2", "XA3"],
+      "texto": "Con sulfatos ≥ 600 mg/l en agua o ≥ 3.000 mg/kg en suelo, cemento resistente a sulfatos. Consulta el estudio geotécnico.",
+      "ref": "Art. 43.3.4.1"
+    },
+    {
+      "clases": ["XS1", "XS2", "XD1", "XD2", "XD3", "XF1", "XF2", "XF3", "XF4", "XM1", "XM2", "XM3", "XA1"],
+      "texto": "Hormigón impermeable: penetración de agua máx. ≤ 50 mm y media ≤ 30 mm.",
+      "ref": "Tabla 43.3.2",
+      "grupo": "impermeabilidad",
+      "nivel": 1
+    },
+    {
+      "clases": ["XA2"],
+      "tipos": ["masa", "armado"],
+      "texto": "Hormigón impermeable: penetración de agua máx. ≤ 50 mm y media ≤ 30 mm.",
+      "ref": "Tabla 43.3.2",
+      "grupo": "impermeabilidad",
+      "nivel": 1
+    },
+    {
+      "clases": ["XS3", "XA3"],
+      "texto": "Hormigón impermeable: penetración de agua máx. ≤ 30 mm y media ≤ 20 mm.",
+      "ref": "Tabla 43.3.2",
+      "grupo": "impermeabilidad",
+      "nivel": 2
+    },
+    {
+      "clases": ["XA2"],
+      "tipos": ["pretensado"],
+      "texto": "Hormigón impermeable: penetración de agua máx. ≤ 30 mm y media ≤ 20 mm.",
+      "ref": "Tabla 43.3.2",
+      "grupo": "impermeabilidad",
+      "nivel": 2
+    },
+    {
+      "clases": ["XM1", "XM2", "XM3"],
+      "texto": "Árido fino cuarcítico, árido grueso con coeficiente de Los Ángeles < 30, curado un 50 % más largo y cemento máximo de 400 / 375 / 350 kg/m³ para árido de 10 / 20 / 40 mm.",
+      "ref": "Art. 43.3.5 y tabla 43.3.5"
+    }
+  ],
+  "designacion": "PENDIENTE: formato de tipificación del hormigón (no incluido en el capítulo 9 subido)."
+}

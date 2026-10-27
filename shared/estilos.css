@@ -1,0 +1,103 @@
+/* TARSEN Herramientas — estilos comunes. Tokens: docs/marca-tokens.json */
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@800&family=Red+Hat+Text:wght@400;500&display=swap");
+
+:root {
+  --brand-ink: #262626; --brand-sage: #acbfa4; --brand-pale: #e2e8ce;
+  --surface: #ffffff; --surface-soft: var(--brand-pale); --surface-inverse: var(--brand-ink);
+  --text: var(--brand-ink); --text-muted: #5c5c5c; --text-on-inverse: #ffffff;
+  --accent: var(--brand-sage); --border: #d9d9d9;
+  --aviso: #8a5a00; /* [Inferencia] color funcional para avisos, no es de marca */
+  --f-display: "Red Hat Display", system-ui, sans-serif;
+  --f-text: "Red Hat Text", system-ui, sans-serif;
+  --s1: 4px; --s2: 8px; --s3: 16px; --s4: 24px; --s5: 40px; --s6: 64px;
+  --r-sm: 2px; --r-md: 4px;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --surface: var(--brand-ink); --surface-soft: #333333; --surface-inverse: #ffffff;
+  --text: var(--brand-pale); --text-muted: var(--brand-sage); --text-on-inverse: var(--brand-ink);
+  --border: #4a4a4a; --aviso: #f0c36a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--text); font: 400 16px/24px var(--f-text); }
+.contenedor { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+h1, h2, h3, .dato { font-family: var(--f-display); font-weight: 800; margin: 0 0 var(--s3); }
+h1 { font-size: 32px; line-height: 38px; }
+h2 { font-size: 24px; line-height: 30px; }
+h3 { font-size: 18px; line-height: 24px; }
+@media (min-width: 720px) { h1 { font-size: 40px; line-height: 44px; } h2 { font-size: 28px; line-height: 34px; } }
+p { margin: 0 0 var(--s3); }
+.muted, small { color: var(--text-muted); }
+.entradilla { font-size: 18px; line-height: 28px; color: var(--text-muted); }
+.label { font: 500 12px/16px var(--f-text); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+a { color: inherit; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+/* Cabecera */
+.cabecera { border-bottom: 1px solid var(--border); }
+.cabecera .contenedor { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding-block: var(--s3); }
+.logo img { height: 32px; display: block; }
+.logo .inv, :root[data-theme="dark"] .logo .col { display: none; }
+:root[data-theme="dark"] .logo .inv { display: block; }
+.acciones { display: flex; gap: var(--s2); }
+.acciones .btn { white-space: nowrap; }
+@media (max-width: 559px) {
+  .logo img { height: 24px; }
+  .acciones .btn { padding: var(--s2); font-size: 13px; }
+  .acciones .solo-ancho { display: none; }
+}
+
+/* Controles */
+.btn { font: 500 14px/20px var(--f-text); padding: var(--s2) var(--s3); border: 1px solid var(--text); border-radius: var(--r-sm);
+  background: transparent; color: var(--text); cursor: pointer; text-decoration: none; display: inline-block; }
+.btn:hover { background: var(--accent); color: var(--brand-ink); border-color: var(--accent); }
+.btn-primario { background: var(--text); color: var(--surface); }
+.campo { display: grid; gap: var(--s1); margin-bottom: var(--s3); }
+.campo > span { font-weight: 500; }
+select, input[type="number"] { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: var(--s2); width: 100%; min-height: 40px; }
+select:focus, input:focus, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.check { display: flex; gap: var(--s2); align-items: flex-start; margin-bottom: var(--s3); }
+.rejilla { display: grid; gap: 0 var(--s4); }
+@media (min-width: 720px) { .rejilla { grid-template-columns: 1fr 1fr; } }
+
+/* Pestañas */
+.pestanas { display: flex; border-bottom: 1px solid var(--border); margin-bottom: var(--s4); }
+.pestanas button { font: 800 16px/24px var(--f-display); background: none; border: 0; color: var(--text-muted);
+  padding: var(--s3) var(--s3) calc(var(--s3) - 4px); border-bottom: 4px solid transparent; cursor: pointer; }
+.pestanas button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); }
+
+/* Bloques */
+main { padding-block: var(--s5); }
+section { margin-bottom: var(--s5); }
+.tarjeta { background: var(--surface-soft); padding: var(--s4); border-radius: var(--r-md); margin-bottom: var(--s4); }
+.resultados { border-left: 4px solid var(--accent); padding-left: var(--s4); margin-bottom: var(--s4); }
+.res { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--s2);
+  padding-block: var(--s2); border-bottom: 1px solid var(--border); }
+.res .dato { font-size: 28px; line-height: 34px; margin: 0; }
+.ref { display: block; width: 100%; font-size: 13px; line-height: 18px; color: var(--text-muted); }
+.nota { font-size: 14px; line-height: 20px; color: var(--text-muted); margin: var(--s2) 0; }
+.nota.alerta { color: var(--aviso); }
+.aviso-legal { font-size: 14px; line-height: 20px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: var(--s3); }
+.cta { background: var(--surface-inverse); color: var(--text-on-inverse); padding: var(--s5) var(--s4); margin-block: var(--s5); }
+.cta h2 { margin-bottom: var(--s2); }
+.cta .btn { border-color: var(--accent); background: var(--accent); color: var(--brand-ink); margin-top: var(--s2); }
+.pie { border-top: 1px solid var(--border); padding-block: var(--s4); font-size: 14px; color: var(--text-muted); }
+.solo-impresion { display: none; }
+[hidden] { display: none !important; }
+
+/* Hoja de impresión */
+@media print {
+  :root, :root[data-theme="dark"] { --surface: #fff; --surface-soft: #fff; --text: #262626; --text-muted: #5c5c5c; --border: #bbb; --aviso: #262626; }
+  @page { margin: 15mm; }
+  body { font-size: 11pt; line-height: 1.4; }
+  .cabecera, .pestanas, .cta, .pie, .no-imprimir, button { display: none !important; }
+  .solo-impresion { display: block; }
+  .cab-impresion { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #262626; padding-bottom: 8px; margin-bottom: 16px; gap: 16px; text-align: right; }
+  .cab-impresion img { height: 28px; }
+  main { padding: 0; }
+  .tarjeta { border: 1px solid #bbb; padding: 12px; break-inside: avoid; }
+  select, input[type="number"] { border: 0; padding: 0; appearance: none; min-height: 0; }
+  .resultados, .res { break-inside: avoid; }
+}

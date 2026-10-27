@@ -1,0 +1,77 @@
+{
+  "fuente": "Código Estructural (RD 470/2021), Capítulo 9, arts. 43.4.1 y 44. Transcrito de docs/normativa/CE-capitulo-9-durabilidad.pdf, pp. 164-169.",
+  "nota": "Valores en mm. Bandas de resistencia: 'f25' = 25 ≤ fck < 40 N/mm²; 'f40' = fck ≥ 40 N/mm². Pares [vida útil 50 años, 100 años]. '*' = recubrimiento excesivo, se recomienda estudio específico. 'proyectista' = lo fija el autor del proyecto.",
+
+  "cementos": {
+    "_ref": "Agrupación de cada tipo de cemento según los textos de las tablas 44.2.1.1.a, 44.2.1.1.b, 44.3 y 44.4. Claves: a = tabla 44.2.1.1.a; b_armado / b_pretensado = tabla 44.2.1.1.b; xf13 / xf24 = tabla 44.3; xa1 = tabla 44.4.",
+    "lista": [
+      { "id": "CEMI",      "nombre": "CEM I (sin adiciones)",                         "a": "CEMI",  "b_armado": "resto", "b_pretensado": "resto", "xf13": "otros",  "xf24": "otros",   "xa1": "resto" },
+      { "id": "CEMI_HS",   "nombre": "CEM I con humo de sílice > 6 %",                "a": "otros", "b_armado": "g1",    "b_pretensado": "g1",    "xf13": "otros",  "xf24": "otros",   "xa1": "g1" },
+      { "id": "CEMI_CV",   "nombre": "CEM I con cenizas volantes > 20 %",             "a": "otros", "b_armado": "g1",    "b_pretensado": "resto", "xf13": "otros",  "xf24": "otros",   "xa1": "g1" },
+      { "id": "CEMII_AD",  "nombre": "CEM II/A-D",                                    "a": "otros", "b_armado": "g1",    "b_pretensado": "g1",    "xf13": "otros",  "xf24": "CEMIIAD", "xa1": "g1" },
+      { "id": "CEMII_BV",  "nombre": "CEM II/B-V",                                    "a": "otros", "b_armado": "g1",    "b_pretensado": "resto", "xf13": "otros",  "xf24": "otros",   "xa1": "g1" },
+      { "id": "CEMII_BSP", "nombre": "CEM II/B-S o CEM II/B-P",                       "a": "otros", "b_armado": "g2",    "b_pretensado": "resto", "xf13": "otros",  "xf24": "otros",   "xa1": "g1" },
+      { "id": "CEMIII",    "nombre": "CEM III/A o CEM III/B",                         "a": "otros", "b_armado": "g1",    "b_pretensado": "resto", "xf13": "CEMIII", "xf24": "CEMIII",  "xa1": "g1" },
+      { "id": "CEMIV",     "nombre": "CEM IV",                                        "a": "otros", "b_armado": "g1",    "b_pretensado": "resto", "xf13": "otros",  "xf24": "otros",   "xa1": "g1" },
+      { "id": "OTROS",     "nombre": "Otros cementos (resto de CEM II, CEM V…)",       "a": "otros", "b_armado": "resto", "b_pretensado": "resto", "xf13": "otros",  "xf24": "otros",   "xa1": "resto" }
+    ]
+  },
+
+  "carbonatacion": {
+    "_ref": "Tabla 44.2.1.1.a — Recubrimientos mínimos para clases relacionadas con la corrosión por carbonatación",
+    "X0":   { "cualquiera": { "f25": [15, 25], "f40": [15, 25] } },
+    "XC1":  { "CEMI": { "f25": [15, 25], "f40": [10, 20] }, "otros": { "f25": [20, 30], "f40": [15, 25] } },
+    "XC2":  { "CEMI": { "f25": [15, 25], "f40": [10, 20] }, "otros": { "f25": [20, 30], "f40": [15, 25] } },
+    "XC3":  { "CEMI": { "f25": [15, 25], "f40": [10, 20] }, "otros": { "f25": [20, 30], "f40": [15, 25] } },
+    "XC4":  { "CEMI": { "f25": [20, 30], "f40": [15, 25] }, "otros": { "f25": [25, 35], "f40": [20, 30] } }
+  },
+
+  "cloruros": {
+    "_ref": "Tabla 44.2.1.1.b — Recubrimiento mínimo para clases relacionadas con la corrosión por cloruros. Orden de columnas: XS1, XS2, XS3, XD (XD1, XD2, XD3).",
+    "columnas": ["XS1", "XS2", "XS3", "XD"],
+    "armado": {
+      "g1":    { "_texto": "CEM III/A, CEM III/B, CEM IV, CEM II/B-V, CEM II/A-D u hormigón con adición de microsílice > 6 % o de cenizas volantes > 20 %",
+                 "50": [25, 30, 45, 35], "100": [30, 35, 50, 40] },
+      "g2":    { "_texto": "CEM II/B-S, B-P", "50": [30, 35, 65, 40], "100": [35, 40, 70, 45] },
+      "resto": { "_texto": "Resto de cementos utilizables, según el Artículo 28", "50": [40, 45, "*", "*"], "100": [65, "*", "*", "*"] }
+    },
+    "pretensado": {
+      "g1":    { "_texto": "CEM II/A-D o bien CEM I con adición de humo de sílice > 6 %", "50": [30, 35, 50, 40], "100": [35, 40, 65, 45] },
+      "resto": { "_texto": "Resto de cementos utilizables, según el Artículo 28", "50": [45, 55, "*", "*"], "100": ["*", "*", "*", "*"] }
+    }
+  },
+
+  "heladas": {
+    "_ref": "Tabla 44.3 — Recubrimientos mínimos para las clases de exposición XF",
+    "xf13": { "CEMIII": { "f25": [25, 50], "f40": [15, 25] }, "otros": { "f25": [20, 35], "f40": [10, 20] } },
+    "xf24": { "CEMIIAD": { "f25": [25, 50], "f40": [15, 35] }, "CEMIII": { "f25": [40, "*"], "f40": [20, 40] }, "otros": { "f25": [20, 40], "f40": [10, 20] } }
+  },
+
+  "quimico": {
+    "_ref": "Tabla 44.4 — Recubrimientos mínimos para las clases de exposición XA",
+    "XA1": { "g1": [40, 55], "resto": ["*", "*"] },
+    "XA2": "proyectista",
+    "XA3": "proyectista"
+  },
+
+  "erosion": {
+    "_ref": "Tabla 44.5 — Sobre-espesor del recubrimiento para las clases XM (se suma al resto de criterios)",
+    "XM1": 5, "XM2": 10, "XM3": 15
+  },
+
+  "margen": {
+    "_ref": "Tabla 43.4.1 — Margen de recubrimiento Δcdev según el nivel de control de ejecución",
+    "lista": [
+      { "id": "prefabricado", "nombre": "Prefabricado con nivel intenso de control en la instalación", "valor": 0 },
+      { "id": "intenso",      "nombre": "In situ con nivel intenso de control de ejecución",          "valor": 5 },
+      { "id": "otros",        "nombre": "Otros casos",                                                "valor": 10 }
+    ]
+  },
+
+  "adherencia": {
+    "_ref": "Art. 44.2.1.1 a): recubrimiento de armaduras principales ≥ diámetro de la barra y ≥ 0,80 veces el tamaño máximo del árido (1,25 si la disposición de armaduras dificulta el paso del hormigón)",
+    "k_arido": 0.80, "k_arido_dificil": 1.25
+  },
+  "terreno": { "_ref": "Art. 44.2.1.1: piezas hormigonadas contra el terreno sin terreno preparado ni hormigón de limpieza", "cmin": 70 },
+  "malla_reparto": { "_ref": "Art. 44.2.1.1: si el recubrimiento supera 50 mm, valorar malla de reparto", "umbral": 50 }
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Herramientas gratuitas de cálculo estructural | TARSEN</title>
+  <meta name="description" content="Herramientas gratuitas de consulta y predimensionado estructural según el Código Estructural, el CTE y la NCSE-02.">
+  <link rel="icon" href="shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="shared/estilos.css">
+</head>
+<body>
+  <div data-ui="cabecera"></div>
+  <main class="contenedor">
+    <h1>Herramientas gratuitas de cálculo estructural</h1>
+    <p class="entradilla">Consultas rápidas con la normativa española. Todo se calcula en tu navegador.</p>
+    <a class="tarjeta" style="display:block;text-decoration:none" href="hormigon/">
+      <h3>Clases de exposición y recubrimientos</h3>
+      <p class="muted">Dosificación mínima y recubrimiento nominal según el Código Estructural.</p>
+    </a>
+    <div data-ui="aviso"></div>
+  </main>
+  <div data-ui="cta"></div>
+  <div data-ui="pie"></div>
+  <script type="module">
+    import { iniciarPagina, CONFIG } from "./shared/ui.js";
+    CONFIG.herramientas = "./";
+    iniciarPagina();
+  </script>
+</body>
+</html>
