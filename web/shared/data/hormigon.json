@@ -1,0 +1,21 @@
+{
+  "fuente": "Código Estructural (RD 470/2021): Anejo 19 (tabla A19.2.1, 3.1.6, 3.1.7, tabla A19.3.1) y cap. 8 (art. 33.4, tabla 34.2.a). PDF en el proyecto de Claude. Datos comunes a escalera, cuantías, canto mínimo y anclajes.",
+  "hormigon": {
+    "_ref": "Anejo 19: tabla A19.2.1 (γc), 3.1.6(1) (αcc), tabla A19.3.1 (fctm), 3.1.7(3) (λ, η)",
+    "gammaC": 1.5,
+    "alphaCC": 1.0,
+    "fctm": "0,30·fck^(2/3) para fck ≤ 50 N/mm² (tabla A19.3.1)",
+    "fck": [25, 30, 35, 40, 45, 50],
+    "_fck": "Mínimo 25 N/mm² en armado (art. 33.4). Máximo 50 N/mm²: por encima cambian λ, η y fctm (3.1.7(3), tabla A19.3.1)."
+  },
+  "acero": {
+    "_ref": "Cap. 8, tabla 34.2.a (fyk) y Anejo 19, tabla A19.2.1 (γs)",
+    "gammaS": 1.15,
+    "tipos": [
+      { "id": "B500S", "fyk": 500, "texto": "B 500 S" },
+      { "id": "B500SD", "fyk": 500, "texto": "B 500 SD" },
+      { "id": "B400S", "fyk": 400, "texto": "B 400 S" },
+      { "id": "B400SD", "fyk": 400, "texto": "B 400 SD" }
+    ]
+  }
+}

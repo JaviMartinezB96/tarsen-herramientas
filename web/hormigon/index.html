@@ -27,6 +27,24 @@
       <div data-ui="cta"></div>
     </section>
 
+    <!-- Explicación del método (también para SEO). Mantener al día con calculo.js y data/*.json. -->
+    <details class="detalles metodo">
+      <summary>Cómo calcula esta herramienta</summary>
+      <p>Determina las clases de exposición del elemento, la dosificación y la designación del hormigón que piden y el recubrimiento nominal de las armaduras. Todos los valores salen de las tablas del Código Estructural; no se calcula nada de memoria.</p>
+      <ol>
+        <li><strong>Clases de exposición.</strong> Tus respuestas (tipo de hormigón, ubicación, cercanía a la costa, heladas, agresividad química y desgaste) se traducen en una clase de corrosión de armaduras (X0, XC, XS o XD) y, si corresponde, en una de hielo-deshielo (XF), otra de ataque químico (XA) y otra de erosión (XM). Un hormigón en masa es X0 salvo que tenga hielo-deshielo, ataque químico o desgaste. <span class="ref">Código Estructural, art. 27 y tablas 27.1.a y 27.1.b</span></li>
+        <li><strong>Criterio TARSEN: costa.</strong> A menos de 5 km de la costa se asigna XS1 aunque el elemento esté protegido de la intemperie. Es un criterio del lado de la seguridad; la norma lo plantea como caso general. <span class="ref">Art. 27.1</span></li>
+        <li><strong>Dosificación.</strong> Para cada clase se lee la relación agua/cemento máxima, el contenido mínimo de cemento y la resistencia mínima, y con varias clases manda la más exigente de cada parámetro. Se añaden los requisitos complementarios que tocan (impermeabilidad, aire ocluido, cementos resistentes…); de impermeabilidad, solo el más estricto. <span class="ref">Art. 43.2.1, tablas 43.2.1.a y 43.2.1.b; art. 43.3</span></li>
+        <li><strong>Designación.</strong> La resistencia es la mayor entre la mínima estructural (20 N/mm² en masa, 25 N/mm² en armado o pretensado), la mínima por durabilidad y la que indiques, redondeada a la serie recomendada. Si eliges una menor, se sube y se avisa. Formato T-R/C/TM/A. Cuando hay varias clases, se unen con «+» (p. ej. XC2+XA1); la norma no fija cómo escribirlo [Inferencia]. <span class="ref">Art. 33.4, 33.5 y 33.6</span></li>
+        <li><strong>Recubrimiento mínimo por durabilidad.</strong> Se lee en función de la clase, el tipo de cemento, la resistencia (bandas 25 ≤ f<sub>ck</sub> &lt; 40 y f<sub>ck</sub> ≥ 40 N/mm²) y la vida útil (50 o 100 años): carbonatación, cloruros, hielo-deshielo y ataque químico. Cada criterio se comprueba por separado y manda el mayor [Inferencia]. Si la tabla marca el recubrimiento como excesivo o lo deja al proyectista, la herramienta se detiene y lo indica. <span class="ref">Art. 44.2.1.1 y tablas 44.2.1.1.a, 44.2.1.1.b, 44.3 y 44.4</span></li>
+        <li><strong>Adherencia y árido.</strong> El recubrimiento de la armadura principal no es menor que su diámetro ni que 0,8 veces el tamaño máximo del árido (1,25 si las armaduras dificultan el paso del hormigón). <span class="ref">Art. 44.2.1.1 a)</span></li>
+        <li><strong>Criterio TARSEN: cercos y estribos.</strong> El recubrimiento se mide a la armadura más exterior, que es el estribo. Por eso, al estribo se le exige (Ø − Ø<sub>e</sub>) y (k · TM − Ø<sub>e</sub>), y se indica también el recubrimiento resultante a la armadura principal [Inferencia]. <span class="ref">Arts. 43.4.1 y 44.2.1.1 a)</span></li>
+        <li><strong>Erosión y terreno.</strong> En las clases XM se suma un sobre-espesor de 5, 10 o 15 mm. Si se hormigona contra el terreno sin hormigón de limpieza, el mínimo es 70 mm. <span class="ref">Tabla 44.5; art. 44.2.1.1</span></li>
+        <li><strong>Recubrimiento nominal.</strong> c<sub>nom</sub> = c<sub>min</sub> + Δc<sub>dev</sub>, con Δc<sub>dev</sub> = 10 mm en control normal, 5 mm con control intenso in situ y 0 mm en prefabricados con control intenso. Por encima de 50 mm se sugiere valorar una malla de reparto. <span class="ref">Art. 43.4.1 y tabla 43.4.1; art. 44.2.1.1</span></li>
+      </ol>
+      <p>No aplica (solo avisa de ellas) las reducciones por armaduras inoxidables o galvanizadas, inhibidores o protección catódica (arts. 43.3.1.4 a 43.3.1.7), ni el recubrimiento exigido por resistencia al fuego (CTE DB SI), que puede ser mayor.</p>
+    </details>
+
     <div data-ui="aviso"></div>
   </main>
   <div data-ui="pie"></div>

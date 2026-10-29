@@ -6,7 +6,9 @@ import { calcular, nBarras } from "./calculo.js";
 import { croquis } from "./croquis.js";
 
 iniciarPagina();
-const N = await cargarJSON("data/escalera.json");
+// Propiedades de hormigón y acero comunes a varias herramientas (shared/data/hormigon.json).
+const [N0, MAT] = await Promise.all([cargarJSON("data/escalera.json"), cargarJSON("../shared/data/hormigon.json")]);
+const N = { ...N0, hormigon: MAT.hormigon, acero: MAT.acero };
 const $ = (s) => document.querySelector(s);
 
 const INICIAL = { uso: "A1", L: 3.5, ancho: 1, contrahuella: 17.5, huella: 28, peldanos: "hormigon", solado: 1.5, fck: "25", acero: "B500S", rec: 30 };
