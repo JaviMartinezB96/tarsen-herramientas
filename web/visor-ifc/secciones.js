@@ -24,6 +24,7 @@ export class Secciones {
     p.length = 0;
     this.cortes.forEach((c) => p.push(c.plano));
     if (this.caja) p.push(...this.caja.planos);
+    this.e.corteActivo.value = p.length ? 1 : 0;
     this.e.pintar(); this.alCambiar?.();
   }
 

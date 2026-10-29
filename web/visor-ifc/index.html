@@ -10,18 +10,15 @@
   <link rel="stylesheet" href="visor.css">
   <script type="importmap">{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/" } }</script>
 </head>
-<body>
+<body class="pagina-visor">
   <div data-ui="cabecera"></div>
   <main class="visor-pagina">
-    <div class="contenedor visor-titulo">
-      <h1>Visor IFC online</h1>
-      <p class="entradilla">Abre uno o varios IFC, superponlos con colores, córtalos y consulta las propiedades de cada elemento. Tus archivos no salen de tu ordenador.</p>
-    </div>
-
     <section class="visor" id="visor" aria-label="Visor 3D">
       <canvas id="lienzo"></canvas>
 
       <div class="vacio" id="vacio">
+        <h1>Visor IFC online</h1>
+        <p class="entradilla">Abre uno o varios IFC, superponlos con colores, córtalos y consulta las propiedades de cada elemento. Tus archivos no salen de tu ordenador.</p>
         <p class="vacio-titulo">Arrastra aquí uno o varios archivos IFC</p>
         <button class="btn btn-primario" data-accion="abrir" type="button">Abrir IFC</button>
         <p class="nota">IFC2x3, IFC4 e IFC4.3. Se leen en tu navegador: no se suben a ningún servidor.</p>
@@ -78,27 +75,28 @@
       </div>
     </section>
 
-    <div class="contenedor estrecho visor-pie">
-      <div data-ui="cta"></div>
-
-      <details class="detalles metodo">
-        <summary>Cómo funciona este visor</summary>
-        <ol>
-          <li><strong>Lectura.</strong> El IFC se abre en tu navegador con web-ifc (That Open Company, licencia MPL-2.0) y se dibuja con three.js. Nada se sube a internet. Se leen IFC2x3, IFC4 e IFC4.3. No se dibujan los espacios (IfcSpace) ni los huecos.</li>
-          <li><strong>Navegación.</strong> Ratón: botón izquierdo para girar; derecho o central para desplazar; central con Mayús para girar; rueda para acercar hacia el cursor. Doble clic sobre el modelo para girar alrededor de ese punto. En pantalla táctil: un dedo gira y dos dedos acercan y desplazan.</li>
-          <li><strong>Varios modelos.</strong> Cada IFC se coloca con sus propias coordenadas. Los modelos coinciden si se exportaron con el mismo origen (por ejemplo, el mismo punto base o punto topográfico en Revit). Con «Color por modelo» cada archivo toma un color, que puedes cambiar en su muestra, y el botón de transparencia deja ver lo que hay detrás.</li>
-          <li><strong>Vistas.</strong> 3D, planta y los cuatro alzados. Se orientan con los ejes del IFC: el alzado frontal mira hacia +Y del proyecto (en Revit, hacia el norte del proyecto), el izquierdo se ve desde −X y el derecho desde +X.</li>
-          <li><strong>Contornos.</strong> Se dibujan los bordes y los pliegues de más de 30° de cada elemento (no en los vidrios).</li>
-          <li><strong>Cortes.</strong> Horizontal (planta), vertical frente a la vista (se ajusta al eje X o Z más próximo) o por la cara que pulses. Cada corte se mueve con su barra y se puede invertir. Puedes combinar varios.</li>
-          <li><strong>Caja de sección.</strong> Envuelve los modelos visibles o el elemento seleccionado. Arrastra las esferas de sus caras para ajustarla.</li>
-          <li><strong>Propiedades.</strong> Al pulsar un elemento se muestran su clase IFC, nombre, GlobalId, nivel, tipo, material y sus conjuntos de propiedades y cantidades (Psets y Qtos), también los heredados del tipo. Las unidades son las del proyecto declaradas en el IFC (IfcUnitAssignment). Los valores son los del archivo, sin recalcular.</li>
-        </ol>
-      </details>
-
-      <p class="aviso-legal">Herramienta de consulta. Muestra la información tal como viene en el archivo IFC; no la comprueba ni sustituye al proyecto de un técnico competente. Los archivos se procesan en tu navegador y no se suben a ningún servidor.</p>
-    </div>
   </main>
-  <div data-ui="pie"></div>
+
+  <dialog class="ayuda" id="ayuda" aria-labelledby="ayuda-titulo">
+    <div class="ayuda-cab">
+      <h2 id="ayuda-titulo">Cómo funciona este visor</h2>
+      <button class="cerrar" type="button" data-accion="cerrar-ayuda" aria-label="Cerrar">×</button>
+    </div>
+    <div class="metodo">
+      <ol>
+        <li><strong>Lectura.</strong> El IFC se abre en tu navegador con web-ifc (That Open Company, licencia MPL-2.0) y se dibuja con three.js. Nada se sube a internet. Se leen IFC2x3, IFC4 e IFC4.3. No se dibujan los espacios (IfcSpace) ni los huecos.</li>
+        <li><strong>Navegación.</strong> Ratón: botón izquierdo para girar; derecho o central para desplazar; central con Mayús para girar; rueda para acercar hacia el cursor. Doble clic sobre el modelo para girar alrededor de ese punto. En pantalla táctil: un dedo gira y dos dedos acercan y desplazan.</li>
+        <li><strong>Varios modelos.</strong> Cada IFC se coloca con sus propias coordenadas. Los modelos coinciden si se exportaron con el mismo origen (por ejemplo, el mismo punto base o punto topográfico en Revit). Con «Color por modelo» cada archivo toma un color, que puedes cambiar en su muestra, y el botón de transparencia deja ver lo que hay detrás.</li>
+        <li><strong>Vistas.</strong> 3D, planta y los cuatro alzados. Se orientan con los ejes del IFC: el alzado frontal mira hacia +Y del proyecto (en Revit, hacia el norte del proyecto), el izquierdo se ve desde −X y el derecho desde +X.</li>
+        <li><strong>Contornos.</strong> Se dibujan los bordes y los pliegues de más de 30° de cada elemento (no en los vidrios).</li>
+        <li><strong>Cortes.</strong> Horizontal (planta), vertical frente a la vista (se ajusta al eje X o Z más próximo) o por la cara que pulses. Cada corte se mueve con su barra y se puede invertir. Puedes combinar varios. Lo cortado se ve macizo, en el color del elemento algo más oscuro (se pintan sus caras interiores; si un elemento del IFC no es un sólido cerrado, su corte puede verse hueco).</li>
+        <li><strong>Caja de sección.</strong> Envuelve los modelos visibles o el elemento seleccionado. Arrastra las esferas de sus caras para ajustarla.</li>
+        <li><strong>Propiedades.</strong> Al pulsar un elemento se muestran su clase IFC, nombre, GlobalId, nivel, tipo, material y sus conjuntos de propiedades y cantidades (Psets y Qtos), también los heredados del tipo. Las unidades son las del proyecto declaradas en el IFC (IfcUnitAssignment). Los valores son los del archivo, sin recalcular.</li>
+      </ol>
+    </div>
+    <div data-ui="cta"></div>
+    <p class="aviso-legal">Herramienta de consulta. Muestra la información tal como viene en el archivo IFC; no la comprueba ni sustituye al proyecto de un técnico competente. Los archivos se procesan en tu navegador y no se suben a ningún servidor.</p>
+  </dialog>
   <input type="file" id="archivo" accept=".ifc,.IFC" multiple hidden>
   <script type="module" src="app.js"></script>
 </body>

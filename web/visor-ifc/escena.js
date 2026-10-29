@@ -31,6 +31,7 @@ export class Escena {
     lienzo.addEventListener("mousedown", (ev) => { if (ev.button === 1) ev.preventDefault(); }); // sin autodesplazamiento del navegador
     this.ctl.enableDamping = true; this.ctl.dampingFactor = 0.15; this.ctl.screenSpacePanning = true;
     this.ctl.addEventListener("change", () => this.pintar());
+    this.corteActivo = { value: 0 }; // 1 si hay cortes o caja: las caras interiores se pintan como sección maciza
     this.planos = [];      // planos de recorte activos (cortes + caja), compartidos por todos los materiales
     this.modelos = new Map();
     this.sel = null;       // { id, eid, mallas: [] }
@@ -74,6 +75,7 @@ export class Escena {
       const mat = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide, clippingPlanes: this.planos,
         transparent: transp, opacity: 1, depthWrite: !transp,
         polygonOffset: true, polygonOffsetFactor: -this.modelos.size, polygonOffsetUnits: -this.modelos.size }); // el último modelo cargado gana en caras coincidentes
+      this.macizo(mat);
       const malla = new THREE.Mesh(g, mat);
       malla.userData = { id, transp, ini: c.ini, num: c.num, eids: c.eids, triIni: Uint32Array.from(c.ini, (x) => x / 3) };
       // Tramos de índices por elemento, para resaltar la selección
@@ -106,6 +108,17 @@ export class Escena {
     setTimeout(() => m.mallas.forEach((x) => x.geometry.computeBoundsTree({ indirect: true })), 50);
     this.pintar();
     return m;
+  }
+
+  /** Sección maciza: con un corte activo, lo que se ve por dentro de un sólido cerrado son sus caras traseras;
+   *  se pintan lisas (sin luz) y un poco más oscuras que el elemento, como el relleno de una sección. */
+  macizo(mat) {
+    mat.onBeforeCompile = (s) => {
+      s.uniforms.uCorte = this.corteActivo;
+      s.fragmentShader = "uniform float uCorte;\n" + s.fragmentShader.replace("#include <dithering_fragment>",
+        "#include <dithering_fragment>\nif (uCorte > 0.5 && !gl_FrontFacing) gl_FragColor = vec4(diffuseColor.rgb * 0.62, diffuseColor.a);");
+    };
+    mat.customProgramCacheKey = () => "macizo";
   }
 
   quitarModelo(id) {
@@ -178,7 +191,8 @@ export class Escena {
     if (b.isEmpty()) return;
     const c = b.getCenter(new THREE.Vector3()), r = b.getBoundingSphere(new THREE.Sphere()).radius || 1;
     const d = dir ? dir.clone().normalize() : this.cam.position.clone().sub(this.ctl.target).normalize();
-    const dist = r / Math.sin(THREE.MathUtils.degToRad(this.cam.fov / 2)) * 1.05;
+    const mv = THREE.MathUtils.degToRad(this.cam.fov / 2), mh = Math.atan(Math.tan(mv) * this.cam.aspect); // en pantallas estrechas manda el ángulo horizontal
+    const dist = r / Math.sin(Math.min(mv, mh)) * 1.05;
     this.ctl.target.copy(c);
     this.cam.position.copy(c).addScaledVector(d, dist);
     this.cam.near = Math.max(dist / 1000, 0.01); this.cam.far = dist * 20; this.cam.updateProjectionMatrix();

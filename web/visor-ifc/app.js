@@ -4,6 +4,13 @@ import { Escena, PALETA } from "./escena.js";
 import { Secciones } from "./secciones.js";
 
 iniciarPagina();
+// Botón de ayuda («?») en la cabecera, junto a Contacto
+{
+  const cab = document.querySelector(".cabecera .contenedor"), contacto = cab.querySelector(".btn");
+  const grupo = document.createElement("div"); grupo.className = "cab-acciones";
+  grupo.innerHTML = '<button class="btn btn-ayuda" type="button" data-accion="ayuda" aria-label="Cómo funciona este visor" title="Cómo funciona este visor">?</button>';
+  contacto.replaceWith(grupo); grupo.append(contacto);
+}
 const $ = (s) => document.querySelector(s);
 const visor = $("#visor"), lienzo = $("#lienzo"), entrada = $("#archivo");
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -46,7 +53,7 @@ function alMensaje({ data: d }) {
     // Con dos o más modelos se pasa a color por modelo, salvo que se haya elegido otra cosa
     if (modelos.size > 1 && !colorElegido) porModelo = true;
     em.porModelo = porModelo; escena.aplicarAspecto(em);
-    if (primero) { escena.vista("3d"); scrollTo({ top: 0 }); } else escena.encuadrar();
+    if (primero) escena.vista("3d"); else escena.encuadrar();
     if (matchMedia("(max-width: 699px)").matches) plegarModelos(true); // en móvil, el panel plegado deja ver el modelo
     pintarModelos();
   } else if (d.cmd === "props") pintarProps(d);
@@ -66,7 +73,6 @@ function pintarModelos() {
   $("#modelos-titulo").textContent = `Modelos (${modelos.size})`;
   $("#vacio").hidden = hay;
   $("#p-modelos").hidden = !hay; $("#barra").hidden = escena.modelos.size === 0;
-  document.body.classList.toggle("con-modelo", hay); // sin título: el visor sube bajo la cabecera
   $("#lista-modelos").innerHTML = [...modelos].map(([id, m]) => `
     <li class="modelo" data-id="${id}">
       <input type="checkbox" data-m="ver" ${m.visible ? "checked" : ""} aria-label="Mostrar ${esc(m.nombre)}">
@@ -133,6 +139,8 @@ document.addEventListener("click", (e) => {
   else if (a === "caja-sel") { const b = escena.cajaSeleccion(); if (b) { secc.activarCaja(b); escena.encuadrar(b); } }
   else if (a === "encuadrar-sel") { const b = escena.cajaSeleccion(); if (b) escena.encuadrar(b); }
   else if (a === "deseleccionar") cerrarProps();
+  else if (a === "ayuda") $("#ayuda").showModal();
+  else if (a === "cerrar-ayuda") $("#ayuda").close();
   else if (a === "plegar") plegarModelos(!$("#p-modelos").classList.contains("plegado"));
   else if (a === "cancelar") modoToque(false);
   else if (a === "reiniciar") {
@@ -141,6 +149,7 @@ document.addEventListener("click", (e) => {
     pintarModelos(); escena.vista("3d");
   }
 });
+$("#ayuda").addEventListener("click", (e) => { if (e.target.id === "ayuda") e.target.close(); }); // pulsar fuera del cuadro lo cierra
 $("#menu-vista").addEventListener("click", (e) => {
   const t = e.target.closest("[data-vista]")?.dataset.vista;
   if (t) { abrirMenu(null); escena.vista(t, cajaVista()); }

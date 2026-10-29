@@ -1,19 +1,27 @@
 /* Visor IFC TARSEN — estilos propios (el resto, de ../shared/estilos.css). */
-.visor-pagina { padding-block: 0; }
-.visor-titulo { padding-block: 28px 18px; }
-.visor-titulo h1 { font-size: clamp(28px, 3.6vw, 40px); margin-bottom: 8px; }
-.visor-titulo .entradilla { font-size: 16px; margin-bottom: 0; max-width: 70ch; }
-.con-modelo .visor-titulo { display: none; }
-.visor-pie { padding-block: 32px 56px; }
+/* Pantalla completa: cabecera arriba y el visor ocupa el resto, sin desplazamiento de página */
+.pagina-visor { height: 100dvh; overflow: hidden; display: flex; flex-direction: column; overscroll-behavior: none; }
+.pagina-visor .cabecera { flex: none; position: relative; }
+.visor-pagina { flex: 1; min-height: 0; padding-block: 0; }
+.visor { position: relative; height: 100%; background: var(--bg-2); overflow: hidden; touch-action: none; }
+.cab-acciones { display: flex; align-items: center; gap: 10px; }
+.btn-ayuda { width: 44px; min-height: 44px; padding: 0; font: 600 18px/1 var(--display); }
 
-.visor { scroll-margin-top: 76px; position: relative; height: calc(100svh - 76px); min-height: 460px; background: var(--bg-2);
-  border-block: 1px solid var(--line); overflow: hidden; touch-action: none; }
+.ayuda { width: min(640px, calc(100% - 24px)); max-height: calc(100dvh - 48px); padding: 24px; background: var(--bg); color: var(--ink);
+  border: 1px solid var(--line-2); border-radius: 10px; overflow: auto; }
+.ayuda::backdrop { background: #0009; }
+.ayuda-cab { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.ayuda h2 { font-size: 24px; }
+.ayuda .aviso-legal { margin-top: 20px; }
+.ayuda .cta-mini { margin-top: 16px; }
 .visor canvas { display: block; width: 100%; height: 100%; }
 .visor.soltar::after { content: "Suelta para abrir"; position: absolute; inset: 12px; display: grid; place-items: center;
   border: 2px dashed var(--pale); border-radius: 10px; background: #0f1512cc; font: 600 24px var(--display); color: var(--pale); }
 
 .vacio { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 24px; text-align: center; }
-.vacio-titulo { font: 600 clamp(20px, 2.4vw, 28px)/1.15 var(--display); color: var(--pale); margin: 0; }
+.vacio h1 { font-size: clamp(32px, 4.4vw, 52px); margin: 0; }
+.vacio .entradilla { font-size: 17px; max-width: 52ch; margin: 0 0 18px; }
+.vacio-titulo { font: 600 clamp(17px, 1.8vw, 21px)/1.2 var(--display); color: var(--pale); margin: 0; }
 
 /* Paneles flotantes */
 .panel { position: absolute; z-index: 3; background: #0f1512f0; border: 1px solid var(--line-2); border-radius: 10px;
@@ -83,7 +91,6 @@
 
 /* Móvil: propiedades como hoja inferior y paneles más compactos */
 @media (max-width: 699px) {
-  .visor { height: calc(100svh - 64px); }
   .p-props { top: auto; bottom: 104px; left: 8px; right: 8px; width: auto; max-height: 48%; }
   .p-modelos { top: 8px; left: 8px; }
   .p-secciones { bottom: 104px; left: 8px; right: 8px; width: auto; }
