@@ -37,7 +37,8 @@ La web publicable vive en `web/` (es la carpeta que publica Cloudflare Pages). L
 - Cada herramienta lleva un desplegable «Cómo calcula esta herramienta» (en su `index.html`, antes del aviso): pasos del cálculo con fórmulas, criterios propios y referencia normativa de cada paso. Se actualiza en el mismo commit que cambie el cálculo.
 - Responsive con prioridad móvil. SEO: `<title>`, `description` y H1 con la palabra clave.
 - Sin cookies ni analítica de terceros. Todo en el navegador; los IFC no se suben a ningún servidor.
-- Entrega: carpeta estática `web/` con rutas relativas. Publicación de prueba automática en Cloudflare Pages conectado a GitHub (rama `main`, carpeta de salida `web`); más adelante, dominio propio de TARSEN.
+- Entrega: carpeta estática `web/` con rutas relativas. Publicación automática en Cloudflare **Pages** conectado a GitHub (rama `main`, carpeta de salida `web`) en **https://herramientas.tarsen.es** (desde el 29-10-2026; CNAME en la zona DNS de Dinahosting, tarsen.es no está en Cloudflare). Enlazado desde el footer de tarsen.es (página «Herramientas web» con descripción y enlace a cada herramienta, la mantiene el propietario).
+- SEO (29-10-2026): cada página lleva canonical a herramientas.tarsen.es, Open Graph + twitter:card con imagen `shared/og/<clave>.png` (generada con `docs/scripts/og_imagenes.py`) y JSON-LD (WebApplication gratuita, proveedor TARSEN). `robots.txt`, `sitemap.xml` y `404.html` en `web/`. Herramienta nueva: bloque SEO, imagen OG, línea en `sitemap.xml` y enlace en la portada. Search Console: propiedad de dominio tarsen.es (cubre el subdominio); el sitemap se envía desde ahí.
 
 ## Marca
 
