@@ -7,8 +7,8 @@ export function croquis(e, r) {
   const W = 640, M = 40, Lpx = W - 2 * M;
   const esc = Lpx / e.L;                                       // px por metro
   const tan = e.contrahuella / e.huella, cos = Math.cos(Math.atan(tan));
-  const sube = e.L * tan * esc, Hs = sube + 210;
-  const x0 = M, y0 = Hs - 110, x1 = M + Lpx, y1 = y0 - sube;    // cara inferior de la losa en los apoyos
+  const sube = e.L * tan * esc, Hs = sube + 170;
+  const x0 = M, y0 = Hs - 70, x1 = M + Lpx, y1 = y0 - sube;    // cara inferior de la losa en los apoyos
   const t = (r.h / 1000 / cos) * esc;                          // espesor vertical de la losa
   const v = (mm) => (mm / 1000 / cos) * esc;                   // distancia perpendicular → vertical en px
   const offI = v(e.rec + r.diam / 2), offS = t - v(e.rec + r.superior.diam / 2);
@@ -25,8 +25,7 @@ export function croquis(e, r) {
     return Array.from({ length: k }, (_, i) => { const x = x0 + 4 + i * dx; return `<circle cx="${x}" cy="${y(x, y0 - d)}" r="2.2"/>`; }).join("");
   };
   const apoyo = (x, yy) => `<path d="M${x},${yy} l-10,16 h20 Z"/>`;
-  const txt = (a, l) => `${nBarras(l, a.s, e.rec)}Ø${a.diam} c/${fmt(a.s / 10)}`;
-  const b = e.ancho * 1000, sep = Math.max(v(5), 4);           // transversal por dentro de la longitudinal
+  const sep = Math.max(v(5), 4);                               // transversal por dentro de la longitudinal
 
   return `<svg viewBox="0 0 ${W} ${Hs}" role="img" aria-label="Croquis del tramo de escalera con su armado" class="croquis">
     <style>.croquis{width:100%;height:auto;font:500 19px var(--sans)}</style>
@@ -40,8 +39,6 @@ export function croquis(e, r) {
     <g fill="var(--ink-2)">
       <text x="${x0 + 30}" y="${y0 + 26}">h = ${fmt(r.h / 10)} cm</text>
       <text x="${(x0 + x1) / 2}" y="${y0 + 52}" text-anchor="middle">L = ${fmt(e.L, 2)} m (horizontal)</text>
-      <text x="${x0}" y="${Hs - 30}" fill="var(--sage)">Inferior: ${txt(r.arm, b)} · transv. ${txt(r.reparto, r.lInc)}</text>
-      <text x="${x0}" y="${Hs - 6}">Superior: ${txt(r.superior, b)} · transv. ${txt(r.repartoSup, r.lInc)}</text>
     </g>
   </svg>`;
 }

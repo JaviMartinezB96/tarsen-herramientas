@@ -64,6 +64,7 @@ asistente.reiniciar();
 function mostrarResultado() {
   $("#p-preguntas").hidden = true;
   $("#p-resultados").hidden = false;
+  $(".entradilla").hidden = true;          // con resultado, la entradilla sobra
   pintarRespuestas();
   pintarResultado();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -74,6 +75,7 @@ $("#reiniciar").addEventListener("click", () => {
   asistente.reiniciar();
   $("#p-resultados").hidden = true;
   $("#p-preguntas").hidden = false;
+  $(".entradilla").hidden = false;
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -132,23 +134,24 @@ function pintarResultado() {
 
   let h = `<p class="label">Designación del hormigón</p>
     <p class="designacion">${des.texto}</p>
-    <p class="ref">Código Estructural, art. 33.6 (tipificación T-R/C/TM/A) · Clases: tabla 27.1.a</p>
-    <div class="resultados">`;
+    <p class="ref">Art. 33.6 (T-R/C/TM/A) · clases: tabla 27.1.a</p>`;
   if (rec && !rec.bloqueo) {
     const ext = rec.estribo ? " al estribo" : "";
-    h += fila(`Recubrimiento nominal${ext}`, `${fmt(rec.cnom)} mm`, `c<sub>nom</sub> = c<sub>min</sub> + Δc<sub>dev</sub> · Código Estructural, art. 43.4.1`);
-    if (rec.estribo) h += fila("Recubrimiento nominal a la barra principal", `${fmt(rec.cnom + rec.estribo)} mm`, `c<sub>nom</sub> + Ø estribo ${rec.estribo} mm · art. 43.4.1`);
-    h += fila(`Recubrimiento mínimo${ext}`, `${fmt(rec.cmin)} mm`, `Gobierna: ${rec.gobierna.texto} · Código Estructural, ${rec.gobierna.ref}`);
-    h += fila("Margen Δc<sub>dev</sub>", `${fmt(rec.dc)} mm`, "Código Estructural, tabla 43.4.1");
+    h += `<p class="label" style="margin-top:28px">Recubrimiento nominal${ext}</p>
+      <p class="designacion">${fmt(rec.cnom)} mm</p>
+      <p class="ref">${fmt(rec.cmin)} + ${fmt(rec.dc)} mm (c<sub>min</sub> + Δc<sub>dev</sub>) · art. 43.4.1</p>`;
   }
-  h += fila("Relación agua/cemento máxima", fmt(dos.ac, 2), "Código Estructural, tabla 43.2.1.a") +
-    fila("Contenido mínimo de cemento", dos.cemento ? `${fmt(dos.cemento)} kg/m³` : "—", "Código Estructural, tabla 43.2.1.a") +
-    fila("Resistencia fck", `${fmt(des.R)} N/mm²`, "Código Estructural, art. 33.4 y tabla 43.2.1.b") + `</div>`;
+  h += `<div class="resultados">`;
+  if (rec && !rec.bloqueo && rec.estribo) h += fila("Recubrimiento a la barra principal", `${fmt(rec.cnom + rec.estribo)} mm`, `c<sub>nom</sub> + Ø${rec.estribo} · art. 43.4.1`);
+  h += fila("Relación a/c máxima", fmt(dos.ac, 2), "Tabla 43.2.1.a") +
+    fila("Cemento mínimo", dos.cemento ? `${fmt(dos.cemento)} kg/m³` : "—", "Tabla 43.2.1.a") + `</div>`;
 
   if (rec?.bloqueo) alertas.push(rec.bloqueo);
   if (des.subida) alertas.push({ texto: `La resistencia elegida es menor que la mínima para estas clases; se toma ${des.R} N/mm².`, ref: "Art. 43.2.1" });
   const cons = T.consistencias.lista.find((c) => c.id === est.consistencia);
   if (cons.nota) alertas.push({ texto: cons.nota, ref: "Art. 33.5" });
+  extra.push({ texto: `Resistencia característica f<sub>ck</sub> = ${fmt(des.R)} N/mm².`, ref: "Art. 33.4 y tabla 43.2.1.b" });
+  if (rec && !rec.bloqueo) extra.push({ texto: `Recubrimiento mínimo${rec.estribo ? " al estribo" : ""} c<sub>min</sub> = ${fmt(rec.cmin)} mm. Gobierna: ${rec.gobierna.texto}. Margen Δc<sub>dev</sub> = ${fmt(rec.dc)} mm.`, ref: `${rec.gobierna.ref}; tabla 43.4.1` });
   if (rec) {
     extra.push(...(rec.notas || []));
     extra.push({ texto: "Criterios comprobados: " + rec.partes.map((p) => `${p.texto} = ${fmt(p.valor, p.valor % 1 ? 1 : 0)} mm (${p.ref})`).join("; ") + ".", ref: "Art. 44" });

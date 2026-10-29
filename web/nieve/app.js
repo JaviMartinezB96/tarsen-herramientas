@@ -126,7 +126,7 @@ function pintar() {
   const rE2 = calcular(N, { ...est, origen: "E2" });
   const r38 = est.capital ? calcular(N, { ...est, origen: "3.8" }) : null;
   const zi = est.zonaInfo || {};
-  const altRef = { ign: "MDT del IGN (paso de 25 m; 500 m en Canarias)", usuario: "Introducida por ti" }[est.altFuente] || "";
+  const altRef = { ign: "MDT del IGN", usuario: "Introducida por ti" }[est.altFuente] || "";
   const zonaRef = est.zona !== zi.zona ? "Elegida por ti" : {
     canarias: "Canarias: zona 7", "ceuta-melilla": "Ceuta y Melilla: zona 6", cercana: `Zona más próxima (a ${fmt(zi.km, 1)} km)`,
   }[zi.regla] || "Detectada en el mapa";
@@ -134,18 +134,25 @@ function pintar() {
     ? [[`Tabla 3.8 · ${esc(est.capital.nombre)} a ${fmt(est.capital.altitud)} m`, r38], [`Tabla E.2 · zona ${est.zona} a ${fmt(est.alt)} m (tu punto)`, rE2]]
     : [["", r38 && rE2.qn == null ? r38 : rE2]];
 
+  // Un valor principal (el del punto, tabla E.2); en capitales, el de la tabla 3.8 va en una línea aparte
+  const [tituloPrin, ref] = casos[casos.length - 1];
   let h = `<p class="label">${lugar}</p><p class="label">Carga de nieve sobre la cubierta (proyección horizontal)</p>
-    <div class="${casos.length > 1 ? "doble" : ""}">${casos.map(([t, r]) => bloque(t, r)).join("")}</div>`;
-  if (casos.length > 1) h += nota("Las dos son válidas según el DB: la tabla 3.8 da el valor de la capital a una altitud fija y la tabla E.2 el de la zona a la altitud de tu punto. Si la obra está lejos del casco urbano o a otra cota, la segunda describe mejor el emplazamiento.", "CTE DB SE-AE, 3.5.2.1 y 3.5.2.2");
-  const ref = casos[casos.length - 1][1];
+    ${bloque(tituloPrin, ref)}`;
+  if (casos.length > 1) {
+    const [t38, r38c] = casos[0];
+    h += `<p class="nota">${t38}: <strong>q<sub>n</sub> = ${kn(r38c.qn)}</strong> <span class="ref">CTE DB SE-AE, 3.5.2.1</span></p>`;
+  }
   h += `<div class="resultados">` +
     fila("Altitud", `${fmt(est.alt)} m`, altRef) +
-    fila("Zona de clima invernal", `${est.zona}`, `${zonaRef} · Anejo E, figura E.2`) +
-    casos.filter(([, r]) => r.sk != null).map(([, r]) => fila(`Carga sobre terreno horizontal s<sub>k</sub>${casos.length > 1 ? (r.fuenteSk === "3.8" ? " · tabla 3.8" : " · tabla E.2") : ""}`, kn(r.sk), refSk(r))).join("") +
-    (ref.metodo === "general" ? fila("Coeficiente de forma μ", fmt(ref.mu, 2), refMu()) : "") +
-    (ref.metodo === "general" && ref.factor !== 1 ? fila("Exposición al viento", `× ${fmt(ref.factor, 1)}`, "CTE DB SE-AE, 3.5.1.3") : "") + `</div>`;
+    fila("Zona de clima invernal", `${est.zona}`, `${zonaRef} · Anejo E`) +
+    (ref.sk != null ? fila("Carga en terreno horizontal s<sub>k</sub>", kn(ref.sk), ref.fuenteSk === "3.8" ? "Tabla 3.8" : `Tabla E.2${ref.e2.filas.length > 1 ? " (interpolada)" : ""}`) : "") +
+    (ref.metodo === "general" ? fila("Coeficiente de forma μ", fmt(ref.mu, 2), "3.5.3.2") : "") +
+    (ref.metodo === "general" && ref.factor !== 1 ? fila("Exposición al viento", `× ${fmt(ref.factor, 1)}`, "3.5.1.3") : "") + `</div>`;
 
   const notas = [];
+  if (casos.length > 1) notas.push(["Las dos son válidas según el DB: la tabla 3.8 da el valor de la capital a una altitud fija y la tabla E.2 el de la zona a la altitud de tu punto. Si la obra está lejos del casco urbano o a otra cota, la segunda describe mejor el emplazamiento.", "CTE DB SE-AE, 3.5.2.1 y 3.5.2.2"]);
+  if (ref.sk != null) notas.push([`Valor de s<sub>k</sub>: ${refSk(ref)}.`, ""]);
+  if (ref.metodo === "general") notas.push([`Coeficiente μ: ${refMu()}.`, ""]);
   if (zi.cerca && est.zona === zi.zona) notas.push([`El punto está a ${fmt(zi.cerca.km, 1)} km de la zona ${zi.cerca.zona}. Los límites de la figura E.2 son aproximados: si dudas, compara las dos zonas.`, "Criterio TARSEN", true]);
   if (ref.metodo === "general" && ref.simplificadoAplica) notas.push(["Si es la cubierta plana de un edificio de pisos, el DB permite tomar directamente 1,0 kN/m². Puedes elegirlo en «Método».", "CTE DB SE-AE, 3.5.1.1"]);
   for (const [t, r] of casos) if (r.pn != null) notas.push([`Por encima de 1.000 m, en los vuelos de la cubierta añade en el borde una carga lineal de hielo p<sub>n</sub> = k · μ² · s<sub>k</sub> = 3 · ${fmt(r.mu, 2)}² · ${fmt(r.sk, 2)} = ${fmt(r.pn, 2)} kN/m${t ? ` (${r.fuenteSk === "3.8" ? "tabla 3.8" : "tabla E.2"})` : ""}.`, "CTE DB SE-AE, 3.5.1.4, ec. (3.3)"]);
