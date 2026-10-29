@@ -46,7 +46,7 @@ function alMensaje({ data: d }) {
     // Con dos o más modelos se pasa a color por modelo, salvo que se haya elegido otra cosa
     if (modelos.size > 1 && !colorElegido) porModelo = true;
     em.porModelo = porModelo; escena.aplicarAspecto(em);
-    if (primero) escena.vista("3d"); else escena.encuadrar();
+    if (primero) { escena.vista("3d"); scrollTo({ top: 0 }); } else escena.encuadrar();
     if (matchMedia("(max-width: 699px)").matches) plegarModelos(true); // en móvil, el panel plegado deja ver el modelo
     pintarModelos();
   } else if (d.cmd === "props") pintarProps(d);
@@ -64,7 +64,9 @@ const ICONO_TRANSP = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8"
 function pintarModelos() {
   const hay = modelos.size > 0;
   $("#modelos-titulo").textContent = `Modelos (${modelos.size})`;
-  $("#vacio").hidden = hay; $("#p-modelos").hidden = !hay; $("#barra").hidden = escena.modelos.size === 0;
+  $("#vacio").hidden = hay;
+  $("#p-modelos").hidden = !hay; $("#barra").hidden = escena.modelos.size === 0;
+  document.body.classList.toggle("con-modelo", hay); // sin título: el visor sube bajo la cabecera
   $("#lista-modelos").innerHTML = [...modelos].map(([id, m]) => `
     <li class="modelo" data-id="${id}">
       <input type="checkbox" data-m="ver" ${m.visible ? "checked" : ""} aria-label="Mostrar ${esc(m.nombre)}">
@@ -111,22 +113,22 @@ function aplicarColores() {
 
 // ---------- Barra de herramientas ----------
 
-const menu = $("#menu-corte"), botonMenu = $('[data-accion="menu-corte"]');
-function abrirMenu(si) {
-  menu.hidden = !si; botonMenu.setAttribute("aria-expanded", String(si));
-  if (si) { // encima del botón, dentro del visor
-    const r = botonMenu.getBoundingClientRect(), v = visor.getBoundingClientRect();
-    menu.style.left = Math.max(8, Math.min(r.left - v.left, v.width - menu.offsetWidth - 8)) + "px";
-    menu.style.top = r.top - v.top - menu.offsetHeight - 8 + "px";
-  }
+let menuAbierto = null;
+function abrirMenu(id) { // id del menú o null para cerrar
+  document.querySelectorAll(".menu-lista").forEach((m) => (m.hidden = m.id !== id));
+  document.querySelectorAll("[data-menu]").forEach((b) => b.setAttribute("aria-expanded", String(b.dataset.menu === id)));
+  menuAbierto = id;
+  if (!id) return;
+  const menu = $("#" + id), r = $(`[data-menu="${id}"]`).getBoundingClientRect(), v = visor.getBoundingClientRect();
+  menu.style.left = Math.max(8, Math.min(r.left - v.left, v.width - menu.offsetWidth - 8)) + "px"; // encima del botón, dentro del visor
+  menu.style.top = r.top - v.top - menu.offsetHeight - 8 + "px";
 }
 document.addEventListener("click", (e) => {
-  if (!e.target.closest("#menu-corte, [data-accion=\"menu-corte\"]")) abrirMenu(false);
+  if (!e.target.closest(".menu-lista, [data-menu]")) abrirMenu(null);
   const a = e.target.closest("[data-accion]")?.dataset.accion;
   if (!a) return;
   if (a === "encuadrar") escena.encuadrar(cajaVista());
-  else if (a === "planta" || a === "3d") escena.vista(a, cajaVista());
-  else if (a === "menu-corte") abrirMenu(menu.hidden);
+  else if (a === "menu") { const id = e.target.closest("[data-menu]").dataset.menu; abrirMenu(menuAbierto === id ? null : id); }
   else if (a === "caja") secc.caja ? secc.quitarCaja() : secc.activarCaja();
   else if (a === "caja-sel") { const b = escena.cajaSeleccion(); if (b) { secc.activarCaja(b); escena.encuadrar(b); } }
   else if (a === "encuadrar-sel") { const b = escena.cajaSeleccion(); if (b) escena.encuadrar(b); }
@@ -139,10 +141,14 @@ document.addEventListener("click", (e) => {
     pintarModelos(); escena.vista("3d");
   }
 });
-menu.addEventListener("click", (e) => {
+$("#menu-vista").addEventListener("click", (e) => {
+  const t = e.target.closest("[data-vista]")?.dataset.vista;
+  if (t) { abrirMenu(null); escena.vista(t, cajaVista()); }
+});
+$("#menu-corte").addEventListener("click", (e) => {
   const t = e.target.closest("[data-corte]")?.dataset.corte;
   if (!t) return;
-  abrirMenu(false);
+  abrirMenu(null);
   if (t === "cara") modoToque(true); else secc.nuevoCorte(t);
 });
 /** Lo visible: los modelos encendidos, limitados a la caja de sección si está activa. */
@@ -201,7 +207,7 @@ lienzo.addEventListener("pointerup", (e) => {
   lector().postMessage({ cmd: "props", id: t.id, eid: t.eid });
 });
 lienzo.addEventListener("dblclick", (e) => { const t = escena.tocar(e.clientX, e.clientY); if (t) escena.orbitarEn(t.punto); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") { cerrarProps(); modoToque(false); abrirMenu(false); } });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { cerrarProps(); modoToque(false); abrirMenu(null); } });
 
 function cerrarProps() { escena.seleccionar(null); $("#p-props").hidden = true; }
 

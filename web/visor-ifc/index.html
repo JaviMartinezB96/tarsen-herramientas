@@ -57,13 +57,20 @@
 
       <nav class="barra" id="barra" hidden aria-label="Herramientas del visor">
         <button class="btn mini" data-accion="encuadrar" type="button">Encuadrar</button>
-        <button class="btn mini" data-accion="planta" type="button">Planta</button>
-        <button class="btn mini" data-accion="3d" type="button">3D</button>
-        <button class="btn mini" data-accion="menu-corte" type="button" aria-expanded="false" aria-controls="menu-corte">Corte</button>
+        <button class="btn mini" data-accion="menu" data-menu="menu-vista" type="button" aria-expanded="false" aria-controls="menu-vista">Vistas</button>
+        <button class="btn mini" data-accion="menu" data-menu="menu-corte" type="button" aria-expanded="false" aria-controls="menu-corte">Corte</button>
         <button class="btn mini" data-accion="caja" type="button" aria-pressed="false">Caja de sección</button>
         <button class="btn mini" data-accion="reiniciar" type="button">Restablecer</button>
       </nav>
 
+      <div class="menu-lista" id="menu-vista" hidden>
+        <button type="button" data-vista="3d">3D</button>
+        <button type="button" data-vista="planta">Planta</button>
+        <button type="button" data-vista="frontal">Alzado frontal</button>
+        <button type="button" data-vista="posterior">Alzado posterior</button>
+        <button type="button" data-vista="izquierdo">Alzado izquierdo</button>
+        <button type="button" data-vista="derecho">Alzado derecho</button>
+      </div>
       <div class="menu-lista" id="menu-corte" hidden>
         <button type="button" data-corte="horizontal">Horizontal</button>
         <button type="button" data-corte="vertical">Vertical, frente a la vista</button>
@@ -78,8 +85,10 @@
         <summary>Cómo funciona este visor</summary>
         <ol>
           <li><strong>Lectura.</strong> El IFC se abre en tu navegador con web-ifc (That Open Company, licencia MPL-2.0) y se dibuja con three.js. Nada se sube a internet. Se leen IFC2x3, IFC4 e IFC4.3. No se dibujan los espacios (IfcSpace) ni los huecos.</li>
-          <li><strong>Navegación.</strong> Ratón: botón izquierdo para girar, derecho para desplazar y rueda para acercar. Doble clic sobre el modelo para girar alrededor de ese punto. En pantalla táctil: un dedo gira y dos dedos acercan y desplazan.</li>
+          <li><strong>Navegación.</strong> Ratón: botón izquierdo para girar; derecho o central para desplazar; central con Mayús para girar; rueda para acercar hacia el cursor. Doble clic sobre el modelo para girar alrededor de ese punto. En pantalla táctil: un dedo gira y dos dedos acercan y desplazan.</li>
           <li><strong>Varios modelos.</strong> Cada IFC se coloca con sus propias coordenadas. Los modelos coinciden si se exportaron con el mismo origen (por ejemplo, el mismo punto base o punto topográfico en Revit). Con «Color por modelo» cada archivo toma un color, que puedes cambiar en su muestra, y el botón de transparencia deja ver lo que hay detrás.</li>
+          <li><strong>Vistas.</strong> 3D, planta y los cuatro alzados. Se orientan con los ejes del IFC: el alzado frontal mira hacia +Y del proyecto (en Revit, hacia el norte del proyecto), el izquierdo se ve desde −X y el derecho desde +X.</li>
+          <li><strong>Contornos.</strong> Se dibujan los bordes y los pliegues de más de 30° de cada elemento (no en los vidrios).</li>
           <li><strong>Cortes.</strong> Horizontal (planta), vertical frente a la vista (se ajusta al eje X o Z más próximo) o por la cara que pulses. Cada corte se mueve con su barra y se puede invertir. Puedes combinar varios.</li>
           <li><strong>Caja de sección.</strong> Envuelve los modelos visibles o el elemento seleccionado. Arrastra las esferas de sus caras para ajustarla.</li>
           <li><strong>Propiedades.</strong> Al pulsar un elemento se muestran su clase IFC, nombre, GlobalId, nivel, tipo, material y sus conjuntos de propiedades y cantidades (Psets y Qtos), también los heredados del tipo. Las unidades son las del proyecto declaradas en el IFC (IfcUnitAssignment). Los valores son los del archivo, sin recalcular.</li>

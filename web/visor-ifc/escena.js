@@ -25,6 +25,10 @@ export class Escena {
     sol.position.set(0.5, 1, 0.8);
     this.cam.add(sol); this.escena.add(this.cam);
     this.ctl = new OrbitControls(this.cam, lienzo);
+    // Izquierdo: orbitar. Central: desplazar (con Mayús, orbitar: OrbitControls gira en PAN si hay Mayús/Ctrl). Derecho: desplazar.
+    this.ctl.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.PAN, RIGHT: THREE.MOUSE.PAN };
+    this.ctl.zoomToCursor = true;
+    lienzo.addEventListener("mousedown", (ev) => { if (ev.button === 1) ev.preventDefault(); }); // sin autodesplazamiento del navegador
     this.ctl.enableDamping = true; this.ctl.dampingFactor = 0.15; this.ctl.screenSpacePanning = true;
     this.ctl.addEventListener("change", () => this.pintar());
     this.planos = [];      // planos de recorte activos (cortes + caja), compartidos por todos los materiales
@@ -71,7 +75,7 @@ export class Escena {
         transparent: transp, opacity: 1, depthWrite: !transp,
         polygonOffset: true, polygonOffsetFactor: -this.modelos.size, polygonOffsetUnits: -this.modelos.size }); // el último modelo cargado gana en caras coincidentes
       const malla = new THREE.Mesh(g, mat);
-      malla.userData = { id, transp, ini: c.ini, num: c.num, eids: c.eids, cajas: c.cajas, triIni: Uint32Array.from(c.ini, (x) => x / 3) };
+      malla.userData = { id, transp, ini: c.ini, num: c.num, eids: c.eids, triIni: Uint32Array.from(c.ini, (x) => x / 3) };
       // Tramos de índices por elemento, para resaltar la selección
       for (let i = 0; i < c.eids.length; i++) {
         const e = c.eids[i];
@@ -79,6 +83,21 @@ export class Escena {
         m.tramos.get(e).push([malla, c.ini[i], c.num[i]]);
       }
       grupo.add(malla); m.mallas.push(malla);
+    }
+    // Caja de cada elemento (unión de sus geometrías), para la caja «núcleo»
+    const porEl = new Map();
+    for (const c of [d.opaco, d.transp]) for (let i = 0; i < c.eids.length; i++) {
+      const k = c.cajas, j = i * 6, b = porEl.get(c.eids[i]);
+      if (!b) porEl.set(c.eids[i], [k[j], k[j + 1], k[j + 2], k[j + 3], k[j + 4], k[j + 5]]);
+      else for (let q = 0; q < 3; q++) { b[q] = Math.min(b[q], k[j + q]); b[q + 3] = Math.max(b[q + 3], k[j + q + 3]); }
+    }
+    m.cajasEl = Float32Array.from([...porEl.values()].flat());
+    if (d.aristas?.length) { // contornos: aristas vivas calculadas en el lector
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.BufferAttribute(d.aristas, 3));
+      m.lineas = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x1b211d, transparent: true, opacity: 0.7, clippingPlanes: this.planos }));
+      m.lineas.raycast = () => {};
+      grupo.add(m.lineas);
     }
     this.escena.add(grupo);
     this.modelos.set(id, m);
@@ -94,6 +113,7 @@ export class Escena {
     if (!m) return;
     if (this.sel?.id === id) this.seleccionar(null);
     m.mallas.forEach((x) => { x.geometry.disposeBoundsTree?.(); x.geometry.dispose(); x.material.dispose(); });
+    if (m.lineas) { m.lineas.geometry.dispose(); m.lineas.material.dispose(); }
     this.escena.remove(m.grupo); this.modelos.delete(id); this.pintar();
   }
 
@@ -110,6 +130,7 @@ export class Escena {
       mat.depthWrite = !mat.transparent;
       mat.needsUpdate = true;
     }
+    if (m.lineas) m.lineas.material.opacity = m.transparente ? 0.25 : 0.7;
     this.pintar();
   }
 
@@ -123,7 +144,8 @@ export class Escena {
     const b = new THREE.Box3(), cajas = [];
     for (const m of this.modelos.values()) {
       if (!m.grupo.visible) continue;
-      for (const x of m.mallas) { b.union(x.geometry.boundingBox); cajas.push(x.userData.cajas); }
+      for (const x of m.mallas) b.union(x.geometry.boundingBox);
+      cajas.push(m.cajasEl);
     }
     if (!nucleo || b.isEmpty()) return b;
     const cx = [], cy = [], cz = [];
@@ -131,7 +153,7 @@ export class Escena {
     const med = (a) => a.slice().sort((p, q) => p - q)[a.length >> 1];
     const mx = med(cx), my = med(cy), mz = med(cz);
     const d = cx.map((_, i) => Math.hypot(cx[i] - mx, cy[i] - my, cz[i] - mz));
-    const lim = 3 * d.slice().sort((p, q) => p - q)[Math.floor(d.length * 0.9)] + 1; // 3 × percentil 90 + 1 m (criterio del visor)
+    const lim = 3 * d.slice().sort((p, q) => p - q)[Math.floor(d.length * 0.75)] + 1; // 3 × percentil 75 + 1 m (criterio del visor)
     const n = new THREE.Box3();
     let j = 0;
     for (const k of cajas) for (let i = 0; i < k.length; i += 6, j++) {
@@ -163,9 +185,13 @@ export class Escena {
     this.ctl.update(); this.pintar();
   }
 
+  /** Vistas rápidas. Ejes del IFC: web-ifc convierte (x, y, z) del IFC en (x, z, −y), así que +Y del IFC es −Z aquí.
+   *  Alzado frontal: mirando hacia +Y del IFC (cámara en −Y); posterior, al revés; izquierdo: desde −X; derecho: desde +X. */
   vista(tipo, b = this.caja()) {
-    const d = { planta: new THREE.Vector3(0, 1, 0.0001), "3d": new THREE.Vector3(1, 0.8, 1) }[tipo];
-    this.encuadrar(b, d);
+    const d = {
+      planta: [0, 1, 0.0001], frontal: [0, 0, 1], posterior: [0, 0, -1], izquierdo: [-1, 0, 0], derecho: [1, 0, 0], "3d": [1, 0.8, 1],
+    }[tipo];
+    this.encuadrar(b, new THREE.Vector3(...d));
   }
 
   // ---------- Selección ----------

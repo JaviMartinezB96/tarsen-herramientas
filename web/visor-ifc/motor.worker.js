@@ -55,6 +55,50 @@ function anadir(c, eid, v, ix, m, color) {
   c.pos.n = p; c.nor.n = p; c.col.n = q; c.idx.n += ix.length; c.nv += nv;
 }
 
+const COS_ARISTA = Math.cos(30 * Math.PI / 180); // ángulo mínimo entre caras para dibujar la arista (criterio del visor)
+
+/** Aristas vivas de una geometría (bordes libres y pliegues > 30°), ya transformadas, en L (pares de puntos). */
+function aristas(v, ix, m, L) {
+  const nv = v.length / 6, id = new Int32Array(nv), clave = new Map();
+  let u = 0;
+  for (let i = 0; i < nv; i++) { // vértices coincidentes (las caras planas no comparten vértice)
+    const k = Math.round(v[i * 6] * 1e4) + "," + Math.round(v[i * 6 + 1] * 1e4) + "," + Math.round(v[i * 6 + 2] * 1e4);
+    let j = clave.get(k);
+    if (j === undefined) { j = u++; clave.set(k, j); }
+    id[i] = j;
+  }
+  const lado = new Map(); // arista (a·u + b) -> [nx, ny, nz, vértice a, vértice b, ¿pliegue?]
+  for (let t = 0; t < ix.length; t += 3) {
+    const a = ix[t] * 6, b = ix[t + 1] * 6, c = ix[t + 2] * 6;
+    const ux = v[b] - v[a], uy = v[b + 1] - v[a + 1], uz = v[b + 2] - v[a + 2];
+    const wx = v[c] - v[a], wy = v[c + 1] - v[a + 1], wz = v[c + 2] - v[a + 2];
+    let nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx;
+    const l = Math.hypot(nx, ny, nz);
+    if (l < 1e-12) continue;
+    nx /= l; ny /= l; nz /= l;
+    for (const [p, q] of [[ix[t], ix[t + 1]], [ix[t + 1], ix[t + 2]], [ix[t + 2], ix[t]]]) {
+      const i1 = id[p], i2 = id[q];
+      if (i1 === i2) continue;
+      const k = i1 < i2 ? i1 * u + i2 : i2 * u + i1;
+      const e = lado.get(k);
+      if (!e) lado.set(k, [nx, ny, nz, p, q, true]);
+      else e[5] = e[0] * nx + e[1] * ny + e[2] * nz < COS_ARISTA; // dos caras: solo si forman pliegue
+    }
+  }
+  const [ox, oy, oz] = origen;
+  for (const e of lado.values()) {
+    if (!e[5]) continue;
+    L.reservar(6);
+    for (const p of [e[3], e[4]]) {
+      const x = v[p * 6], y = v[p * 6 + 1], z = v[p * 6 + 2], A = L.a, n = L.n;
+      A[n] = m[0] * x + m[4] * y + m[8] * z + m[12] - ox;
+      A[n + 1] = m[1] * x + m[5] * y + m[9] * z + m[13] - oy;
+      A[n + 2] = m[2] * x + m[6] * y + m[10] * z + m[14] - oz;
+      L.n += 3;
+    }
+  }
+}
+
 function empaquetar(c) {
   return { pos: c.pos.final(), nor: c.nor.final(), col: c.col.final(), idx: c.idx.final(),
     eids: Uint32Array.from(c.eids), ini: Uint32Array.from(c.ini), num: Uint32Array.from(c.num), cajas: Float32Array.from(c.cajas) };
@@ -64,7 +108,7 @@ async function abrir(id, buffer) {
   await listo;
   const mid = api.OpenModel(new Uint8Array(buffer), { COORDINATE_TO_ORIGIN: false });
   if (mid < 0) throw new Error("No se ha podido leer el archivo. ¿Es un IFC válido?");
-  const opaco = cubo(), transp = cubo();
+  const opaco = cubo(), transp = cubo(), lin = new Crece(Float32Array);
   let ultimo = 0;
   api.StreamAllMeshes(mid, (malla, i, total) => {
     const n = malla.geometries.size();
@@ -75,15 +119,19 @@ async function abrir(id, buffer) {
       const geo = api.GetGeometry(mid, pg.geometryExpressID);
       const v = api.GetVertexArray(geo.GetVertexData(), geo.GetVertexDataSize());
       const ix = api.GetIndexArray(geo.GetIndexData(), geo.GetIndexDataSize());
-      if (ix.length) anadir(pg.color.w < 0.99 ? transp : opaco, malla.expressID, v, ix, m, pg.color);
+      if (ix.length) {
+        anadir(pg.color.w < 0.99 ? transp : opaco, malla.expressID, v, ix, m, pg.color);
+        if (pg.color.w >= 0.99) aristas(v, ix, m, lin); // sin aristas en vidrios
+      }
       geo.delete();
     }
     if (total && i - ultimo > total / 50) { ultimo = i; postMessage({ cmd: "progreso", id, f: i / total }); }
   });
   modelos.set(id, { mid, unidades: leerUnidades(mid) });
   const o = empaquetar(opaco), t = empaquetar(transp);
-  const lista = [o, t].flatMap((x) => [x.pos.buffer, x.nor.buffer, x.col.buffer, x.idx.buffer, x.eids.buffer, x.ini.buffer, x.num.buffer, x.cajas.buffer]);
-  postMessage({ cmd: "abierto", id, esquema: api.GetModelSchema(mid), opaco: o, transp: t }, lista);
+  const aris = lin.final();
+  const lista = [aris.buffer, ...[o, t].flatMap((x) => [x.pos.buffer, x.nor.buffer, x.col.buffer, x.idx.buffer, x.eids.buffer, x.ini.buffer, x.num.buffer, x.cajas.buffer])];
+  postMessage({ cmd: "abierto", id, esquema: api.GetModelSchema(mid), opaco: o, transp: t, aristas: aris }, lista);
 }
 
 // ---------- Propiedades ----------

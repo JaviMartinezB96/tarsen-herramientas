@@ -3,6 +3,7 @@
 .visor-titulo { padding-block: 28px 18px; }
 .visor-titulo h1 { font-size: clamp(28px, 3.6vw, 40px); margin-bottom: 8px; }
 .visor-titulo .entradilla { font-size: 16px; margin-bottom: 0; max-width: 70ch; }
+.con-modelo .visor-titulo { display: none; }
 .visor-pie { padding-block: 32px 56px; }
 
 .visor { scroll-margin-top: 76px; position: relative; height: calc(100svh - 76px); min-height: 460px; background: var(--bg-2);
