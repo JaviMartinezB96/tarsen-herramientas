@@ -1,4 +1,4 @@
-# Copia las librerías del visor IFC (three.js, web-ifc, three-mesh-bvh) desde npm a web/visor-ifc/vendor/.
+# Copia las librerías del visor IFC (three.js, web-ifc, three-mesh-bvh; versiones fijas) desde npm a web/visor-ifc/vendor/.
 # Se ejecuta al cambiar este archivo o a mano (Actions > Run workflow). Las versiones quedan fijadas en vendor/VERSIONES.txt.
 name: Vendor visor IFC
 on:
@@ -17,21 +17,15 @@ jobs:
         with: { node-version: 20 }
       - name: Instalar y copiar
         run: |
-          set -x
+          set -ex
           mkdir -p /tmp/v && cd /tmp/v && npm init -y >/dev/null
-          npm i three@latest web-ifc@latest three-mesh-bvh@latest
+          npm i three@0.186.1 web-ifc@0.0.78 three-mesh-bvh@0.9.17
           D=$GITHUB_WORKSPACE/web/visor-ifc/vendor
           rm -rf $D && mkdir -p $D/three $D/web-ifc $D/bvh
-          { ls -la node_modules/three/build node_modules/web-ifc node_modules/three-mesh-bvh/build; } > $D/LISTADO.txt 2>&1 || true
-          cp node_modules/three/build/three.module.min.js $D/three/ || true
-          cp node_modules/three/build/three.core.min.js $D/three/ || true
-          cp node_modules/three/examples/jsm/controls/OrbitControls.js $D/three/ || true
-          cp node_modules/three/LICENSE $D/three/ || true
-          cp node_modules/web-ifc/*.js node_modules/web-ifc/*.wasm node_modules/web-ifc/*.d.ts $D/web-ifc/ || true
-          cp node_modules/web-ifc/LICENSE* $D/web-ifc/ || true
-          cp node_modules/three-mesh-bvh/build/index.module.js $D/bvh/ || true
-          cp node_modules/three-mesh-bvh/LICENSE $D/bvh/ || true
-          rm -f $D/web-ifc/web-ifc-api-node.js
+          cp node_modules/three/build/three.module.js node_modules/three/build/three.core.js $D/three/
+          cp node_modules/three/examples/jsm/controls/OrbitControls.js node_modules/three/LICENSE $D/three/
+          cp node_modules/web-ifc/web-ifc-api.js node_modules/web-ifc/web-ifc.wasm node_modules/web-ifc/LICENSE.md $D/web-ifc/
+          cp node_modules/three-mesh-bvh/build/index.module.js node_modules/three-mesh-bvh/LICENSE $D/bvh/
           for p in three web-ifc three-mesh-bvh; do echo "$p $(node -e "console.log(JSON.parse(require('fs').readFileSync('node_modules/$p/package.json')).version)")"; done > $D/VERSIONES.txt
           cat $D/VERSIONES.txt
       - name: Commit
