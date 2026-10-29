@@ -1,0 +1,44 @@
+# Copia las librerías del visor IFC (three.js, web-ifc, three-mesh-bvh) desde npm a web/visor-ifc/vendor/.
+# Se ejecuta al cambiar este archivo o a mano (Actions > Run workflow). Las versiones quedan fijadas en vendor/VERSIONES.txt.
+name: Vendor visor IFC
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/vendor-visor.yml"]
+permissions:
+  contents: write
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Instalar y copiar
+        run: |
+          mkdir -p /tmp/v && cd /tmp/v && npm init -y >/dev/null
+          npm i three@latest web-ifc@latest three-mesh-bvh@latest
+          D=$GITHUB_WORKSPACE/web/visor-ifc/vendor
+          rm -rf $D && mkdir -p $D/three $D/web-ifc $D/bvh
+          cp node_modules/three/build/three.module.min.js $D/three/ 
+          cp node_modules/three/build/three.core.min.js $D/three/ 2>/dev/null || true
+          cp node_modules/three/examples/jsm/controls/OrbitControls.js $D/three/
+          cp node_modules/three/LICENSE $D/three/
+          cp node_modules/web-ifc/*.js node_modules/web-ifc/*.wasm node_modules/web-ifc/*.d.ts $D/web-ifc/ 2>/dev/null || true
+          cp node_modules/web-ifc/LICENSE* $D/web-ifc/ 2>/dev/null || true
+          cp node_modules/three-mesh-bvh/build/index.module.js $D/bvh/
+          cp node_modules/three-mesh-bvh/LICENSE $D/bvh/
+          rm -f $D/web-ifc/web-ifc-api-node.js
+          ls -laR $D
+          { echo "three $(node -p "require('three/package.json').version")";
+            echo "web-ifc $(node -p "require('web-ifc/package.json').version")";
+            echo "three-mesh-bvh $(node -p "require('three-mesh-bvh/package.json').version")"; } > $D/VERSIONES.txt
+          cat $D/VERSIONES.txt
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/visor-ifc/vendor
+          git diff --cached --quiet || git commit -m "Visor IFC: librerías copiadas de npm (vendor)"
+          git push
