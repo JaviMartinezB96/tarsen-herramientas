@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visor IFC online gratis: cortes, superposición y propiedades | TARSEN</title>
+  <meta name="description" content="Abre gratis uno o varios archivos IFC en el navegador, superponlos con colores, haz cortes y caja de sección y consulta las propiedades de cada elemento. Sin subir archivos.">
+  <link rel="icon" href="../shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../shared/estilos.css">
+  <link rel="stylesheet" href="visor.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/" } }</script>
+</head>
+<body>
+  <div data-ui="cabecera"></div>
+  <main class="visor-pagina">
+    <div class="contenedor visor-titulo">
+      <h1>Visor IFC online</h1>
+      <p class="entradilla">Abre uno o varios IFC, superponlos con colores, córtalos y consulta las propiedades de cada elemento. Tus archivos no salen de tu ordenador.</p>
+    </div>
+
+    <section class="visor" id="visor" aria-label="Visor 3D">
+      <canvas id="lienzo"></canvas>
+
+      <div class="vacio" id="vacio">
+        <p class="vacio-titulo">Arrastra aquí uno o varios archivos IFC</p>
+        <button class="btn btn-primario" data-accion="abrir" type="button">Abrir IFC</button>
+        <p class="nota">IFC2x3, IFC4 e IFC4.3. Se leen en tu navegador: no se suben a ningún servidor.</p>
+      </div>
+
+      <aside class="panel p-modelos" id="p-modelos" hidden>
+        <div class="panel-cab">
+          <button class="plegar" type="button" data-accion="plegar" aria-expanded="true"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><strong id="modelos-titulo">Modelos</strong></button>
+          <button class="btn mini" data-accion="abrir" type="button">Añadir IFC</button>
+        </div>
+        <ul class="lista-modelos" id="lista-modelos"></ul>
+        <div class="segmento" role="group" aria-label="Colores">
+          <button type="button" data-color="ifc" aria-pressed="true">Colores del IFC</button>
+          <button type="button" data-color="modelo" aria-pressed="false">Color por modelo</button>
+        </div>
+      </aside>
+
+      <aside class="panel p-props" id="p-props" hidden aria-live="polite">
+        <div class="panel-cab">
+          <strong id="props-titulo">Propiedades</strong>
+          <button class="cerrar" data-accion="deseleccionar" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <div class="props-botones">
+          <button class="btn mini" data-accion="encuadrar-sel" type="button">Encuadrar</button>
+          <button class="btn mini" data-accion="caja-sel" type="button">Caja de sección aquí</button>
+        </div>
+        <div id="props" class="props"></div>
+      </aside>
+
+      <div class="panel p-secciones" id="p-secciones" hidden></div>
+
+      <div class="toque" id="toque" hidden>Pulsa una superficie del modelo para cortar por ella. <button class="btn mini" data-accion="cancelar" type="button">Cancelar</button></div>
+
+      <nav class="barra" id="barra" hidden aria-label="Herramientas del visor">
+        <button class="btn mini" data-accion="encuadrar" type="button">Encuadrar</button>
+        <button class="btn mini" data-accion="planta" type="button">Planta</button>
+        <button class="btn mini" data-accion="3d" type="button">3D</button>
+        <button class="btn mini" data-accion="menu-corte" type="button" aria-expanded="false" aria-controls="menu-corte">Corte</button>
+        <button class="btn mini" data-accion="caja" type="button" aria-pressed="false">Caja de sección</button>
+        <button class="btn mini" data-accion="reiniciar" type="button">Restablecer</button>
+      </nav>
+
+      <div class="menu-lista" id="menu-corte" hidden>
+        <button type="button" data-corte="horizontal">Horizontal</button>
+        <button type="button" data-corte="vertical">Vertical, frente a la vista</button>
+        <button type="button" data-corte="cara">Por una cara que elijas</button>
+      </div>
+    </section>
+
+    <div class="contenedor estrecho visor-pie">
+      <div data-ui="cta"></div>
+
+      <details class="detalles metodo">
+        <summary>Cómo funciona este visor</summary>
+        <ol>
+          <li><strong>Lectura.</strong> El IFC se abre en tu navegador con web-ifc (That Open Company, licencia MPL-2.0) y se dibuja con three.js. Nada se sube a internet. Se leen IFC2x3, IFC4 e IFC4.3. No se dibujan los espacios (IfcSpace) ni los huecos.</li>
+          <li><strong>Navegación.</strong> Ratón: botón izquierdo para girar, derecho para desplazar y rueda para acercar. Doble clic sobre el modelo para girar alrededor de ese punto. En pantalla táctil: un dedo gira y dos dedos acercan y desplazan.</li>
+          <li><strong>Varios modelos.</strong> Cada IFC se coloca con sus propias coordenadas. Los modelos coinciden si se exportaron con el mismo origen (por ejemplo, el mismo punto base o punto topográfico en Revit). Con «Color por modelo» cada archivo toma un color, que puedes cambiar en su muestra, y el botón de transparencia deja ver lo que hay detrás.</li>
+          <li><strong>Cortes.</strong> Horizontal (planta), vertical frente a la vista (se ajusta al eje X o Z más próximo) o por la cara que pulses. Cada corte se mueve con su barra y se puede invertir. Puedes combinar varios.</li>
+          <li><strong>Caja de sección.</strong> Envuelve los modelos visibles o el elemento seleccionado. Arrastra las esferas de sus caras para ajustarla.</li>
+          <li><strong>Propiedades.</strong> Al pulsar un elemento se muestran su clase IFC, nombre, GlobalId, nivel, tipo, material y sus conjuntos de propiedades y cantidades (Psets y Qtos), también los heredados del tipo. Las unidades son las del proyecto declaradas en el IFC (IfcUnitAssignment). Los valores son los del archivo, sin recalcular.</li>
+        </ol>
+      </details>
+
+      <p class="aviso-legal">Herramienta de consulta. Muestra la información tal como viene en el archivo IFC; no la comprueba ni sustituye al proyecto de un técnico competente. Los archivos se procesan en tu navegador y no se suben a ningún servidor.</p>
+    </div>
+  </main>
+  <div data-ui="pie"></div>
+  <input type="file" id="archivo" accept=".ifc,.IFC" multiple hidden>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -10,16 +10,16 @@ La web publicable vive en `web/` (es la carpeta que publica Cloudflare Pages). L
 | `/nieve/` | Carga de nieve con mapa | CTE DB SE-AE 3.5 y Anejo E |
 | `/hormigon/` | Ambientes, tipo de hormigón y recubrimientos (dos pestañas) | Código Estructural cap. 9 (arts. 43 y 44) |
 | `/sismo/` | Aceleración sísmica básica con mapa | NCSE-02 (2.1, 2.2, 1.2.3 y Anejo 1) |
-| `/visor-ifc/` | Visor IFC sencillo: ver, medir, propiedades, ocultar por categoría | — |
+| `/visor-ifc/` | Visor IFC sencillo: varios modelos superpuestos con colores, cortes, caja de sección y propiedades | — |
 | `/shared/` | Plantilla común, estilos con tokens de marca, ui.js, logos | — |
 
 ## Reglas de trabajo (ahorro de tokens)
 
 - Una conversación por herramienta o subtarea. Al cerrarla, actualizar "Estado".
-- HTML + CSS + JS vanilla (módulos ES), sin build. Excepción: `/visor-ifc/` (Vite + That Open Engine + web-ifc, versiones exactas fijadas; se publica su `dist/`).
+- HTML + CSS + JS vanilla (módulos ES), sin build, también en `/visor-ifc/`: three.js + web-ifc + three-mesh-bvh copiados en `visor-ifc/vendor/` (versiones fijas en `vendor/VERSIONES.txt`) por la acción `.github/workflows/vendor-visor.yml`; se cargan con un importmap. No se usa That Open Engine (decisión del 29-10-2026: menos dependencias y sin compilación en Cloudflare).
 - Reutilizar siempre `/shared/`. Ficheros pequeños (< 300 líneas). No releer el repo entero: solo lo que toca la tarea.
 - En cambios, entregar solo el fragmento modificado. Commits pequeños en español sobre `main`.
-- Sin npm en el sandbox de Claude: para el visor, verificar con `tsc` global y despliegue de prueba.
+- Sin npm en el sandbox de Claude: para actualizar librerías, cambiar las versiones en la acción `vendor-visor.yml` y hacer push (la acción las descarga y las sube). Verificación en local con Playwright (Chromium) e IFC de muestra de buildingSMART/Sample-Test-Files (se clonan con git).
 
 ## Rigor normativo
 
@@ -55,7 +55,7 @@ No programa. Cualquier paso manual (subir al hosting, GitHub): pasos numerados y
 - [x] 3. `/nieve/` — mapa Leaflet (teselas OSM oscurecidas por CSS), buscador Nominatim (1 petición/s, sin autocompletar), altitud del MDT del IGN (API-Coverages: 25 m Península/Baleares, 500 m Canarias; editable; si falla, se pide a mano). Zona automática: figura E.2 digitalizada por script `docs/scripts/nieve_zonas_e2.py` (UTM huso 30, 70 cruces de retícula, error 0,18 px ≈ 0,3 km) → `nieve/data/zonas_e2.json`; Canarias zona 7 y Ceuta/Melilla zona 6 por regla; fuera del dibujo, zona más cercana a < 20 km; aviso a < 5 km de otra zona (criterio TARSEN); zona editable. Contraste: en las 52 capitales la zona detectada reproduce la tabla 3.8 con la E.2 (±0,08 kN/m², redondeo). sk: en capitales se muestran a la vez los dos valores, tabla 3.8 y tabla E.2 con la altitud del punto (decisión del propietario, sin preguntar) o E.2 interpolada linealmente (criterio TARSEN, anotado). μ 3.5.3.2, ±20 % viento 3.5.1.3, simplificado 1,0 kN/m² como opción bajo 1.000 m (3.5.1.1), hielo pn 3.5.1.4. Flujo propio: el mapa es la pregunta; al poner la chincheta sale el resultado con datos editables. Verificado: Murcia 3.8 → 0,20; zona 2, 1.100 m, 45° → sk 1,75, qn 0,88, pn 1,31 kN/m; zona 4, 650 m, impedimento, expuesta → 0,66; zona 1, 1.700 m → sin valor (3.5.2.3); Jaca (zona 2, 820 m) → 1,14 kN/m². Altitud IGN: el recorte se pide con `subset=Lat(a:b),Long(c:d)` (con `bbox` el servidor da error 500); CORS correcto; comprobado en navegador: Jaca 819 m, Madrid 649 m, Palma 20 m, La Laguna 549 m. Respaldo: MDT de 500 m y, si todo falla, altitud a mano.
 - [x] Base común `shared/data/hormigon.json`: propiedades de hormigón (γc, αcc, fck, fctm) y acero (γs, fyk), Anejo 19 y tabla 34.2.a. La usan escalera y la usarán cuantías, canto mínimo y anclajes.
 - [ ] 4. `/sismo/`
-- [ ] 5. `/visor-ifc/`
+- [x] 5. `/visor-ifc/` (v1, 29-10-2026) — alcance pedido por el propietario: sencillo, sin menús liosos. Varios IFC superpuestos («Colores del IFC» / «Color por modelo» automático con 2+ modelos; muestra de color y transparencia por modelo; el último cargado gana en caras coincidentes por polygonOffset), cortes (horizontal, vertical frente a la vista ajustado a X/Z, por cara pulsada; barra, invertir, varios a la vez), caja de sección con asas arrastrables (a todo o al elemento seleccionado) y propiedades (clase, nombre, GlobalId, nivel, tipo, material, Psets/Qtos también del tipo, unidades de IfcUnitAssignment). Lectura en Web Worker (`motor.worker.js`, web-ifc un hilo, sin COOP/COEP), carga perezosa del lector al abrir el primer archivo, origen común para todos los modelos (coordenadas grandes), selección con BVH (`indirect`). Encuadre y cortes sobre la caja «núcleo»: descarta elementos sueltos a más de 3 × percentil 90 + 1 m del centro (marcadores de georreferencia). Verificado con Playwright: Building-Architecture/Structural/Hvac IFC2x3 e IFC4 (propiedades de un muro: Qto_WallBaseQuantities con mm, m², m³; corte por cara; arrastre de asa; móvil 390 px). No verificado con un IFC de 50 MB. Pendiente para más adelante (propietario): ocultar por tipos y árbol de elementos.
 
 Roadmap (aprobado el 27-10-2026; misma prioridad que `/sismo/` y `/visor-ifc/`, el orden se decide en cada sesión). Detalle y PENDIENTES en el documento «Estado y decisiones» del proyecto de Claude:
 - [ ] `/cuantias/` — cuantías mínimas y máximas (Anejo 19, cap. 9).
