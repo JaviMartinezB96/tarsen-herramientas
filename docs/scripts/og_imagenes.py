@@ -20,6 +20,7 @@ HERRAMIENTAS = [
     ("portada", "Herramientas de cálculo estructural", "Gratuitas, según el Código Estructural y el CTE", ""),
     ("hormigon", "Clases de exposición y recubrimientos", "Designación del hormigón y recubrimiento nominal según el Código Estructural", "hormigon/"),
     ("escalera", "Calculadora de escalera de hormigón armado", "Canto y armado de predimensionado según el Código Estructural y el CTE", "escalera/"),
+    ("cuantias", "Cuantías mínimas y máximas de armadura", "Vigas, losas, pilares y muros según el Anejo 19 del Código Estructural", "cuantias/"),
     ("nieve", "Carga de nieve con mapa", "CTE DB SE-AE: zona y altitud automáticas al marcar la parcela", "nieve/"),
     ("visor-ifc", "Visor IFC online gratis", "Varios modelos superpuestos, cortes, caja de sección y propiedades", "visor-ifc/"),
 ]

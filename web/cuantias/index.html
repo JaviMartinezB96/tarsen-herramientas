@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cuantías mínimas y máximas de armadura (Código Estructural) | TARSEN</title>
+  <meta name="description" content="Calcula gratis la armadura mínima y máxima de vigas, losas, pilares y muros de hormigón armado según el Anejo 19 del Código Estructural.">
+  <link rel="canonical" href="https://herramientas.tarsen.es/cuantias/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="TARSEN">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:title" content="Cuantías mínimas y máximas de armadura (Código Estructural) | TARSEN">
+  <meta property="og:description" content="Calcula gratis la armadura mínima y máxima de vigas, losas, pilares y muros de hormigón armado según el Anejo 19 del Código Estructural.">
+  <meta property="og:url" content="https://herramientas.tarsen.es/cuantias/">
+  <meta property="og:image" content="https://herramientas.tarsen.es/shared/og/cuantias.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Cuantías mínimas y máximas de armadura (Código Estructural)", "url": "https://herramientas.tarsen.es/cuantias/", "description": "Calcula gratis la armadura mínima y máxima de vigas, losas, pilares y muros de hormigón armado según el Anejo 19 del Código Estructural.", "inLanguage": "es-ES", "applicationCategory": "DesignApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "provider": {"@type": "Organization", "name": "TARSEN Estructuras", "url": "https://tarsen.es/"}}</script>
+  <link rel="icon" href="../shared/brand/TARSEN-COLOR-Isologo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../shared/estilos.css">
+</head>
+<body>
+  <div data-ui="cabecera"></div>
+  <main class="contenedor estrecho">
+    <h1>Cuantías mínimas y máximas de armadura</h1>
+    <p class="entradilla">Responde unas preguntas y obtén la armadura mínima y máxima de una viga, losa, pilar o muro de hormigón armado según el Anejo 19 del Código Estructural.</p>
+
+    <!-- Cuestionario (una pregunta por pantalla, avance automático) -->
+    <section class="paso" id="p-preguntas"><div id="asistente" aria-live="polite"></div></section>
+
+    <!-- Resultado + respuestas editables (recalcula al cambiar) -->
+    <section class="paso" id="p-resultados" hidden>
+      <div id="res" aria-live="polite"></div>
+      <h2 class="pregunta subtitulo">Tus respuestas</h2>
+      <p class="nota">Cambia cualquier dato y el resultado se recalcula al momento.</p>
+      <form id="f" class="respuestas" onsubmit="return false"></form>
+      <div class="botonera"><button class="btn" type="button" id="reiniciar">Empezar de nuevo</button></div>
+      <div data-ui="cta"></div>
+    </section>
+
+    <!-- Explicación del método (también para SEO). Mantener al día con calculo.js. -->
+    <details class="detalles metodo">
+      <summary>Cómo calcula esta herramienta</summary>
+      <p>Aplica las cuantías del capítulo 9 del Anejo 19 del Código Estructural a secciones rectangulares. Resistencias de cálculo: f<sub>yd</sub> = f<sub>yk</sub> / 1,15. <span class="ref">Anejo 19, tabla A19.2.1</span></p>
+      <ol>
+        <li><strong>Vigas.</strong> Mínima de tracción A<sub>s,min</sub> = W / z · f<sub>ctm,fl</sub> / f<sub>yd</sub>, con W = b · h² / 6, z = 0,8 h, f<sub>ctm</sub> = 0,30 · f<sub>ck</sub><sup>2/3</sup> y f<sub>ctm,fl</sub> = max[(1,6 − h/1000) · f<sub>ctm</sub>; f<sub>ctm</sub>]. Máxima 0,04 · A<sub>c</sub> para la armadura de tracción y para la de compresión, fuera de solapes. <span class="ref">Anejo 19, 9.2.1.1, (9.1), (3.23) y tabla A19.3.1</span></li>
+        <li><strong>Losas.</strong> Lo mismo por metro de ancho en la dirección principal. Reparto en losas unidireccionales de al menos el 20 % de la principal (la cifra corresponde a disponer la mínima) y separación menor de 300 mm y de 3 h. <span class="ref">Anejo 19, 9.3.1.1</span></li>
+        <li><strong>Pilares.</strong> En compresión compuesta (caso general), en cada una de las dos caras principales 0,05 · N<sub>Ed</sub> / f<sub>yc,d</sub>, con f<sub>yc,d</sub> = f<sub>yd</sub> sin pasar de 400 N/mm². En compresión simple con armado simétrico, 0,10 · N<sub>Ed</sub> / f<sub>yd</sub> en total. Además, una barra en cada esquina de Ø 12 o mayor (4Ø12). Máxima 0,04 · A<sub>c</sub>, y 0,08 · A<sub>c</sub> en solapes. Avisa si el lado mayor supera 4 veces el menor. <span class="ref">Anejo 19, 9.5.1, 9.5.2 y figura A19.9.11</span></li>
+        <li><strong>Muros de carga.</strong> Vertical entre 0,002 · A<sub>c</sub> y 0,04 · A<sub>c</sub>: la mitad en cada cara si solo trabaja a compresión, o el 60 % en la cara traccionada si además flecta. Horizontal 0,004 · A<sub>c</sub> con B 400 o 0,0032 · A<sub>c</sub> con B 500, en las dos caras, reducible a 0,002 · A<sub>c</sub> si el fuste mide más de 2,5 m y al menos la mitad de la altura, o con juntas verticales a menos de 7,5 m. En muros de más de 50 cm la horizontal se calcula con 50 cm de espesor. Separaciones de 400 mm como máximo (y 3 veces el espesor en la vertical). <span class="ref">Anejo 19, 9.6.2 y 9.6.3</span></li>
+        <li><strong>Muros a flexión</strong> (contención, sótanos). La vertical sigue las reglas de losa, como en el punto 2. La horizontal se mantiene según el punto 4, más exigente que el reparto del 20 % (criterio TARSEN). <span class="ref">Anejo 19, 9.6.1(1)</span></li>
+      </ol>
+      <p>No incluye la alternativa de 1,2 veces la armadura de cálculo para elementos secundarios (Anejo 19, 9.2.1.1(1)), secciones en T o en cajón, la armadura mínima por fisuración (7.3) ni elementos pretensados.</p>
+    </details>
+
+    <div data-ui="aviso"></div>
+  </main>
+  <div data-ui="pie"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
