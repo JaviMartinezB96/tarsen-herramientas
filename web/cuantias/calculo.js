@@ -72,3 +72,49 @@ export function calcular(N, e) {
   const traccionada = e.trabajo === "flexocompresion" ? M.vTraccionada * vert : vert / 2; // 60 % / mitad (9.6.2(1) y (2))
   return { ...base, vert, traccionada, otra: vert - traccionada };
 }
+
+// ---- Propuesta de armado (criterio TARSEN, no normativo; datos en cuantias.json → propuesta) ----
+
+/** Malla Ø c/s por metro: para cada Ø (de menor a mayor), la mayor separación múltiplo de sPaso con As ≥ Anec, sin pasar del límite.
+ *  estricto = true si la norma pide s < límite (losas, 9.3.1.1(3)); false si s ≤ límite (muros, 9.6.2(3) y 9.6.3(2)). */
+export function malla(P, Anec, diams, lim, estricto) {
+  const sLim = estricto ? Math.ceil(lim / P.sPaso) * P.sPaso - P.sPaso : Math.floor(lim / P.sPaso) * P.sPaso;
+  const ops = diams.map((diam) => {
+    const s = Math.min(Math.floor((AREA(diam) * 1000) / Anec / P.sPaso) * P.sPaso, sLim);
+    return s >= P.sMin ? { diam, s, As: (AREA(diam) * 1000) / s } : null;
+  }).filter(Boolean);
+  // Menor Ø con s ≥ sPreferida; si ninguno, el de mayor separación (criterio TARSEN)
+  const prop = ops.find((o) => o.s >= P.sPreferida) || [...ops].sort((a, b) => b.s - a.s)[0] || null;
+  return { prop, ops };
+}
+
+/** Barras sueltas n Ø: n ≥ nMin y múltiplo de paso; la de menos barras y, a igual nº, menor Ø (criterio TARSEN). */
+export function barras(Anec, diams, nMin, paso = 1) {
+  const ops = diams.map((diam) => {
+    let n = Math.max(nMin, Math.ceil(Anec / AREA(diam)));
+    n = Math.ceil(n / paso) * paso;
+    return { n, diam, As: n * AREA(diam) };
+  });
+  const prop = [...ops].sort((a, b) => a.n - b.n || a.diam - b.diam)[0];
+  return { prop, ops };
+}
+
+/** Añade al resultado de calcular() la propuesta de armado de cada elemento. */
+export function proponer(N, e, r) {
+  const P = N.propuesta;
+  if (r.elemento === "viga") return { traccion: barras(r.min.As, P.viga.diam, P.viga.nMin) };
+  if (r.elemento === "losa") {
+    const principal = malla(P, r.min.As, P.losa.diamPrincipal, r.sMax, true);
+    const repNec = N.losa.reparto * (principal.prop?.As ?? r.min.As);    // 9.3.1.1(2): 20 % de la principal dispuesta
+    return { principal, repNec, reparto: malla(P, repNec, P.losa.diamReparto, r.sMax, true) };
+  }
+  if (r.elemento === "pilar") {
+    if (e.solicitacion === "simple")
+      return { total: barras(r.asMin, P.pilar.diam, P.pilar.nMinTotal, P.pilar.pasoTotal) };
+    return { cara: barras(r.porCara, P.pilar.diam, P.pilar.nMinCara) };   // en cada una de las dos caras
+  }
+  const vert = (A) => malla(P, A, P.muro.diamVertical, r.sMaxV, false);
+  const hor = malla(P, r.horiz / 2, P.muro.diamHorizontal, r.sMaxH, false);   // 9.6.3(1): en cada cara
+  if (r.flexion) return { traccionada: vert(r.flexion.As), hor };
+  return { traccionada: vert(r.traccionada), otra: vert(r.otra), hor };
+}

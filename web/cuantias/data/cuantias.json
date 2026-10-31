@@ -3,20 +3,17 @@
     "CE": "Código Estructural (RD 470/2021), Anejo 19, cap. 9 (9.2.1.1, 9.3.1.1, 9.5.1, 9.5.2, 9.6.1 a 9.6.4) y 3.1.8; PDF en el proyecto de Claude. Figura A19.9.11 comprobada con captura del PDF aportada por el propietario (31-10-2026).",
     "materiales": "Hormigón y acero en shared/data/hormigon.json (tabla A19.3.1, tabla A19.2.1, tabla 34.2.a)."
   },
-
   "viga": {
     "_ref": "A19 9.2.1.1(1): As,min = W/z · fctm,fl/fyd (9.1), z ≈ 0,8h; (3): As,max = 0,04·Ac fuera de solapes, para la armadura de tracción o la de compresión",
     "zSobreH": 0.8,
     "asMax": 0.04
   },
-
   "losa": {
     "_ref": "A19 9.3.1.1(1): se aplican 9.2.1.1(1) y (3) en la dirección principal; (2): reparto ≥ 20 % de la principal en losas unidireccionales; (3): s < 300 mm y s < 3h",
     "reparto": 0.2,
     "sMax": 300,
     "sMaxSobreH": 3
   },
-
   "pilar": {
     "_ref": "A19 9.5.1(1): h ≤ 4b; 9.5.2(1): Ø > 12 mm; (2): A's1,min = A's2,min = 0,05·NEd/fyc,d por cara con fyc,d = fyd ≯ 400 N/mm² (figura A19.9.11) y, en compresión simple con armado simétrico, As,min = 0,10·NEd/fyd (9.12); (3): As,max = 0,04·Ac fuera de solapes y 0,08·Ac en ellos; (4): una barra en cada esquina",
     "relacionMax": 4,
@@ -28,13 +25,15 @@
     "diamMin": 12,
     "nBarrasMin": 4
   },
-
   "muro": {
     "_ref": "A19 9.6.1(1): longitud/espesor ≥ 4; muros con flexión fuera de su plano principalmente → reglas de losa (9.3). 9.6.2: vertical entre 0,002·Ac (60 % en la cara traccionada; si manda el mínimo, la mitad en cada cara) y 0,04·Ac; s ≤ min(400 mm; 3·espesor). 9.6.3: horizontal ≥ 0,004·Ac (fyk 400) o 0,0032·Ac (fyk 500), reducible a 0,002·Ac; espesor eficaz máximo 50 cm; s ≤ 400 mm. 9.6.4(1): cercos si la vertical de ambas caras supera 0,02·Ac",
     "vMin": 0.002,
     "vTraccionada": 0.6,
     "vMax": 0.04,
-    "hMin": { "400": 0.004, "500": 0.0032 },
+    "hMin": {
+      "400": 0.004,
+      "500": 0.0032
+    },
     "hMinReducida": 0.002,
     "eEficazMax": 500,
     "sMaxV": 400,
@@ -42,26 +41,234 @@
     "sMaxH": 400,
     "cercosSi": 0.02
   },
-
+  "propuesta": {
+    "_criterio": "Criterio TARSEN (no normativo): propuesta práctica que cumple la mínima. Mallas: separaciones múltiplo de 50 mm, no menores de 100 mm y bajo el límite de la norma; se elige el menor Ø que permite separar al menos sPreferida (150 mm); si ninguno llega, el que da más separación. Barras sueltas: el menor nº de barras (n ≥ nMin, múltiplo de paso) y, con el mismo nº, el menor Ø.",
+    "sPaso": 50,
+    "sMin": 100,
+    "sPreferida": 150,
+    "losa": {
+      "diamPrincipal": [
+        10,
+        12,
+        16
+      ],
+      "diamReparto": [
+        8,
+        10,
+        12
+      ]
+    },
+    "muro": {
+      "diamVertical": [
+        10,
+        12,
+        16
+      ],
+      "diamHorizontal": [
+        8,
+        10,
+        12
+      ]
+    },
+    "viga": {
+      "diam": [
+        12,
+        16,
+        20,
+        25
+      ],
+      "nMin": 2
+    },
+    "pilar": {
+      "diam": [
+        12,
+        16,
+        20,
+        25
+      ],
+      "nMinCara": 2,
+      "nMinTotal": 4,
+      "pasoTotal": 2,
+      "_ref": "Ø ≥ 12 (9.5.2(1)); una barra por esquina (9.5.2(4)): 2 por cara y 4 en total; armado simétrico en número par"
+    }
+  },
   "fuera_de_alcance": [
     "Alternativa de 9.2.1.1(1) y nota de 9.3.1.1(1): As,min = 1,2 · As de cálculo en ELU para elementos secundarios o losas con riesgo de rotura frágil pequeño. Fuera para simplificar (decisión del propietario, 31-10-2026).",
     "Vigas en T o en cajón (9.2.1.2(2)): solo sección rectangular (decisión del propietario, 31-10-2026).",
     "Armadura mínima de control de fisuración (7.3) y elementos pretensados (9.2.1.1(4))."
   ],
-
   "asistente": [
-    { "id": "elemento", "campo": "elemento", "pregunta": "¿Qué elemento quieres comprobar?", "dinamica": "elementos" },
-    { "id": "bv", "campo": "b", "tipo": "numero", "pregunta": "¿Cuál es el ancho de la viga?", "unidad": "Ancho b (cm)", "min": 10, "max": 300, "paso": 1, "solo_si": { "elemento": ["viga"] } },
-    { "id": "hv", "campo": "h", "tipo": "numero", "pregunta": "¿Cuál es el canto total de la viga?", "unidad": "Canto h (cm)", "min": 10, "max": 300, "paso": 1, "solo_si": { "elemento": ["viga"] } },
-    { "id": "hl", "campo": "h", "tipo": "numero", "pregunta": "¿Cuál es el canto total de la losa?", "unidad": "Canto h (cm)", "min": 8, "max": 200, "paso": 1, "nota": "Se calcula por metro de ancho, en la dirección principal.", "solo_si": { "elemento": ["losa"] } },
-    { "id": "bp", "campo": "b", "tipo": "numero", "pregunta": "¿Cuál es la dimensión menor del pilar?", "unidad": "Lado menor b (cm)", "min": 15, "max": 300, "paso": 1, "solo_si": { "elemento": ["pilar"] } },
-    { "id": "hp", "campo": "h", "tipo": "numero", "pregunta": "¿Y la dimensión mayor?", "unidad": "Lado mayor h (cm)", "min": 15, "max": 300, "paso": 1, "nota": "Si el pilar es cuadrado, repite el mismo valor.", "solo_si": { "elemento": ["pilar"] } },
-    { "id": "ned", "campo": "NEd", "tipo": "numero", "pregunta": "¿Cuál es el axil de cálculo de compresión?", "unidad": "NEd (kN)", "min": 0, "max": 100000, "paso": 1, "nota": "Axil mayorado en ELU (con los coeficientes de seguridad ya aplicados).", "ref": "A19, 9.5.2(2)", "solo_si": { "elemento": ["pilar"] } },
-    { "id": "solicitacion", "campo": "solicitacion", "pregunta": "¿Cómo trabaja el pilar?", "dinamica": "solicitaciones", "ref": "A19, 9.5.2(2) y figura A19.9.11", "solo_si": { "elemento": ["pilar"] } },
-    { "id": "em", "campo": "e", "tipo": "numero", "pregunta": "¿Cuál es el espesor del muro?", "unidad": "Espesor (cm)", "min": 10, "max": 200, "paso": 1, "nota": "Se calcula por metro de muro.", "solo_si": { "elemento": ["muro"] } },
-    { "id": "trabajo", "campo": "trabajo", "pregunta": "¿Cómo trabaja el muro?", "dinamica": "trabajos", "ref": "A19, 9.6.1 y 9.6.2", "solo_si": { "elemento": ["muro"] } },
-    { "id": "reduccion", "campo": "reduccion", "pregunta": "¿Se puede reducir la armadura horizontal?", "dinamica": "reducciones", "ref": "A19, 9.6.3(1)", "solo_si": { "elemento": ["muro"] } },
-    { "id": "fck", "campo": "fck", "pregunta": "¿Qué hormigón vas a usar?", "dinamica": "fck", "nota": "Influye en la armadura mínima a flexión: a más resistencia, más armadura mínima.", "ref": "A19, tabla A19.3.1", "solo_si": { "conFck": ["si"] } },
-    { "id": "acero", "campo": "acero", "pregunta": "¿Qué acero vas a usar?", "dinamica": "aceros", "ref": "Cap. 8, tabla 34.2.a" }
+    {
+      "id": "elemento",
+      "campo": "elemento",
+      "pregunta": "¿Qué elemento quieres comprobar?",
+      "dinamica": "elementos"
+    },
+    {
+      "id": "bv",
+      "campo": "b",
+      "tipo": "numero",
+      "pregunta": "¿Cuál es el ancho de la viga?",
+      "unidad": "Ancho b (cm)",
+      "min": 10,
+      "max": 300,
+      "paso": 1,
+      "solo_si": {
+        "elemento": [
+          "viga"
+        ]
+      }
+    },
+    {
+      "id": "hv",
+      "campo": "h",
+      "tipo": "numero",
+      "pregunta": "¿Cuál es el canto total de la viga?",
+      "unidad": "Canto h (cm)",
+      "min": 10,
+      "max": 300,
+      "paso": 1,
+      "solo_si": {
+        "elemento": [
+          "viga"
+        ]
+      }
+    },
+    {
+      "id": "hl",
+      "campo": "h",
+      "tipo": "numero",
+      "pregunta": "¿Cuál es el canto total de la losa?",
+      "unidad": "Canto h (cm)",
+      "min": 8,
+      "max": 200,
+      "paso": 1,
+      "nota": "Se calcula por metro de ancho, en la dirección principal.",
+      "solo_si": {
+        "elemento": [
+          "losa"
+        ]
+      }
+    },
+    {
+      "id": "bp",
+      "campo": "b",
+      "tipo": "numero",
+      "pregunta": "¿Cuál es la dimensión menor del pilar?",
+      "unidad": "Lado menor b (cm)",
+      "min": 15,
+      "max": 300,
+      "paso": 1,
+      "solo_si": {
+        "elemento": [
+          "pilar"
+        ]
+      }
+    },
+    {
+      "id": "hp",
+      "campo": "h",
+      "tipo": "numero",
+      "pregunta": "¿Y la dimensión mayor?",
+      "unidad": "Lado mayor h (cm)",
+      "min": 15,
+      "max": 300,
+      "paso": 1,
+      "nota": "Si el pilar es cuadrado, repite el mismo valor.",
+      "solo_si": {
+        "elemento": [
+          "pilar"
+        ]
+      }
+    },
+    {
+      "id": "ned",
+      "campo": "NEd",
+      "tipo": "numero",
+      "pregunta": "¿Cuál es el axil de cálculo de compresión?",
+      "unidad": "NEd (kN)",
+      "min": 0,
+      "max": 100000,
+      "paso": 1,
+      "nota": "Axil mayorado en ELU (con los coeficientes de seguridad ya aplicados).",
+      "ref": "A19, 9.5.2(2)",
+      "solo_si": {
+        "elemento": [
+          "pilar"
+        ]
+      }
+    },
+    {
+      "id": "solicitacion",
+      "campo": "solicitacion",
+      "pregunta": "¿Cómo trabaja el pilar?",
+      "dinamica": "solicitaciones",
+      "ref": "A19, 9.5.2(2) y figura A19.9.11",
+      "solo_si": {
+        "elemento": [
+          "pilar"
+        ]
+      }
+    },
+    {
+      "id": "em",
+      "campo": "e",
+      "tipo": "numero",
+      "pregunta": "¿Cuál es el espesor del muro?",
+      "unidad": "Espesor (cm)",
+      "min": 10,
+      "max": 200,
+      "paso": 1,
+      "nota": "Se calcula por metro de muro.",
+      "solo_si": {
+        "elemento": [
+          "muro"
+        ]
+      }
+    },
+    {
+      "id": "trabajo",
+      "campo": "trabajo",
+      "pregunta": "¿Cómo trabaja el muro?",
+      "dinamica": "trabajos",
+      "ref": "A19, 9.6.1 y 9.6.2",
+      "solo_si": {
+        "elemento": [
+          "muro"
+        ]
+      }
+    },
+    {
+      "id": "reduccion",
+      "campo": "reduccion",
+      "pregunta": "¿Se puede reducir la armadura horizontal?",
+      "dinamica": "reducciones",
+      "ref": "A19, 9.6.3(1)",
+      "solo_si": {
+        "elemento": [
+          "muro"
+        ]
+      }
+    },
+    {
+      "id": "fck",
+      "campo": "fck",
+      "pregunta": "¿Qué hormigón vas a usar?",
+      "dinamica": "fck",
+      "nota": "Influye en la armadura mínima a flexión: a más resistencia, más armadura mínima.",
+      "ref": "A19, tabla A19.3.1",
+      "solo_si": {
+        "conFck": [
+          "si"
+        ]
+      }
+    },
+    {
+      "id": "acero",
+      "campo": "acero",
+      "pregunta": "¿Qué acero vas a usar?",
+      "dinamica": "aceros",
+      "ref": "Cap. 8, tabla 34.2.a"
+    }
   ]
 }
